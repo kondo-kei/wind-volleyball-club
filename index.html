@@ -1,554 +1,779 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wind Volleyball Club</title>
-  <meta name="description" content="Wind Volleyball Club — competitive club volleyball for 13U and 14U athletes. Training at The Prairie School.">
-  <link rel="stylesheet" href="styles.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
-    /* ── Hero ──────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0b1f3a;
+      --navy2:    #112847;
+      --blue:     #1a6fd4;
+      --blue2:    #1358b0;
+      --blue-pale:#dbeafe;
+      --white:    #ffffff;
+      --off-white:#f4f8ff;
+      --ink:      #0b1f3a;
+      --muted:    #4a6a8a;
+      --card:     #ffffff;
+
+      /* keep old names mapped so nothing breaks */
+      --bg:       #f4f8ff;
+      --bg2:      #e8f0fb;
+      --sky:      var(--blue);
+      --sky2:     var(--blue2);
+      --sky-pale: var(--blue-pale);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      overflow-x: hidden;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5vw;
+      background: rgba(11,31,58,.96);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(26,111,212,.25);
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: .08em;
+      color: var(--white);
+    }
+    .nav-logo span { color: var(--blue); }
+    nav ul { list-style: none; display: flex; gap: 2.4rem; }
+    nav a {
+      text-decoration: none;
+      color: rgba(255,255,255,.65);
+      font-size: .82rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    nav a:hover { color: var(--white); }
+
+    /* ── HERO ── */
     .hero {
-      position: relative;
       min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--navy);
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(ellipse at 55% 45%, rgba(0, 180, 216, 0.12) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 20%, rgba(240, 165, 0, 0.06) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, transparent 30%, rgba(10, 22, 40, 0.6) 70%),
-        linear-gradient(135deg, var(--navy) 0%, #0d1e38 100%);
-    }
-
-    /* Volleyball court line pattern */
-    .hero-court-lines {
-      position: absolute;
-      inset: 0;
-      opacity: 0.04;
-      background-image:
-        linear-gradient(0deg, var(--white) 1px, transparent 1px),
-        linear-gradient(90deg, var(--white) 1px, transparent 1px);
-      background-size: 80px 80px;
-    }
-
-    /* Diagonal slash accent */
-    .hero-slash {
-      position: absolute;
-      top: -20%;
-      right: 15%;
-      width: 2px;
-      height: 140%;
-      background: linear-gradient(180deg, transparent, rgba(240, 165, 0, 0.15), rgba(0, 180, 216, 0.1), transparent);
-      transform: rotate(25deg);
-      z-index: 1;
-    }
-
-    .hero-slash:nth-child(2) {
-      right: 14%;
-      width: 1px;
-      opacity: 0.5;
-    }
-
-    /* Bottom gradient edge */
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      background: linear-gradient(90deg, var(--teal), var(--gold), var(--teal));
-      z-index: 5;
-    }
-
-    .hero-content {
-      position: relative;
-      z-index: 3;
-      max-width: var(--max-width);
-      width: 100%;
-      margin: 0 auto;
-      padding: var(--header-height) 24px 40px;
-      padding-top: calc(var(--header-height) + 40px);
-      text-align: center;
-    }
-
-    .hero-eyebrow {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 16px;
-      animation: fadeUp 0.8s ease both;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-    }
-
-    .hero-eyebrow::before,
-    .hero-eyebrow::after {
-      content: '';
-      width: 40px;
-      height: 1px;
-      background: linear-gradient(90deg, transparent, var(--gold));
-    }
-
-    .hero-eyebrow::after {
-      background: linear-gradient(90deg, var(--gold), transparent);
-    }
-
-    .hero-title {
-      font-size: clamp(4.5rem, 13vw, 11rem);
-      background: linear-gradient(180deg, #ffffff 0%, #c8cdd4 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      line-height: 0.88;
-      margin-bottom: 32px;
-      animation: fadeUp 0.8s ease 0.15s both;
-      filter: drop-shadow(0 4px 20px rgba(10, 22, 40, 0.7));
-    }
-
-    .hero-title em {
-      font-style: normal;
-      background: linear-gradient(180deg, #33d6f1 0%, var(--teal) 60%, #0096b7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      position: relative;
-      filter: drop-shadow(0 4px 30px rgba(0, 180, 216, 0.4));
-    }
-
-    .hero-divider {
-      width: 60px;
-      height: 2px;
-      background: linear-gradient(90deg, var(--teal), var(--gold));
-      margin: 0 auto 24px;
-      animation: fadeUp 0.8s ease 0.25s both;
-    }
-
-    .hero-subtitle {
-      font-size: clamp(1rem, 1.6vw, 1.15rem);
-      color: var(--gray-300);
-      max-width: 460px;
-      margin-left: auto;
-      margin-right: auto;
-      line-height: 1.75;
-      margin-bottom: 40px;
-      animation: fadeUp 0.8s ease 0.3s both;
-      text-shadow: 0 2px 20px rgba(10, 22, 40, 0.9);
-    }
-
-    .hero-actions {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      animation: fadeUp 0.8s ease 0.45s both;
-    }
-
-    .hero-actions .btn-gold {
-      padding: 16px 40px;
-      font-size: 1.15rem;
-      box-shadow: 0 0 30px rgba(240, 165, 0, 0.2);
-    }
-
-    .hero-actions .btn-secondary {
-      padding: 16px 36px;
-      font-size: 1.15rem;
-      border-color: rgba(255, 255, 255, 0.2);
-    }
-
-    @keyframes slowSpin {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-
-    /* Volleyball wrapper — positioning & mask */
-    .hero-volleyball-wrap {
-      position: absolute;
-      left: 50%;
-      top: 48%;
-      transform: translate(-38%, -50%);
-      width: 750px;
-      height: 750px;
-      z-index: 1;
-      opacity: 0;
-      animation: fadeIn 1.5s ease 0.6s forwards;
-      -webkit-mask-image: radial-gradient(ellipse 55% 55% at 50% 45%, black 30%, transparent 72%);
-      mask-image: radial-gradient(ellipse 55% 55% at 50% 45%, black 30%, transparent 72%);
-    }
-
-    /* Floating volleyball — BEHIND text */
-    .hero-volleyball {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      opacity: 0.35;
-      animation: slowSpin 120s linear infinite;
-      filter: drop-shadow(0 0 120px rgba(0, 180, 216, 0.25)) drop-shadow(0 0 40px rgba(240, 165, 0, 0.1));
-    }
-
-    @media (max-width: 900px) {
-      .hero-volleyball-wrap {
-        width: 420px;
-        height: 420px;
-        transform: translate(-50%, -50%);
-      }
-      .hero-volleyball {
-        opacity: 0.2;
-        animation: none;
-      }
-    }
-
-    /* ── Programs Preview ─────────────── */
-    .programs {
-      padding: 120px 0 140px;
-      background: var(--off-white);
-      position: relative;
-    }
-
-    .section-eyebrow {
-      font-family: var(--font-body);
-      font-size: 0.8rem;
-      font-weight: 600;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: var(--teal);
-      margin-bottom: 12px;
-    }
-
-    .section-title {
-      font-size: clamp(2.2rem, 5vw, 3.5rem);
-      color: var(--navy);
-      margin-bottom: 16px;
-    }
-
-    .section-subtitle {
-      font-size: 1.1rem;
-      color: var(--gray-500);
-      max-width: 520px;
-      margin-bottom: 60px;
-    }
-
-    .programs-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 28px;
-    }
-
-    .program-card {
-      background: var(--white);
-      border-radius: 8px;
-      padding: 40px 32px;
-      border: 1px solid var(--gray-100);
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      place-items: center;
+      text-align: center;
+      padding: 0 6vw;
       position: relative;
       overflow: hidden;
     }
 
-    .program-card::before {
+    /* dark navy hero */
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 55% at 60% 40%, rgba(26,111,212,.35) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 50% at 10% 70%, rgba(26,111,212,.15) 0%, transparent 55%),
+        linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
+    }
+    /* wind-streak lines */
+    .hero-bg::after {
       content: '';
+      position: absolute; inset: 0;
+      background-image:
+        repeating-linear-gradient(
+          -18deg,
+          transparent,
+          transparent 60px,
+          rgba(26,111,212,.07) 60px,
+          rgba(26,111,212,.07) 61px
+        );
+    }
+
+    /* large faint wordmark */
+    .hero-watermark {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 4px;
-      background: var(--teal);
-      transform: scaleX(0);
-      transform-origin: left;
-      transition: transform 0.3s ease;
+      bottom: -3rem; left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(8rem, 22vw, 20rem);
+      letter-spacing: -.02em;
+      color: rgba(26,111,212,.1);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
     }
 
-    .program-card:hover::before {
-      transform: scaleX(1);
+    /* floating orbs */
+    .hero-orb {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+    }
+    .hero-orb-1 {
+      width: 32rem; height: 32rem;
+      top: -8rem; right: -10rem;
+      background: radial-gradient(circle, rgba(26,111,212,.22) 0%, transparent 70%);
+      animation: drift 9s ease-in-out infinite alternate;
+    }
+    .hero-orb-2 {
+      width: 20rem; height: 20rem;
+      bottom: 4rem; left: 5%;
+      background: radial-gradient(circle, rgba(26,111,212,.14) 0%, transparent 70%);
+      animation: drift 12s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes drift {
+      from { transform: translateY(0) translateX(0); }
+      to   { transform: translateY(-20px) translateX(12px); }
     }
 
-    .program-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 12px 40px rgba(10, 22, 40, 0.08);
+    .hero-content { position: relative; z-index: 1; }
+    .hero-eyebrow {
+      font-size: .72rem;
+      letter-spacing: .35em;
+      text-transform: uppercase;
+      color: var(--blue-pale);
+      margin-bottom: 1.2rem;
+      opacity: 0;
+      animation: fadeUp .7s .2s forwards;
+    }
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(4.5rem, 13vw, 11rem);
+      line-height: .93;
+      letter-spacing: .02em;
+      color: var(--white);
+      opacity: 0;
+      animation: fadeUp .7s .35s forwards;
+    }
+    .hero h1 em {
+      font-style: normal;
+      color: #5aacf5;
+      display: block;
+    }
+    .hero-sub {
+      margin-top: 1.6rem;
+      font-size: clamp(.95rem, 2vw, 1.1rem);
+      color: rgba(255,255,255,.7);
+      max-width: 42ch;
+      margin-left: auto; margin-right: auto;
+      opacity: 0;
+      animation: fadeUp .7s .5s forwards;
+    }
+    .hero-ctas {
+      margin-top: 2.6rem;
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      opacity: 0;
+      animation: fadeUp .7s .65s forwards;
     }
 
-    .program-age {
-      font-family: var(--font-display);
-      font-size: 2.8rem;
-      color: var(--navy);
-      margin-bottom: 8px;
+    .btn {
+      display: inline-block;
+      padding: .75rem 2rem;
+      border-radius: 3px;
+      font-size: .82rem;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+      border: none;
+      transition: all .22s;
     }
+    .btn-sky { background: var(--blue); color: #fff; }
+    .btn-sky:hover { background: var(--blue2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,111,212,.45); }
+    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.35); }
+    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); transform: translateY(-2px); }
 
-    .program-name {
-      font-weight: 600;
-      color: var(--gray-700);
-      margin-bottom: 16px;
+    /* ── SHARED SECTION ── */
+    section { padding: 7rem 6vw; }
+    .section-label {
+      font-size: .68rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: .8rem;
+    }
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      line-height: 1;
+      color: var(--ink);
+      margin-bottom: 1.2rem;
+    }
+    .section-intro {
+      color: var(--muted);
+      max-width: 55ch;
       font-size: 1rem;
     }
-
-    .program-desc {
-      font-size: 0.95rem;
-      color: var(--gray-500);
-      line-height: 1.7;
+    .divider {
+      width: 3rem; height: 3px;
+      background: var(--sky);
+      margin: 1.5rem 0 3rem;
+      border-radius: 2px;
     }
 
-    /* ── Info Strip ───────────────────── */
-    .info-strip {
-      background: var(--navy);
-      padding: 80px 0;
-      position: relative;
-      z-index: 2;
+    /* ── ABOUT ── */
+    #about { background: var(--card); position: relative; overflow: hidden; }
+    #about::before {
+      content: '';
+      position: absolute; top: -10rem; right: -10rem;
+      width: 36rem; height: 36rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(58,172,219,.07) 0%, transparent 68%);
+      pointer-events: none;
     }
 
-    .info-grid {
+    .about-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 48px;
-      text-align: center;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 1.6rem;
+      margin-top: 1rem;
     }
+    @media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
 
-    .info-item {
-      color: var(--white);
-    }
-
-    .info-icon {
-      width: 48px;
-      height: 48px;
-      margin: 0 auto 16px;
-      color: var(--teal);
-    }
-
-    .info-label {
-      font-family: var(--font-display);
-      font-size: 1.3rem;
-      letter-spacing: 0.06em;
-      margin-bottom: 8px;
-    }
-
-    .info-value {
-      font-size: 0.95rem;
-      color: var(--gray-300);
-      line-height: 1.6;
-    }
-
-    @media (max-width: 768px) {
-      .info-grid {
-        grid-template-columns: 1fr;
-        gap: 40px;
-      }
-    }
-
-    /* ── CTA Banner ───────────────────── */
-    .cta-banner {
-      padding: 120px 0;
-      background: linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 100%);
-      text-align: center;
+    .about-card {
+      background: var(--card);
+      border: 1px solid rgba(58,172,219,.12);
+      border-radius: 16px;
+      padding: 2.2rem 2rem;
       position: relative;
       overflow: hidden;
+      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
+      box-shadow: 0 2px 12px rgba(13,42,64,.06);
     }
+    .about-card::after {
+      content: '';
+      position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(26,111,212,.05) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .28s ease;
+      pointer-events: none;
+    }
+    .about-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(11,31,58,.12), 0 0 0 1px rgba(26,111,212,.3); border-color: transparent; }
+    .about-card:hover::after { opacity: 1; }
 
-    .cta-banner h2 {
-      font-size: clamp(2.5rem, 6vw, 4rem);
-      color: var(--white);
-      margin-bottom: 16px;
+.about-card h3 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.45rem;
+      letter-spacing: .05em;
+      color: var(--ink);
+      margin-bottom: .6rem;
     }
+    .about-card p, .about-card li {
+      font-size: .91rem;
+      color: var(--muted);
+      line-height: 1.75;
+    }
+    .about-card ul { list-style: none; padding: 0; }
+    .about-card li { padding: .25rem 0; display: flex; align-items: baseline; gap: .5rem; }
+    .about-card li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--sky); flex-shrink: 0; margin-top: .35rem; }
 
-    .cta-banner p {
-      color: var(--gray-300);
-      font-size: 1.15rem;
-      margin-bottom: 36px;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
+    /* coaches */
+    .coaches-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1.2rem;
+      margin-top: 3rem;
     }
+    .coach-card {
+      background: var(--bg);
+      border: 1px solid rgba(58,172,219,.15);
+      border-radius: 6px;
+      padding: 1.6rem;
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      transition: border-color .25s, box-shadow .25s;
+      box-shadow: 0 2px 10px rgba(58,172,219,.05);
+    }
+    .coach-card:hover { border-color: rgba(58,172,219,.4); box-shadow: 0 6px 22px rgba(58,172,219,.10); }
+    .coach-avatar {
+      width: 54px; height: 54px;
+      border-radius: 50%;
+      background: var(--sky-pale);
+      border: 2px solid var(--sky);
+      display: grid; place-items: center;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      color: var(--sky2);
+      flex-shrink: 0;
+    }
+    .coach-info h4 { font-weight: 500; font-size: .95rem; margin-bottom: .15rem; color: var(--ink); }
+    .coach-role { font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sky); }
+
+    /* ── SEASON ── */
+    #season { background: var(--navy); }
+    #season .section-label { color: #5aacf5; }
+    #season .section-title { color: var(--white); }
+    #season .section-intro { color: rgba(255,255,255,.6); }
+    #season .divider { background: var(--blue); }
+    .season-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 780px) { .season-layout { grid-template-columns: 1fr; gap: 2rem; } }
+
+    .timeline { position: relative; padding-left: 1.6rem; }
+    .timeline::before {
+      content: '';
+      position: absolute; left: 0; top: .5rem; bottom: .5rem;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--blue), rgba(26,111,212,.1));
+      border-radius: 2px;
+    }
+    .tl-item { position: relative; margin-bottom: 2.2rem; }
+    .tl-dot {
+      position: absolute; left: -1.95rem; top: .4rem;
+      width: 10px; height: 10px;
+      border-radius: 50%;
+      background: var(--blue);
+      border: 2px solid var(--navy);
+    }
+    .tl-date { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: #5aacf5; margin-bottom: .25rem; }
+    .tl-item h4 { font-weight: 500; margin-bottom: .2rem; color: var(--white); }
+    .tl-item p { font-size: .88rem; color: rgba(255,255,255,.55); }
+
+    .detail-row {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .detail-label { font-size: .73rem; letter-spacing: .16em; text-transform: uppercase; color: #5aacf5; min-width: 8rem; padding-top: .1rem; }
+    .detail-value { font-size: .91rem; color: rgba(255,255,255,.65); }
+
+    /* ── CONTACT ── */
+    #contact { background: var(--card); }
+    .contact-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.4fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    @media (max-width: 780px) { .contact-layout { grid-template-columns: 1fr; gap: 2rem; } }
+
+    .contact-blurb p { color: var(--muted); font-size: .95rem; margin-bottom: 1.4rem; }
+    .contact-item { display: flex; align-items: flex-start; gap: .8rem; margin-bottom: 1rem; }
+    .contact-item-icon { font-size: 1.1rem; margin-top: .1rem; }
+    .contact-item-text { font-size: .88rem; color: var(--muted); }
+    .contact-item-text strong { color: var(--ink); display: block; font-weight: 500; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .1rem; }
+
+    form { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
+
+    /* ── Contact Form ── */
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-label { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+    .form-label .optional { font-size: .68rem; text-transform: none; letter-spacing: 0; color: rgba(74,106,130,.6); }
+    .form-input, .form-select, .form-textarea {
+      background: var(--bg);
+      border: 1px solid rgba(58,172,219,.22);
+      border-radius: 4px;
+      padding: .75rem 1rem;
+      color: var(--ink);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(74,106,130,.4); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(58,172,219,.1); }
+    .form-select option { background: #fff; }
+    .form-textarea { resize: vertical; min-height: 110px; }
+    .form-submit {
+      width: 100%;
+      padding: .9rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.1rem;
+      letter-spacing: .1em;
+      background: var(--sky);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background .2s, transform .2s;
+    }
+    .form-submit:hover { background: var(--sky2); transform: translateY(-1px); }
+    .form-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
+    .form-status {
+      display: none;
+      padding: 14px 18px;
+      border-radius: 4px;
+      font-size: .9rem;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
+    .form-status.success { display: block; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .form-status.error   { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+    .birth-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--navy);
+      padding: 2.5rem 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-top: 1px solid rgba(26,111,212,.3);
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--white); letter-spacing: .08em; }
+    .footer-logo span { color: #5aacf5; }
+    footer p { font-size: .78rem; color: rgba(255,255,255,.45); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .65s, transform .65s;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
   </style>
 </head>
 <body>
 
-  <!-- ═══ HEADER ═══ -->
-  <header class="site-header">
-    <div class="header-inner">
-      <a href="index.html" class="logo">
-        <svg class="logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="21" cy="21" r="20" stroke="#00b4d8" stroke-width="2"/>
-          <path d="M10 21c4-8 10-12 18-14" stroke="#00b4d8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-          <path d="M8 28c6-6 14-10 24-10" stroke="#f0a500" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
-          <path d="M14 14c5-3 12-5 20-4" stroke="#00b4d8" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.4"/>
-        </svg>
-        <div class="logo-text">WIND <span>VBC</span></div>
-      </a>
-      <nav class="nav-links" id="navLinks">
-        <a href="index.html" class="active">Home</a>
-        <a href="about.html">About</a>
-        <a href="contact.html" class="nav-cta">Join Us</a>
-      </nav>
-      <button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </header>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-logo">Wind<span> VC</span></div>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#season">Season</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
 
-  <!-- ═══ HERO ═══ -->
-  <section class="hero">
+  <!-- HERO -->
+  <section class="hero" id="home">
     <div class="hero-bg"></div>
-    <div class="hero-court-lines"></div>
-    <div class="hero-slash"></div>
-    <div class="hero-slash"></div>
-    <div class="wind-lines">
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-    </div>
+    <div class="hero-orb hero-orb-1"></div>
+    <div class="hero-orb hero-orb-2"></div>
+    <div class="hero-watermark">WIND</div>
     <div class="hero-content">
-      <p class="hero-eyebrow">Club Volleyball &mdash; Est. 2026</p>
-      <h1 class="hero-title">WIND<br><em>VOLLEYBALL</em><br>CLUB</h1>
-      <div class="hero-divider"></div>
-      <p class="hero-subtitle">Competitive club volleyball for 13U and 14U athletes. Building skills, character, and a love for the game.</p>
-      <div class="hero-actions">
-        <a href="about.html" class="btn btn-gold">Meet the Coaches</a>
-        <a href="contact.html" class="btn btn-secondary">Get in Touch &rarr;</a>
-      </div>
-    </div>
-    <!-- Decorative volleyball -->
-    <div class="hero-volleyball-wrap" aria-hidden="true">
-      <img src="volleyball.png" alt="" class="hero-volleyball">
-    </div>
-  </section>
-
-  <!-- ═══ PROGRAMS ═══ -->
-  <section class="programs">
-    <div class="container">
-      <p class="section-eyebrow reveal">Our Programs</p>
-      <h2 class="section-title reveal">Built for Young Athletes</h2>
-      <p class="section-subtitle reveal">Developing the next generation of volleyball players through competitive training and purposeful coaching.</p>
-      <div class="programs-grid">
-        <div class="program-card reveal">
-          <div class="program-age">13U</div>
-          <div class="program-name">Foundation Program</div>
-          <p class="program-desc">Building core skills, volleyball IQ, and competitive instincts. Designed for athletes ready to take their game to the next level.</p>
-        </div>
-        <div class="program-card reveal">
-          <div class="program-age">14U</div>
-          <div class="program-name">Development Program</div>
-          <p class="program-desc">Refining technique, building game sense, and preparing for high school volleyball through competitive play and focused training.</p>
-        </div>
-        <div class="program-card reveal">
-          <div class="program-age">HS</div>
-          <div class="program-name">High School Program</div>
-          <p class="program-desc">Coming soon based on demand. Advanced competitive training for high school athletes looking to compete at the club level. <a href="contact.html" style="color: var(--teal); font-weight: 600;">Express interest &rarr;</a></p>
-        </div>
+      <p class="hero-eyebrow">Founding Season · 2025–26</p>
+      <h1>Wind<em>Volleyball Club</em></h1>
+      <p class="hero-sub">A brand-new competitive club built on hard work, team culture, and a relentless drive to improve.</p>
+      <div class="hero-ctas">
+        <a href="#about" class="btn btn-sky">Meet the Team</a>
+        <a href="#contact" class="btn btn-outline">Get in Touch</a>
       </div>
     </div>
   </section>
 
-  <!-- ═══ INFO STRIP ═══ -->
-  <section class="info-strip">
-    <div class="container">
-      <div class="info-grid">
-        <div class="info-item reveal">
-          <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/>
-            <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/>
-          </svg>
-          <div class="info-label">Training Facility</div>
-          <div class="info-value">The Prairie School</div>
-        </div>
-        <div class="info-item reveal">
-          <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"/>
-          </svg>
-          <div class="info-label">Coaching Staff</div>
-          <div class="info-value">Kei Kondo &amp; Henry Yunker</div>
-        </div>
-        <div class="info-item reveal">
-          <svg class="info-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5"/>
-          </svg>
-          <div class="info-label">First Season</div>
-          <div class="info-value">Winter 2027</div>
-        </div>
-      </div>
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="reveal">
+      <p class="section-label">Who We Are</p>
+      <h2 class="section-title">About the Club</h2>
+      <p class="section-intro">Wind Volleyball Club is a newly formed competitive club team dedicated to developing well-rounded athletes in a supportive, high-energy environment.</p>
+      <div class="divider"></div>
     </div>
-  </section>
 
-  <!-- ═══ CTA BANNER ═══ -->
-  <section class="cta-banner">
-    <div class="wind-lines">
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-      <div class="wind-line"></div>
-    </div>
-    <div class="container" style="position: relative; z-index: 2;">
-      <h2 class="reveal">Ready to Play?</h2>
-      <p class="reveal">Have questions about our programs or want to express interest? We'd love to hear from you.</p>
-      <a href="contact.html" class="btn btn-gold reveal">Contact Us &rarr;</a>
-    </div>
-  </section>
-
-  <!-- ═══ FOOTER ═══ -->
-  <footer class="site-footer">
-    <div class="footer-inner">
-      <div class="footer-brand">
-        <a href="index.html" class="logo">
-          <svg class="logo-icon" viewBox="0 0 42 42" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="21" cy="21" r="20" stroke="#00b4d8" stroke-width="2"/>
-            <path d="M10 21c4-8 10-12 18-14" stroke="#00b4d8" stroke-width="1.5" fill="none" stroke-linecap="round"/>
-            <path d="M8 28c6-6 14-10 24-10" stroke="#f0a500" stroke-width="1.5" fill="none" stroke-linecap="round" opacity="0.6"/>
-          </svg>
-          <div class="logo-text">WIND <span>VBC</span></div>
-        </a>
-        <p>Competitive club volleyball for young athletes. Training at The Prairie School with coaches Kei Kondo and Henry Yunker.</p>
+    <div class="about-grid reveal">
+      <div class="about-card">
+        <h3>Where We Practice</h3>
+        <p>All training sessions are held at <strong style="color:var(--ink)">The Prairie School</strong>.<br><br>Gym access begins 15 minutes before each session.</p>
       </div>
-      <div>
-        <h4 class="footer-heading">Navigate</h4>
-        <ul class="footer-links">
-          <li><a href="index.html">Home</a></li>
-          <li><a href="about.html">About</a></li>
-          <li><a href="contact.html">Contact</a></li>
+      <div class="about-card">
+        <h3>Practice Schedule</h3>
+        <ul>
+          <li>2 regular practices per week</li>
+          <li>1 optional practices per week (strength training &amp; skills deep dive)</li>
         </ul>
       </div>
-      <div>
-        <h4 class="footer-heading">Get in Touch</h4>
-        <ul class="footer-links">
-          <li><a href="contact.html">Contact Form</a></li>
-          <li>The Prairie School</li>
-        </ul>
+      <div class="about-card">
+        <h3>Our Philosophy</h3>
+        <p>We believe great volleyball starts with great people. We emphasize skill development, coachability, and competing with integrity — every rep, every match.</p>
       </div>
     </div>
-    <div class="footer-bottom">
-      &copy; 2026 Wind Volleyball Club. All rights reserved.
+
+    <!-- COACHES -->
+    <div class="reveal" style="margin-top: 3.5rem;">
+      <p class="section-label">Coaching Staff</p>
+      <h3 class="section-title" style="font-size: clamp(2rem, 4vw, 3.2rem);">Meet Your Coaches</h3>
+      <div class="divider"></div>
     </div>
+    <div class="coaches-strip reveal">
+      <div class="coach-card">
+        <div class="coach-avatar">KK</div>
+        <div class="coach-info">
+          <h4>Kei Kondo</h4>
+          <div class="coach-role">Head Coach U13</div>
+        </div>
+      </div>
+      <div class="coach-card">
+        <div class="coach-avatar">HY</div>
+        <div class="coach-info">
+          <h4>Henry Yunker</h4>
+          <div class="coach-role">Head Coach U14</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SEASON -->
+  <section id="season">
+    <div class="reveal">
+      <p class="section-label">Year One</p>
+      <h2 class="section-title">The First Season</h2>
+      <p class="section-intro">Here's what our inaugural season looks like — from tryouts through the end-of-season tournament.</p>
+      <div class="divider"></div>
+    </div>
+
+    <div class="season-layout reveal">
+      <div>
+        <div class="timeline">
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">July 2026</div>
+            <h4>Tryouts &amp; Roster Set</h4>
+            <p>Open tryouts for all age-eligible players. Final roster announced within 72 hours.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">December 2026 - May 2027</div>
+            <h4>Regular Season</h4>
+            <p>Practices being in early December. Practices and tournaments throughout the season.</p>
+          </div>
+          <div class="tl-item">
+            <div class="tl-dot"></div>
+            <div class="tl-date">May 2027</div>
+            <h4>End-of-Season Tournament</h4>
+            <p>Season culminates with the regional championship.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="season-details">
+        <div class="detail-row">
+          <div class="detail-label">Age Group</div>
+          <div class="detail-value">13U &amp; 14U </div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Season Dates</div>
+          <div class="detail-value">December 2026 – May 2027</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Tournaments</div>
+          <div class="detail-value">1-2 regoinal tournaments per month</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Practice Days</div>
+          <div class="detail-value">2 regular practices per week with an optional third practice</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Season Fee</div>
+          <div class="detail-value">$2,500</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Tryout Info</div>
+          <div class="detail-value">Register via the contact form below</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact">
+    <div class="contact-layout">
+      <div class="contact-blurb reveal">
+        <p class="section-label">Get in Touch</p>
+        <h2 class="section-title">Contact Us</h2>
+        <div class="divider"></div>
+        <p>Questions about tryouts, the season, or joining the club? Fill out the form and we'll get back to you within 48 hours.</p>
+
+        <div class="contact-item">
+          <div class="contact-item-icon">📧</div>
+          <div class="contact-item-text">
+            <strong>Email</strong>
+            info@windvolleyballclub.com
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <strong>Practice Facility</strong>
+            The Prairie School
+          </div>
+        </div>
+        <div class="contact-item">
+          <div class="contact-item-icon">📅</div>
+          <div class="contact-item-text">
+            <strong>Tryout Season</strong>
+            July 2026 — register early
+          </div>
+        </div>
+      </div>
+
+      <div class="reveal">
+        <form id="contactForm" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="parentName">Parent / Guardian Name *</label>
+            <input class="form-input" type="text" id="parentName" name="parentName" required autocomplete="name">
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="email">Email *</label>
+              <input class="form-input" type="email" id="email" name="email" required autocomplete="email">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone <span class="optional">(optional)</span></label>
+              <input class="form-input" type="tel" id="phone" name="phone" autocomplete="tel">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="playerName">Player Name *</label>
+            <input class="form-input" type="text" id="playerName" name="playerName" required>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">Player Birth Month &amp; Year *</label>
+            <div class="birth-row">
+              <select class="form-select" id="birthMonth" name="birthMonth" required>
+                <option value="">Month</option>
+                <option value="January">January</option>
+                <option value="February">February</option>
+                <option value="March">March</option>
+                <option value="April">April</option>
+                <option value="May">May</option>
+                <option value="June">June</option>
+                <option value="July">July</option>
+                <option value="August">August</option>
+                <option value="September">September</option>
+                <option value="October">October</option>
+                <option value="November">November</option>
+                <option value="December">December</option>
+              </select>
+              <select class="form-select" id="birthYear" name="birthYear" required>
+                <option value="">Year</option>
+                <option value="2017">2017</option>
+                <option value="2016">2016</option>
+                <option value="2015">2015</option>
+                <option value="2014">2014</option>
+                <option value="2013">2013</option>
+                <option value="2012">2012</option>
+                <option value="2011">2011</option>
+                <option value="2010">2010</option>
+                <option value="2009">2009</option>
+                <option value="2008">2008</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="message">Message <span class="optional">(optional)</span></label>
+            <textarea class="form-textarea" id="message" name="message" placeholder="Any questions or additional info..."></textarea>
+          </div>
+
+          <button type="submit" class="form-submit" id="submitBtn">SEND MESSAGE</button>
+
+          <div class="form-status" id="formStatus"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <p>© 2025 Wind Volleyball Club · Founding Season</p>
+    <p style="color:var(--muted); font-size:.75rem;">Built with ❤️ for the sport</p>
   </footer>
 
   <script>
-    // Mobile nav toggle
-    const toggle = document.getElementById('mobileToggle');
-    const nav = document.getElementById('navLinks');
-    toggle.addEventListener('click', () => {
-      toggle.classList.toggle('open');
-      nav.classList.toggle('open');
-    });
-
     // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => entry.target.classList.add('visible'), i * 100);
-          observer.unobserve(entry.target);
-        }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
       });
     }, { threshold: 0.1 });
-    reveals.forEach(el => observer.observe(el));
+    reveals.forEach(el => io.observe(el));
+
+    // ══════════════════════════════════════
+    // GOOGLE SHEETS FORM SUBMISSION
+    // ══════════════════════════════════════
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrIpgz0z-p8dxFadge4GINQniJ03PKTBqtgZi1ZetpTqPduTMx8t-m_pN5COosUYtw/exec';
+
+    const form = document.getElementById('contactForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const formStatus = document.getElementById('formStatus');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Basic validation
+      const required = form.querySelectorAll('[required]');
+      let valid = true;
+      required.forEach(field => {
+        if (!field.value.trim()) {
+          field.style.borderColor = '#ef4444';
+          valid = false;
+        } else {
+          field.style.borderColor = '';
+        }
+      });
+
+      if (!valid) return;
+
+      // Submit
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'SENDING...';
+
+      const data = {
+        parentName: document.getElementById('parentName').value.trim(),
+        email: document.getElementById('email').value.trim(),
+        phone: document.getElementById('phone').value.trim(),
+        playerName: document.getElementById('playerName').value.trim(),
+        birthMonthYear: document.getElementById('birthMonth').value + ' ' + document.getElementById('birthYear').value,
+        message: document.getElementById('message').value.trim(),
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        formStatus.className = 'form-status success';
+        formStatus.textContent = 'Thank you! Your information has been submitted. A coach will be in touch soon.';
+        form.reset();
+      } catch (err) {
+        formStatus.className = 'form-status error';
+        formStatus.textContent = 'Something went wrong. Please try again or reach out to us directly.';
+      }
+
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'SEND MESSAGE';
+    });
+
+    // Clear error styling on input
+    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
+      field.addEventListener('input', () => { field.style.borderColor = ''; });
+    });
   </script>
 </body>
 </html>
