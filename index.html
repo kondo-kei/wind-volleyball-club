@@ -355,6 +355,11 @@
     }
     .detail-label { font-size: .73rem; letter-spacing: .16em; text-transform: uppercase; color: #5aacf5; min-width: 8rem; padding-top: .1rem; }
     .detail-value { font-size: .91rem; color: rgba(255,255,255,.65); }
+    .detail-list {
+      margin: 0;
+      padding-left: 1rem;
+    }
+    .detail-list li { margin: .15rem 0; }
 
     /* ── CONTACT ── */
     #contact { background: var(--card); }
@@ -505,7 +510,6 @@
         <h3>Where We Practice</h3>
         <ul>
           <li>All training sessions held at <strong style="color:var(--ink)">The Prairie School</strong></li>
-          <li>Gym access begins 15 minutes before each session</li>
         </ul>
       </div>
     </div>
@@ -572,7 +576,12 @@
       <div class="season-details">
         <div class="detail-row">
           <div class="detail-label">Age Group</div>
-          <div class="detail-value">13U &amp; 14U </div>
+          <div class="detail-value">
+            <ul class="detail-list">
+              <li>13U (Born on or after July 1, 2013)</li>
+              <li>14U (Born on or after July 1, 2012)</li>
+            </ul>
+          </div>
         </div>
         <div class="detail-row">
           <div class="detail-label">Season Dates</div>
