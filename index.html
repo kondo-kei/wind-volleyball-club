@@ -22,7 +22,6 @@
       --muted:    #4a6a8a;
       --card:     #ffffff;
 
-      /* keep old names mapped so nothing breaks */
       --bg:       #f4f8ff;
       --bg2:      #e8f0fb;
       --sky:      var(--blue);
@@ -79,7 +78,6 @@
       overflow: hidden;
     }
 
-    /* dark navy hero */
     .hero-bg {
       position: absolute; inset: 0;
       background:
@@ -87,7 +85,6 @@
         radial-gradient(ellipse 50% 50% at 10% 70%, rgba(26,111,212,.15) 0%, transparent 55%),
         linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
     }
-    /* wind-streak lines */
     .hero-bg::after {
       content: '';
       position: absolute; inset: 0;
@@ -101,7 +98,6 @@
         );
     }
 
-    /* large faint wordmark */
     .hero-watermark {
       position: absolute;
       bottom: -3rem; left: 50%;
@@ -115,7 +111,6 @@
       user-select: none;
     }
 
-    /* floating orbs */
     .hero-orb {
       position: absolute;
       border-radius: 50%;
@@ -195,6 +190,8 @@
     .btn-sky:hover { background: var(--blue2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,111,212,.45); }
     .btn-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.35); }
     .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); transform: translateY(-2px); }
+    .btn-tryout { background: #5aacf5; color: var(--navy); font-weight: 600; }
+    .btn-tryout:hover { background: #3d9ae8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(90,172,245,.4); }
 
     /* ── SHARED SECTION ── */
     section { padding: 7rem 6vw; }
@@ -264,7 +261,7 @@
     .about-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(11,31,58,.12), 0 0 0 1px rgba(26,111,212,.3); border-color: transparent; }
     .about-card:hover::after { opacity: 1; }
 
-.about-card h3 {
+    .about-card h3 {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.45rem;
       letter-spacing: .05em;
@@ -376,7 +373,6 @@
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
     @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
 
-    /* ── Contact Form ── */
     .form-group { display: flex; flex-direction: column; gap: .4rem; }
     .form-label { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
     .form-label .optional { font-size: .68rem; text-transform: none; letter-spacing: 0; color: rgba(74,106,130,.6); }
@@ -474,7 +470,8 @@
       <h1>Wind<em>Volleyball Club</em></h1>
       <p class="hero-sub">Pure volleyball, no fluff — skills, fun, and the game we love.</p>
       <div class="hero-ctas">
-        <a href="#about" class="btn btn-sky">About the Club</a>
+        <a href="register.html" class="btn btn-tryout">Sign Up for Tryouts</a>
+        <a href="#about" class="btn btn-outline">About the Club</a>
         <a href="#contact" class="btn btn-outline">Get in Touch</a>
       </div>
     </div>
@@ -579,7 +576,7 @@
         </div>
         <div class="detail-row">
           <div class="detail-label">Tournaments</div>
-          <div class="detail-value">Targeting 2 regoinal tournaments per month</div>
+          <div class="detail-value">Targeting 2 regional tournaments per month</div>
         </div>
         <div class="detail-row">
           <div class="detail-label">Practice Days</div>
@@ -596,6 +593,7 @@
       </div>
     </div>
   </section>
+
 
   <!-- CONTACT -->
   <section id="contact">
@@ -707,7 +705,6 @@
   </footer>
 
   <script>
-    // Scroll reveal
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
       entries.forEach(e => {
@@ -716,9 +713,6 @@
     }, { threshold: 0.1 });
     reveals.forEach(el => io.observe(el));
 
-    // ══════════════════════════════════════
-    // GOOGLE SHEETS FORM SUBMISSION
-    // ══════════════════════════════════════
     const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrIpgz0z-p8dxFadge4GINQniJ03PKTBqtgZi1ZetpTqPduTMx8t-m_pN5COosUYtw/exec';
 
     const form = document.getElementById('contactForm');
@@ -728,7 +722,6 @@
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
 
-      // Basic validation
       const required = form.querySelectorAll('[required]');
       let valid = true;
       required.forEach(field => {
@@ -742,7 +735,6 @@
 
       if (!valid) return;
 
-      // Submit
       submitBtn.disabled = true;
       submitBtn.textContent = 'SENDING...';
 
@@ -775,10 +767,10 @@
       submitBtn.textContent = 'SEND MESSAGE';
     });
 
-    // Clear error styling on input
     form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
       field.addEventListener('input', () => { field.style.borderColor = ''; });
     });
+
   </script>
 </body>
 </html>

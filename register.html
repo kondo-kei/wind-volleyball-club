@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tryout Registration — Wind Volleyball Club</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0b1f3a;
+      --navy2:    #112847;
+      --blue:     #1a6fd4;
+      --blue2:    #1358b0;
+      --blue-pale:#dbeafe;
+      --sky:      #5aacf5;
+      --white:    #ffffff;
+      --bg:       #f4f8ff;
+      --ink:      #0b1f3a;
+      --muted:    #4a6a8a;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5vw;
+      background: rgba(11,31,58,.98);
+      border-bottom: 1px solid rgba(26,111,212,.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: .08em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--sky); }
+    .nav-back {
+      display: flex; align-items: center; gap: .5rem;
+      text-decoration: none;
+      color: rgba(255,255,255,.6);
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--white); }
+    .nav-back-arrow { font-size: 1rem; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 4rem 6vw 2.5rem;
+      border-bottom: 1px solid rgba(26,111,212,.2);
+      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -18deg, transparent, transparent 60px,
+        rgba(26,111,212,.06) 60px, rgba(26,111,212,.06) 61px
+      );
+    }
+    .page-header-inner { position: relative; z-index: 1; max-width: 760px; }
+    .page-eyebrow {
+      font-size: .7rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: .8rem;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.8rem, 7vw, 5rem);
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .page-title em { font-style: normal; color: var(--sky); }
+    .page-desc {
+      color: rgba(255,255,255,.6);
+      font-size: .97rem;
+      max-width: 52ch;
+    }
+    .page-divider {
+      width: 3rem; height: 3px;
+      background: var(--blue);
+      margin: 1.2rem 0 0;
+      border-radius: 2px;
+    }
+
+    /* ── FORM AREA ── */
+    .form-area {
+      padding: 4rem 6vw 6rem;
+      max-width: 820px;
+    }
+
+    .reg-form { display: flex; flex-direction: column; gap: 2rem; }
+
+    /* section groupings */
+    .form-section { display: flex; flex-direction: column; gap: 1.1rem; }
+    .form-section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.3rem;
+      letter-spacing: .06em;
+      color: var(--sky);
+      padding-bottom: .6rem;
+      border-bottom: 1px solid rgba(90,172,245,.2);
+      margin-bottom: .2rem;
+    }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
+    @media (max-width: 560px) { .form-row { grid-template-columns: 1fr; } }
+
+    .form-group { display: flex; flex-direction: column; gap: .4rem; }
+    .form-label {
+      font-size: .7rem;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.5);
+    }
+    .form-label .optional {
+      font-size: .68rem; text-transform: none;
+      letter-spacing: 0; color: rgba(255,255,255,.28);
+    }
+
+    .form-input, .form-select, .form-textarea {
+      background: rgba(255,255,255,.07);
+      border: 1px solid rgba(90,172,245,.22);
+      border-radius: 4px;
+      padding: .78rem 1rem;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: .92rem;
+      outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      width: 100%;
+    }
+    .form-input::placeholder, .form-textarea::placeholder { color: rgba(255,255,255,.22); }
+    .form-input:focus, .form-select:focus, .form-textarea:focus {
+      border-color: var(--sky);
+      box-shadow: 0 0 0 3px rgba(90,172,245,.14);
+    }
+    /* date placeholder color */
+    .form-input[type="date"] { color-scheme: dark; color: rgba(255,255,255,.22); }
+    .form-input[type="date"]::-webkit-datetime-edit-month-field,
+    .form-input[type="date"]::-webkit-datetime-edit-day-field,
+    .form-input[type="date"]::-webkit-datetime-edit-year-field,
+    .form-input[type="date"]::-webkit-datetime-edit-text { color: rgba(255,255,255,.22); }
+    .form-input[type="date"].has-value { color: var(--white); }
+    .form-input[type="date"].has-value::-webkit-datetime-edit-month-field,
+    .form-input[type="date"].has-value::-webkit-datetime-edit-day-field,
+    .form-input[type="date"].has-value::-webkit-datetime-edit-year-field,
+    .form-input[type="date"].has-value::-webkit-datetime-edit-text { color: var(--white); }
+    .form-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(.5); cursor: pointer; }
+    /* select placeholder color */
+    .form-select { color: rgba(255,255,255,.22); }
+    .form-select.has-value { color: var(--white); }
+    .form-select option { background: #112847; color: var(--white); }
+    .form-select option[value=""] { color: rgba(255,255,255,.22); }
+
+    /* address */
+    .address-grid { display: flex; flex-direction: column; gap: .8rem; }
+    .addr-row-2 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: .8rem; }
+    @media (max-width: 560px) { .addr-row-2 { grid-template-columns: 1fr; } }
+
+    /* position checkboxes */
+    .position-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+      gap: .7rem;
+      margin-top: .3rem;
+    }
+    .position-option {
+      display: flex; align-items: center; gap: .65rem;
+      padding: .7rem 1rem;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(90,172,245,.18);
+      border-radius: 6px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s;
+      user-select: none;
+    }
+    .position-option:hover { border-color: rgba(90,172,245,.48); background: rgba(90,172,245,.1); }
+    .position-option input[type="checkbox"] {
+      width: 16px; height: 16px;
+      accent-color: var(--sky);
+      flex-shrink: 0; cursor: pointer;
+    }
+    .position-option input[type="checkbox"]:checked + span { color: var(--sky); }
+    .position-option span { font-size: .88rem; color: rgba(255,255,255,.72); }
+
+    /* submit */
+    .form-submit {
+      width: 100%;
+      padding: 1rem;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .14em;
+      background: var(--sky);
+      color: var(--navy);
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 700;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      margin-top: .5rem;
+    }
+    .form-submit:hover {
+      background: #3d9ae8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(90,172,245,.35);
+    }
+    .form-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    .form-status {
+      display: none;
+      padding: 16px 20px;
+      border-radius: 6px;
+      font-size: .92rem;
+      margin-top: 1rem;
+      line-height: 1.6;
+    }
+    .form-status.success { display: block; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
+    .form-status.error   { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+
+    .form-note {
+      font-size: .78rem;
+      color: rgba(255,255,255,.3);
+      text-align: center;
+      margin-top: .5rem;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: rgba(0,0,0,.3);
+      padding: 2rem 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-top: 1px solid rgba(26,111,212,.2);
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--white); letter-spacing: .08em; }
+    .footer-logo span { color: var(--sky); }
+    footer p { font-size: .75rem; color: rgba(255,255,255,.35); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Wind<span> VC</span></a>
+    <a href="index.html" class="nav-back">
+      <span class="nav-back-arrow">←</span> Back to Main Site
+    </a>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <p class="page-eyebrow">Wind Volleyball Club · 2026–27</p>
+      <h1 class="page-title">Tryout <em>Registration</em></h1>
+      <p class="page-desc">Fill out the form below to register your player for Wind VC tryouts. We'll follow up with tryout details within 48 hours.</p>
+      <div class="page-divider"></div>
+    </div>
+  </div>
+
+  <!-- FORM -->
+  <div class="form-area">
+    <form id="regForm" class="reg-form" novalidate>
+
+      <!-- Parent / Guardian -->
+      <div class="form-section">
+        <div class="form-section-title">Parent / Guardian Info</div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg_parentName">Parent / Guardian Name *</label>
+          <input class="form-input" type="text" id="reg_parentName" name="parentName" required autocomplete="name" placeholder="Jane Smith">
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg_phone">Phone Number *</label>
+            <input class="form-input" type="tel" id="reg_phone" name="parentPhone" required autocomplete="tel" placeholder="(555) 000-0000">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg_email">Email Address *</label>
+            <input class="form-input" type="email" id="reg_email" name="parentEmail" required autocomplete="email" placeholder="you@email.com">
+          </div>
+        </div>
+      </div>
+
+      <!-- Player Info -->
+      <div class="form-section">
+        <div class="form-section-title">Player Info</div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg_playerName">Player Name *</label>
+          <input class="form-input" type="text" id="reg_playerName" name="playerName" required placeholder="First Last">
+        </div>
+
+        <div class="form-group">
+          <label class="form-label" for="reg_birthdate">Player Birthdate *</label>
+          <input class="form-input" type="date" id="reg_birthdate" name="playerBirthdate" required>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="reg_school">School (2026–27 Academic Year) *</label>
+            <input class="form-input" type="text" id="reg_school" name="playerSchool" required placeholder="School name">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg_grade">Grade (2026–27) *</label>
+            <select class="form-select" id="reg_grade" name="playerGrade" required>
+              <option value="">Select grade</option>
+              <option value="6th">6th Grade</option>
+              <option value="7th">7th Grade</option>
+              <option value="8th">8th Grade</option>
+              <option value="9th">9th Grade</option>
+              <option value="10th">10th Grade</option>
+              <option value="11th">11th Grade</option>
+              <option value="12th">12th Grade</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address -->
+      <div class="form-section">
+        <div class="form-section-title">Address</div>
+        <div class="address-grid">
+          <div class="form-group">
+            <label class="form-label" for="reg_street">Street Address *</label>
+            <input class="form-input" type="text" id="reg_street" name="street" required placeholder="123 Main St" autocomplete="street-address">
+          </div>
+          <div class="addr-row-2">
+            <div class="form-group">
+              <label class="form-label" for="reg_city">City *</label>
+              <input class="form-input" type="text" id="reg_city" name="city" required placeholder="City" autocomplete="address-level2">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg_state">State *</label>
+              <input class="form-input" type="text" id="reg_state" name="state" required placeholder="WI" maxlength="2" autocomplete="address-level1">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg_zip">ZIP *</label>
+              <input class="form-input" type="text" id="reg_zip" name="zip" required placeholder="00000" maxlength="10" autocomplete="postal-code">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Position -->
+      <div class="form-section">
+        <div class="form-section-title">Position(s)</div>
+        <p style="font-size:.88rem; color:rgba(255,255,255,.45); margin-bottom:.3rem;">Select all that apply.</p>
+        <div class="position-grid">
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Outside/Leftside">
+            <span>Outside / Leftside</span>
+          </label>
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Opposite/Rightside">
+            <span>Opposite / Rightside</span>
+          </label>
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Middle">
+            <span>Middle</span>
+          </label>
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Setter">
+            <span>Setter</span>
+          </label>
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Libero/DS">
+            <span>Libero / DS</span>
+          </label>
+          <label class="position-option">
+            <input type="checkbox" name="position" value="Unknown">
+            <span>Unknown</span>
+          </label>
+        </div>
+      </div>
+
+      <!-- Prior Club -->
+      <div class="form-section">
+        <div class="form-section-title">Volleyball History</div>
+        <div class="form-group">
+          <label class="form-label" for="reg_priorClub">Club Played in 2025–26 Season * <span class="optional">(type NONE if not applicable)</span></label>
+          <input class="form-input" type="text" id="reg_priorClub" name="priorClub" required placeholder="Club name or NONE">
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div>
+        <button type="submit" class="form-submit" id="regSubmitBtn">Submit Registration</button>
+        <p class="form-note">Your information is kept private and used only for tryout coordination.</p>
+        <div class="form-status" id="regFormStatus"></div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <p>© 2025 Wind Volleyball Club · Founding Season</p>
+  </footer>
+
+  <script>
+    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzrIpgz0z-p8dxFadge4GINQniJ03PKTBqtgZi1ZetpTqPduTMx8t-m_pN5COosUYtw/exec';
+
+    const regForm = document.getElementById('regForm');
+    const regSubmitBtn = document.getElementById('regSubmitBtn');
+    const regFormStatus = document.getElementById('regFormStatus');
+
+    regForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Validate required text fields
+      const requiredFields = regForm.querySelectorAll('[required]');
+      let valid = true;
+      requiredFields.forEach(field => {
+        if (!field.value.trim()) {
+          field.style.borderColor = '#ef4444';
+          valid = false;
+        } else {
+          field.style.borderColor = '';
+        }
+      });
+
+      // Validate at least one position checked
+      const positions = Array.from(regForm.querySelectorAll('input[name="position"]:checked')).map(cb => cb.value);
+      if (positions.length === 0) {
+        valid = false;
+        regFormStatus.className = 'form-status error';
+        regFormStatus.textContent = 'Please select at least one position.';
+        return;
+      }
+
+      if (!valid) {
+        regFormStatus.className = 'form-status error';
+        regFormStatus.textContent = 'Please fill in all required fields.';
+        return;
+      }
+
+      regSubmitBtn.disabled = true;
+      regSubmitBtn.textContent = 'Submitting...';
+      regFormStatus.style.display = 'none';
+
+      const data = {
+        formType: 'tryoutRegistration',
+        parentName:      document.getElementById('reg_parentName').value.trim(),
+        parentPhone:     document.getElementById('reg_phone').value.trim(),
+        parentEmail:     document.getElementById('reg_email').value.trim(),
+        playerName:      document.getElementById('reg_playerName').value.trim(),
+        playerBirthdate: document.getElementById('reg_birthdate').value,
+        street:          document.getElementById('reg_street').value.trim(),
+        city:            document.getElementById('reg_city').value.trim(),
+        state:           document.getElementById('reg_state').value.trim(),
+        zip:             document.getElementById('reg_zip').value.trim(),
+        positions:       positions.join(', '),
+        playerSchool:    document.getElementById('reg_school').value.trim(),
+        playerGrade:     document.getElementById('reg_grade').value,
+        priorClub:       document.getElementById('reg_priorClub').value.trim(),
+      };
+
+      try {
+        await fetch(GOOGLE_SCRIPT_URL, {
+          method: 'POST',
+          mode: 'no-cors',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(data),
+        });
+
+        regFormStatus.className = 'form-status success';
+        regFormStatus.textContent = '✓ Registration received! A coach will be in touch within 48 hours with tryout details.';
+        regForm.reset();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      } catch (err) {
+        regFormStatus.className = 'form-status error';
+        regFormStatus.textContent = 'Something went wrong. Please try again or email us directly at kondo.kei@windvbc.com';
+      }
+
+      regSubmitBtn.disabled = false;
+      regSubmitBtn.textContent = 'Submit Registration';
+    });
+
+    // Clear error highlight on input
+    regForm.querySelectorAll('.form-input, .form-select').forEach(field => {
+      field.addEventListener('input', () => { field.style.borderColor = ''; });
+    });
+
+    // Toggle has-value class for date and select placeholder styling
+    const dateField = document.getElementById('reg_birthdate');
+    const gradeField = document.getElementById('reg_grade');
+
+    dateField.addEventListener('change', () => {
+      dateField.classList.toggle('has-value', !!dateField.value);
+    });
+    gradeField.addEventListener('change', () => {
+      gradeField.classList.toggle('has-value', !!gradeField.value);
+    });
+  </script>
+</body>
+</html>
