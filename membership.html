@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Membership Requirement — Wind Volleyball Club</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #0b1f3a;
+      --navy2:    #112847;
+      --blue:     #1a6fd4;
+      --blue2:    #1358b0;
+      --sky:      #5aacf5;
+      --white:    #ffffff;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--navy);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 300;
+      line-height: 1.65;
+      min-height: 100vh;
+    }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5vw;
+      background: rgba(11,31,58,.98);
+      border-bottom: 1px solid rgba(26,111,212,.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: .08em;
+      color: var(--white);
+      text-decoration: none;
+    }
+    .nav-logo span { color: var(--sky); }
+    .nav-back {
+      display: flex; align-items: center; gap: .5rem;
+      text-decoration: none;
+      color: rgba(255,255,255,.6);
+      font-size: .82rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      transition: color .2s;
+    }
+    .nav-back:hover { color: var(--white); }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      padding: 4rem 6vw 2.5rem;
+      border-bottom: 1px solid rgba(26,111,212,.2);
+      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .page-header::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(
+        -18deg, transparent, transparent 60px,
+        rgba(26,111,212,.06) 60px, rgba(26,111,212,.06) 61px
+      );
+    }
+    .page-header-inner { position: relative; z-index: 1; max-width: 760px; }
+    .page-eyebrow {
+      font-size: .7rem;
+      letter-spacing: .38em;
+      text-transform: uppercase;
+      color: var(--sky);
+      margin-bottom: .8rem;
+    }
+    .page-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+      line-height: 1;
+      color: var(--white);
+      margin-bottom: 1rem;
+    }
+    .page-title em { font-style: normal; color: var(--sky); }
+    .page-desc {
+      color: rgba(255,255,255,.6);
+      font-size: .97rem;
+      max-width: 52ch;
+    }
+    .page-divider {
+      width: 3rem; height: 3px;
+      background: var(--blue);
+      margin: 1.2rem 0 0;
+      border-radius: 2px;
+    }
+
+    /* ── CONTENT ── */
+    .content-area {
+      padding: 4rem 6vw 6rem;
+      max-width: 800px;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+    }
+
+    .info-card {
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(90,172,245,.18);
+      border-radius: 8px;
+      padding: 1.8rem 2rem;
+      display: flex;
+      gap: 1.4rem;
+    }
+    .info-card-icon {
+      font-size: 1.8rem;
+      flex-shrink: 0;
+      line-height: 1;
+      margin-top: .1rem;
+    }
+    .info-card-body { display: flex; flex-direction: column; gap: .5rem; }
+    .info-card-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem;
+      letter-spacing: .06em;
+      color: var(--sky);
+    }
+    .info-card-body p {
+      font-size: .95rem;
+      color: rgba(255,255,255,.72);
+      line-height: 1.7;
+    }
+    .info-card-body strong { color: var(--white); font-weight: 500; }
+
+    .info-card.highlight {
+      border-color: rgba(90,172,245,.4);
+      background: rgba(90,172,245,.08);
+    }
+
+    .btn-purchase {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      margin-top: .8rem;
+      padding: .75rem 1.4rem;
+      background: var(--sky);
+      color: var(--navy);
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1rem;
+      letter-spacing: .1em;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: 700;
+      transition: background .2s, transform .2s, box-shadow .2s;
+      width: fit-content;
+    }
+    .btn-purchase:hover {
+      background: #3d9ae8;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(90,172,245,.35);
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      color: rgba(255,255,255,.5);
+      font-size: .85rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      text-decoration: none;
+      transition: color .2s;
+    }
+    .back-link:hover { color: var(--white); }
+
+    /* ── FOOTER ── */
+    footer {
+      background: rgba(0,0,0,.3);
+      padding: 2rem 6vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      border-top: 1px solid rgba(26,111,212,.2);
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--white); letter-spacing: .08em; }
+    .footer-logo span { color: var(--sky); }
+    footer p { font-size: .75rem; color: rgba(255,255,255,.35); }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <a href="index.html" class="nav-logo">Wind<span> VC</span></a>
+    <a href="register.html" class="nav-back">← Back to Registration</a>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <p class="page-eyebrow">Wind Volleyball Club · Membership Info</p>
+      <h1 class="page-title">Badger Region <em>Membership</em></h1>
+      <p class="page-desc">Why we require it, and how to get yours.</p>
+      <div class="page-divider"></div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+
+    <div class="info-card">
+      <div class="info-card-icon">🛡️</div>
+      <div class="info-card-body">
+        <div class="info-card-title">Why We Require Membership</div>
+        <p>Wind Volleyball Club is a member of <strong>Badger Region Volleyball Association</strong>, a regional branch of <strong>USA Volleyball</strong>. Our insurance coverage is provided through this affiliation.</p>
+        <p>Because of this, all participants — including those attending tryouts, camps, and clinics — are required to hold an active Badger Region / USA Volleyball membership. This protects players in the event of unforeseen injuries or accidents.</p>
+      </div>
+    </div>
+
+    <div class="info-card">
+      <div class="info-card-icon">✅</div>
+      <div class="info-card-body">
+        <div class="info-card-title">Played Club in 2025–26? You're Likely Covered</div>
+        <p>If your player participated on a club volleyball team during the 2025–26 season, their membership most likely covers summer activities — including our tryouts and clinics.</p>
+        <p>You can find your <strong>Badger Region / USA Volleyball Membership ID</strong> by logging into your <strong>SportsEngine account</strong>. Look under your player's profile for a membership or registration tied to Badger Region Volleyball.</p>
+      </div>
+    </div>
+
+    <div class="info-card highlight">
+      <div class="info-card-icon">🆕</div>
+      <div class="info-card-body">
+        <div class="info-card-title">New to Club Volleyball? Purchase a Membership</div>
+        <p>If your player did not participate in club volleyball during the 2025–26 season, you'll need to purchase a Badger Region Volleyball membership before attending any Wind VC events.</p>
+        <a href="https://memberships.sportsengine.com/buy/11f05eb5-2ee5-89fc-80de-e6076231cac5" target="_blank" class="btn-purchase">Purchase Membership →</a>
+      </div>
+    </div>
+
+    <a href="register.html" class="back-link">← Back to Tryout Registration</a>
+
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <p>© 2025 Wind Volleyball Club · Founding Season</p>
+  </footer>
+
+</body>
+</html>
