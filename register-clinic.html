@@ -12,22 +12,22 @@
 
     :root {
       --navy:     #0b1f3a;
-      --navy2:    #0d2a2a;
-      --blue:     #0d9488;
-      --blue2:    #0f766e;
-      --blue-pale:#ccfbf1;
-      --sky:      #2dd4bf;
+      --navy2:    #112847;
+      --blue:     #1a6fd4;
+      --blue2:    #1358b0;
+      --blue-pale:#dbeafe;
+      --sky:      #5aacf5;
       --white:    #ffffff;
-      --bg:       #f0fdfb;
+      --bg:       #f4f8ff;
       --ink:      #0b1f3a;
-      --muted:    #4a7a78;
+      --muted:    #4a6a8a;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--navy);
-      color: var(--white);
+      background: var(--bg);
+      color: var(--ink);
       font-family: 'DM Sans', sans-serif;
       font-weight: 300;
       line-height: 1.65;
@@ -66,7 +66,7 @@
     .page-header {
       padding: 4rem 6vw 2.5rem;
       border-bottom: 1px solid rgba(26,111,212,.2);
-      background: linear-gradient(160deg, #0b1f3a 0%, #0b2e2c 100%);
+      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
       position: relative;
       overflow: hidden;
     }
@@ -119,9 +119,9 @@
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.3rem;
       letter-spacing: .06em;
-      color: var(--sky);
+      color: var(--blue);
       padding-bottom: .6rem;
-      border-bottom: 1px solid rgba(90,172,245,.2);
+      border-bottom: 1px solid rgba(26,111,212,.2);
       margin-bottom: .2rem;
     }
 
@@ -133,34 +133,34 @@
       font-size: .7rem;
       letter-spacing: .16em;
       text-transform: uppercase;
-      color: rgba(255,255,255,.5);
+      color: var(--muted);
     }
     .form-label .optional {
       font-size: .68rem; text-transform: none;
-      letter-spacing: 0; color: rgba(255,255,255,.28);
+      letter-spacing: 0; color: rgba(74,106,138,.5);
     }
 
     .form-input, .form-select {
-      background: rgba(255,255,255,.07);
-      border: 1px solid rgba(90,172,245,.22);
+      background: var(--white);
+      border: 1px solid rgba(26,111,212,.25);
       border-radius: 4px;
       padding: .78rem 1rem;
-      color: var(--white);
+      color: var(--ink);
       font-family: 'DM Sans', sans-serif;
       font-size: .92rem;
       outline: none;
       transition: border-color .2s, box-shadow .2s;
       width: 100%;
     }
-    .form-input::placeholder { color: rgba(255,255,255,.22); }
+    .form-input::placeholder { color: rgba(11,31,58,.3); }
     .form-input:focus, .form-select:focus {
-      border-color: var(--sky);
-      box-shadow: 0 0 0 3px rgba(90,172,245,.14);
+      border-color: var(--blue);
+      box-shadow: 0 0 0 3px rgba(26,111,212,.12);
     }
-    .form-select { color: rgba(255,255,255,.22); }
-    .form-select.has-value { color: var(--white); }
-    .form-select option { background: #112847; color: var(--white); }
-    .form-select option[value=""] { color: rgba(255,255,255,.22); }
+    .form-select { color: rgba(11,31,58,.35); }
+    .form-select.has-value { color: var(--ink); }
+    .form-select option { background: var(--white); color: var(--ink); }
+    .form-select option[value=""] { color: rgba(11,31,58,.35); }
 
     /* address */
     .address-grid { display: flex; flex-direction: column; gap: .8rem; }
@@ -206,21 +206,21 @@
     .position-option {
       display: flex; align-items: center; gap: .65rem;
       padding: .7rem 1rem;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(90,172,245,.18);
+      background: var(--white);
+      border: 1px solid rgba(26,111,212,.2);
       border-radius: 6px;
       cursor: pointer;
       transition: border-color .2s, background .2s;
       user-select: none;
     }
-    .position-option:hover { border-color: rgba(90,172,245,.48); background: rgba(90,172,245,.1); }
+    .position-option:hover { border-color: var(--blue); background: rgba(26,111,212,.05); }
     .position-option input[type="checkbox"] {
       width: 16px; height: 16px;
-      accent-color: var(--sky);
+      accent-color: var(--blue);
       flex-shrink: 0; cursor: pointer;
     }
-    .position-option input[type="checkbox"]:checked + span { color: var(--sky); }
-    .position-option span { font-size: .88rem; color: rgba(255,255,255,.72); }
+    .position-option input[type="checkbox"]:checked + span { color: var(--blue); }
+    .position-option span { font-size: .88rem; color: rgba(11,31,58,.7); }
 
     /* submit */
     .form-submit {
@@ -239,9 +239,9 @@
       margin-top: .5rem;
     }
     .form-submit:hover {
-      background: #14b8a6;
+      background: #3d9ae8;
       transform: translateY(-2px);
-      box-shadow: 0 8px 28px rgba(45,212,191,.35);
+      box-shadow: 0 8px 28px rgba(26,111,212,.35);
     }
     .form-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; box-shadow: none; }
 
@@ -258,7 +258,7 @@
 
     .form-note {
       font-size: .78rem;
-      color: rgba(255,255,255,.3);
+      color: rgba(11,31,58,.4);
       text-align: center;
       margin-top: .5rem;
     }
@@ -391,7 +391,7 @@
       <!-- Position -->
       <div class="form-section">
         <div class="form-section-title">Position(s)</div>
-        <p style="font-size:.88rem; color:rgba(255,255,255,.45); margin-bottom:.3rem;">Select all that apply.</p>
+        <p style="font-size:.88rem; color:rgba(11,31,58,.45); margin-bottom:.3rem;">Select all that apply.</p>
         <div class="position-grid">
           <label class="position-option">
             <input type="checkbox" name="position" value="Outside/Leftside">
