@@ -119,11 +119,14 @@
       gap: 1.4rem;
     }
     .info-card-icon {
-      font-size: 1.8rem;
       flex-shrink: 0;
-      line-height: 1;
+      width: 2.2rem;
+      height: 2.2rem;
       margin-top: .1rem;
+      color: var(--sky);
+      opacity: .85;
     }
+    .info-card-icon svg { width: 100%; height: 100%; }
     .info-card-body { display: flex; flex-direction: column; gap: .5rem; }
     .info-card-title {
       font-family: 'Bebas Neue', sans-serif;
@@ -217,7 +220,11 @@
   <div class="content-area">
 
     <div class="info-card">
-      <div class="info-card-icon">🛡️</div>
+      <div class="info-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      </div>
       <div class="info-card-body">
         <div class="info-card-title">Why We Require Membership</div>
         <p>Wind Volleyball Club is a member of <strong>Badger Region Volleyball Association</strong>, a regional branch of <strong>USA Volleyball</strong>. Our insurance coverage is provided through this affiliation.</p>
@@ -226,7 +233,12 @@
     </div>
 
     <div class="info-card">
-      <div class="info-card-icon">✅</div>
+      <div class="info-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M9 12l2 2 4-4"/>
+        </svg>
+      </div>
       <div class="info-card-body">
         <div class="info-card-title">Played Club in 2025–26? You're Likely Covered</div>
         <p>If your player participated on a club volleyball team during the 2025–26 season, their membership most likely covers summer activities — including our tryouts and clinics.</p>
@@ -235,10 +247,17 @@
     </div>
 
     <div class="info-card highlight">
-      <div class="info-card-icon">🆕</div>
+      <div class="info-card-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="8" x2="12" y2="16"/>
+          <line x1="8" y1="12" x2="16" y2="12"/>
+        </svg>
+      </div>
       <div class="info-card-body">
         <div class="info-card-title">New to Club Volleyball? Purchase a Membership</div>
         <p>If your player did not participate in club volleyball during the 2025–26 season, you'll need to purchase a Badger Region Volleyball membership before attending any Wind VC events.</p>
+        <p>A <strong>summer membership is $20</strong> and covers all summer activities including tryouts, camps, and clinics.</p>
         <a href="https://memberships.sportsengine.com/buy/11f05eb5-2ee5-89fc-80de-e6076231cac5" target="_blank" class="btn-purchase">Purchase Membership →</a>
       </div>
     </div>
