@@ -106,6 +106,29 @@
       border-radius: 2px;
     }
 
+    .clinic-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem 2rem;
+      margin-top: 1.4rem;
+    }
+    .clinic-detail {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+    }
+    .clinic-detail-label {
+      font-size: .62rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+    .clinic-detail-value {
+      font-size: .95rem;
+      color: var(--white);
+      font-weight: 400;
+    }
+
     /* ── FORM AREA ── */
     .form-area {
       padding: 4rem 6vw 6rem;
@@ -294,8 +317,26 @@
     <div class="page-header-inner">
       <p class="page-eyebrow">Wind Volleyball Club · July 6–9, 2026</p>
       <h1 class="page-title">Pre-Tryout <em>Tune-Up Clinic</em></h1>
-      <p class="page-desc">Register your player for our 4-day tune-up clinic. Open to players trying out for any club — we'll follow up with details within 48 hours.</p>
+      <p class="page-desc">Register your player for our 4-day tune-up clinic. Open to players trying out for any club.</p>
       <div class="page-divider"></div>
+      <div class="clinic-details">
+        <div class="clinic-detail">
+          <span class="clinic-detail-label">Date</span>
+          <span class="clinic-detail-value">July 6–9, 2026</span>
+        </div>
+        <div class="clinic-detail">
+          <span class="clinic-detail-label">Time</span>
+          <span class="clinic-detail-value">TBD (2 hours/day)</span>
+        </div>
+        <div class="clinic-detail">
+          <span class="clinic-detail-label">Cost</span>
+          <span class="clinic-detail-value">$100 for 4 days</span>
+        </div>
+        <div class="clinic-detail">
+          <span class="clinic-detail-label">Location</span>
+          <span class="clinic-detail-value">The Prairie School</span>
+        </div>
+      </div>
     </div>
   </div>
 
