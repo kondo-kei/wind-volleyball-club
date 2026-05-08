@@ -36,6 +36,11 @@ function doPost(e) {
   var data = JSON.parse(e.postData.contents);
   var formType = data.formType || 'contact';
 
+  // ── DEBUG: log every incoming payload to a Debug sheet ──
+  var debugSheet = getSheet('Debug Log');
+  debugSheet.appendRow([new Date(), formType, e.postData.contents]);
+  // ────────────────────────────────────────────────────────
+
   if (formType === 'tryoutRegistration') {
     return handleTryout(data);
   } else if (formType === 'clinicRegistration') {
