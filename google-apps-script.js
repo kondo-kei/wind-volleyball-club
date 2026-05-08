@@ -1,51 +1,64 @@
 // ═══════════════════════════════════════════════════════
-// Google Apps Script — Wind VBC Contact Form → Sheet + Email
+// Google Apps Script — Wind VBC Forms → Sheets + Email
 // ═══════════════════════════════════════════════════════
+//
+// Handles three form types, each written to its own sheet tab:
+//   - Contact form         → "Contact Form" tab
+//   - Tryout registration  → "Tryout Registrations" tab
+//   - Clinic registration  → "Clinic Registrations" tab
 //
 // SETUP:
-// 1. Create a Google Sheet
-// 2. Add these headers in Row 1 (cells A1 through G1):
-//    Timestamp | Parent Name | Email | Phone | Player Name | Birth Month/Year | Message
+// 1. Open your Google Sheet
+// 2. Create three tabs named exactly:
+//      Contact Form
+//      Tryout Registrations
+//      Clinic Registrations
 //
-// 3. In the Sheet, go to Extensions > Apps Script
-// 4. Delete any existing code and paste this entire file
-// 5. Set NOTIFY_EMAIL below to the address you want notifications sent to
-// 6. Click the floppy disk icon (Save)
-// 7. Click Deploy > New deployment
-//    - Click the gear icon next to "Select type" → choose "Web app"
-//    - Description: "Wind VBC Contact Form"
-//    - Execute as: Me (your Google account)
-//    - Who has access: Anyone
-//    - Click Deploy
-// 8. Authorize the app when prompted (click through the "unsafe" warning — it's your own script)
-//    Note: the Gmail permission is required to send notification emails
-// 9. Copy the Web App URL
-// 10. Paste that URL into index.html in the fetch() call inside the <script> block
+// 3. Add these headers in Row 1 of each tab:
 //
-// That's it! Form submissions will appear as rows in your sheet AND trigger an email.
+//    Contact Form (A1–G1):
+//      Timestamp | Parent Name | Email | Phone | Player Name | Birth Month/Year | Message
+//
+//    Tryout Registrations (A1–N1):
+//      Timestamp | Parent Name | Phone | Email | Player Name | Birthdate | School | Grade | Street | City | State | ZIP | Positions | Prior Club | USAV ID
+//
+//    Clinic Registrations (A1–M1):
+//      Timestamp | Parent Name | Phone | Email | Player Name | School | Grade | USAV ID | Street | City | State | ZIP | Positions | Prior Club
+//
+// 4. Go to Extensions > Apps Script, paste this file, save
+// 5. Deploy as Web App (Execute as: Me, Who has access: Anyone)
+// 6. Copy the Web App URL into all three HTML files' GOOGLE_SCRIPT_URL constant
 // ═══════════════════════════════════════════════════════
 
-// ── Set this to the email address that should receive notifications ──
 var NOTIFY_EMAIL = 'kondo.kei@windvbc.com';
 
 function doPost(e) {
-  var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
-
   var data = JSON.parse(e.postData.contents);
+  var formType = data.formType || 'contact';
 
-  var timestamp   = new Date();
-  var parentName  = data.parentName     || '';
-  var email       = data.email          || '';
-  var phone       = data.phone          || '';
-  var playerName  = data.playerName     || '';
-  var birthMonth  = data.birthMonthYear || '';
-  var message     = data.message        || '';
+  if (formType === 'tryoutRegistration') {
+    return handleTryout(data);
+  } else if (formType === 'clinicRegistration') {
+    return handleClinic(data);
+  } else {
+    return handleContact(data);
+  }
+}
+
+// ── Contact Form ─────────────────────────────────────────
+function handleContact(data) {
+  var sheet = getSheet('Contact Form');
+  var timestamp  = new Date();
+  var parentName = data.parentName     || '';
+  var email      = data.email          || '';
+  var phone      = data.phone          || '';
+  var playerName = data.playerName     || '';
+  var birthMonth = data.birthMonthYear || '';
+  var message    = data.message        || '';
 
   sheet.appendRow([timestamp, parentName, email, phone, playerName, birthMonth, message]);
 
-  // ── Send notification email ──────────────────────────
   var subject = 'New Contact Request – Wind VBC: ' + parentName;
-
   var body =
     'A new contact request was submitted on the Wind VBC website.\n\n' +
     'Timestamp:        ' + timestamp.toLocaleString() + '\n' +
@@ -59,16 +72,115 @@ function doPost(e) {
     'Sent automatically by the Wind VBC contact form.';
 
   GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
-  // ────────────────────────────────────────────────────
+  return ok();
+}
 
+// ── Tryout Registration ───────────────────────────────────
+function handleTryout(data) {
+  var sheet = getSheet('Tryout Registrations');
+  var timestamp = new Date();
+
+  sheet.appendRow([
+    timestamp,
+    data.parentName      || '',
+    data.parentPhone     || '',
+    data.parentEmail     || '',
+    data.playerName      || '',
+    data.playerBirthdate || '',
+    data.playerSchool    || '',
+    data.playerGrade     || '',
+    data.street          || '',
+    data.city            || '',
+    data.state           || '',
+    data.zip             || '',
+    data.positions       || '',
+    data.priorClub       || '',
+    data.usavId          || '',
+  ]);
+
+  var subject = 'New Tryout Registration – Wind VBC: ' + (data.playerName || '');
+  var body =
+    'A new tryout registration was submitted.\n\n' +
+    'Timestamp:       ' + timestamp.toLocaleString() + '\n' +
+    'Parent Name:     ' + (data.parentName || '') + '\n' +
+    'Phone:           ' + (data.parentPhone || '') + '\n' +
+    'Email:           ' + (data.parentEmail || '') + '\n\n' +
+    'Player Name:     ' + (data.playerName || '') + '\n' +
+    'Birthdate:       ' + (data.playerBirthdate || '') + '\n' +
+    'School:          ' + (data.playerSchool || '') + '\n' +
+    'Grade (2026-27): ' + (data.playerGrade || '') + '\n' +
+    'Position(s):     ' + (data.positions || '') + '\n' +
+    'Prior Club:      ' + (data.priorClub || '') + '\n' +
+    'USAV ID:         ' + (data.usavId || '') + '\n\n' +
+    'Address:         ' + (data.street || '') + ', ' + (data.city || '') + ', ' + (data.state || '') + ' ' + (data.zip || '') + '\n\n' +
+    '──────────────────────────────────────\n' +
+    'Sent automatically by the Wind VBC tryout registration form.';
+
+  GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+  return ok();
+}
+
+// ── Clinic Registration ───────────────────────────────────
+function handleClinic(data) {
+  var sheet = getSheet('Clinic Registrations');
+  var timestamp = new Date();
+
+  sheet.appendRow([
+    timestamp,
+    data.parentName   || '',
+    data.parentPhone  || '',
+    data.parentEmail  || '',
+    data.playerName   || '',
+    data.playerSchool || '',
+    data.playerGrade  || '',
+    data.usavId       || '',
+    data.street       || '',
+    data.city         || '',
+    data.state        || '',
+    data.zip          || '',
+    data.positions    || '',
+    data.priorClub    || '',
+  ]);
+
+  var subject = 'New Clinic Registration – Wind VBC: ' + (data.playerName || '');
+  var body =
+    'A new Pre-Tryout Tune-Up Clinic registration was submitted.\n\n' +
+    'Timestamp:       ' + timestamp.toLocaleString() + '\n' +
+    'Parent Name:     ' + (data.parentName || '') + '\n' +
+    'Phone:           ' + (data.parentPhone || '') + '\n' +
+    'Email:           ' + (data.parentEmail || '') + '\n\n' +
+    'Player Name:     ' + (data.playerName || '') + '\n' +
+    'School:          ' + (data.playerSchool || '') + '\n' +
+    'Grade (2026-27): ' + (data.playerGrade || '') + '\n' +
+    'Position(s):     ' + (data.positions || '') + '\n' +
+    'Prior Club:      ' + (data.priorClub || '') + '\n' +
+    'USAV ID:         ' + (data.usavId || '') + '\n\n' +
+    'Address:         ' + (data.street || '') + ', ' + (data.city || '') + ', ' + (data.state || '') + ' ' + (data.zip || '') + '\n\n' +
+    '──────────────────────────────────────\n' +
+    'Sent automatically by the Wind VBC clinic registration form.';
+
+  GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+  return ok();
+}
+
+// ── Helpers ───────────────────────────────────────────────
+function getSheet(name) {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(name);
+  if (!sheet) {
+    sheet = ss.insertSheet(name);
+  }
+  return sheet;
+}
+
+function ok() {
   return ContentService
     .createTextOutput(JSON.stringify({ status: 'success' }))
     .setMimeType(ContentService.MimeType.JSON);
 }
 
-// Handle GET requests (for testing in browser)
 function doGet() {
   return ContentService
-    .createTextOutput('Wind VBC contact form endpoint is active.')
+    .createTextOutput('Wind VBC form endpoint is active.')
     .setMimeType(ContentService.MimeType.TEXT);
 }
