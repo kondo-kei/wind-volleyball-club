@@ -550,12 +550,14 @@
           body: JSON.stringify(data),
         });
 
+        regFormStatus.style.display = '';
         regFormStatus.className = 'form-status success';
         regFormStatus.textContent = '✓ Registration received! We\'ll be in touch with clinic details. See you on the court!';
         regForm.reset();
         regFormStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       } catch (err) {
+        regFormStatus.style.display = '';
         regFormStatus.className = 'form-status error';
         regFormStatus.textContent = 'Something went wrong. Please try again or email us directly at kondo.kei@windvbc.com';
       }
