@@ -122,10 +122,10 @@ function handleTryout(data) {
   var parentFirstName = (data.parentName || '').split(' ')[0];
   var playerFirstName = (data.playerName || '').split(' ')[0];
   var confirmSubject = 'You\'re registered for Wind VC Tryouts!';
-  var confirmBody =
+  var confirmPlain =
     'Hi ' + parentFirstName + ',\n\n' +
     'You\'re registered for Wind Volleyball Club tryouts — we look forward to seeing ' + playerFirstName + ' on the court!\n\n' +
-    'TRYOUT DETAILS\n' +
+    'Tryout Details\n' +
     'Dates:    July 18th & 19th\n' +
     'Time:     4:00 – 6:00 p.m.\n' +
     'Location: The Prairie School\n\n' +
@@ -135,8 +135,21 @@ function handleTryout(data) {
     'See you on the court!\n\n' +
     'Kei Kondo & Henry Yunker\n' +
     'Wind Volleyball Club';
+  var confirmHtml =
+    'Hi ' + parentFirstName + ',<br><br>' +
+    'You\'re registered for Wind Volleyball Club tryouts — we look forward to seeing ' + playerFirstName + ' on the court!<br><br>' +
+    '<strong>Tryout Details</strong><br>' +
+    'Dates:&nbsp;&nbsp;&nbsp;&nbsp;July 18th &amp; 19th<br>' +
+    'Time:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4:00 – 6:00 p.m.<br>' +
+    'Location: The Prairie School<br><br>' +
+    'Please arrive 15 minutes early to complete registration. Nets will be set up and balls will be available when you arrive — feel free to grab one and start warming up.<br><br>' +
+    'One thing to remember: <strong>bring a water bottle!</strong><br><br>' +
+    'Questions? Don\'t hesitate to reach out — we\'re happy to help.<br><br>' +
+    'See you on the court!<br><br>' +
+    'Kei Kondo &amp; Henry Yunker<br>' +
+    'Wind Volleyball Club';
 
-  GmailApp.sendEmail(data.parentEmail, confirmSubject, confirmBody);
+  GmailApp.sendEmail(data.parentEmail, confirmSubject, confirmPlain, { htmlBody: confirmHtml });
   // ─────────────────────────────────────
 
   return ok();
