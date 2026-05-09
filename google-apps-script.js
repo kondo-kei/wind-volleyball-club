@@ -33,30 +33,15 @@
 var NOTIFY_EMAIL = 'kondo.kei@windvbc.com';
 
 function doPost(e) {
-  try {
-    // ── DEBUG: log the raw event before anything else ──
-    var debugSheet = getSheet('Debug Log');
-    var rawContents = e && e.postData ? e.postData.contents : 'NO_POST_DATA';
-    var contentType = e && e.postData ? e.postData.type : 'NO_CONTENT_TYPE';
-    debugSheet.appendRow([new Date(), 'RAW', contentType, rawContents]);
-    // ──────────────────────────────────────────────────
+  var data = JSON.parse(e.postData.contents);
+  var formType = data.formType || 'contact';
 
-    var data = JSON.parse(rawContents);
-    var formType = data.formType || 'contact';
-
-    debugSheet.appendRow([new Date(), 'PARSED', formType, JSON.stringify(data)]);
-
-    if (formType === 'tryoutRegistration') {
-      return handleTryout(data);
-    } else if (formType === 'clinicRegistration') {
-      return handleClinic(data);
-    } else {
-      return handleContact(data);
-    }
-  } catch (err) {
-    var errSheet = getSheet('Debug Log');
-    errSheet.appendRow([new Date(), 'ERROR', err.toString(), e ? JSON.stringify(e) : 'NO_EVENT']);
-    return ok();
+  if (formType === 'tryoutRegistration') {
+    return handleTryout(data);
+  } else if (formType === 'clinicRegistration') {
+    return handleClinic(data);
+  } else {
+    return handleContact(data);
   }
 }
 
