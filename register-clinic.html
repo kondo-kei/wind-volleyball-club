@@ -474,10 +474,10 @@
       <div>
         <button type="submit" class="form-submit" id="regSubmitBtn">Submit Registration</button>
         <p class="form-note">Your information is kept private and used only for clinic coordination.</p>
-        <div class="form-status" id="regFormStatus"></div>
       </div>
 
     </form>
+    <div class="form-status" id="regFormStatus"></div>
   </div>
 
   <!-- FOOTER -->
@@ -554,7 +554,7 @@
         regFormStatus.className = 'form-status success';
         regFormStatus.textContent = '✓ Registration received! We\'ll be in touch with clinic details. See you on the court!';
         regForm.reset();
-        regFormStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => regFormStatus.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
 
       } catch (err) {
         regFormStatus.style.display = '';
