@@ -532,9 +532,9 @@
         });
 
         regFormStatus.className = 'form-status success';
-        regFormStatus.textContent = '✓ Registration received! A coach will be in touch within 48 hours with tryout details.';
+        regFormStatus.textContent = '✓ Registration received! Check your email for confirmation details. See you at tryouts!';
         regForm.reset();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        regFormStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       } catch (err) {
         regFormStatus.className = 'form-status error';
