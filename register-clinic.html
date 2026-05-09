@@ -551,9 +551,9 @@
         });
 
         regFormStatus.className = 'form-status success';
-        regFormStatus.textContent = '✓ Registration received! We\'ll be in touch within 48 hours with clinic details.';
+        regFormStatus.textContent = '✓ Registration received! We\'ll be in touch with clinic details. See you on the court!';
         regForm.reset();
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        regFormStatus.scrollIntoView({ behavior: 'smooth', block: 'center' });
 
       } catch (err) {
         regFormStatus.className = 'form-status error';
