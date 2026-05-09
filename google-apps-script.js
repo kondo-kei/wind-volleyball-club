@@ -117,6 +117,28 @@ function handleTryout(data) {
     'Sent automatically by the Wind VBC tryout registration form.';
 
   GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+
+  // ── Confirmation email to parent ──
+  var parentFirstName = (data.parentName || '').split(' ')[0];
+  var playerFirstName = (data.playerName || '').split(' ')[0];
+  var confirmSubject = 'You\'re registered for Wind VC Tryouts!';
+  var confirmBody =
+    'Hi ' + parentFirstName + ',\n\n' +
+    'You\'re registered for Wind Volleyball Club tryouts — we look forward to seeing ' + playerFirstName + ' on the court!\n\n' +
+    'TRYOUT DETAILS\n' +
+    'Dates:    July 18th & 19th\n' +
+    'Time:     4:00 – 6:00 p.m.\n' +
+    'Location: The Prairie School\n\n' +
+    'Please arrive 15 minutes early to complete registration. Nets will be set up and balls will be available when you arrive — feel free to grab one and start warming up.\n\n' +
+    'One thing to remember: bring a water bottle!\n\n' +
+    'Questions? Don\'t hesitate to reach out — we\'re happy to help.\n\n' +
+    'See you on the court!\n\n' +
+    'Kei Kondo & Henry Yunker\n' +
+    'Wind Volleyball Club';
+
+  GmailApp.sendEmail(data.parentEmail, confirmSubject, confirmBody);
+  // ─────────────────────────────────────
+
   return ok();
 }
 
