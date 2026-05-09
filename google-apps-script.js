@@ -149,7 +149,7 @@ function handleTryout(data) {
     'Kei Kondo &amp; Henry Yunker<br>' +
     'Wind Volleyball Club';
 
-  GmailApp.sendEmail(data.parentEmail, confirmSubject, confirmPlain, { htmlBody: confirmHtml });
+  GmailApp.sendEmail(data.parentEmail, confirmSubject, confirmPlain, { htmlBody: confirmHtml, name: 'Kei Kondo | Wind Volleyball Club' });
   // ─────────────────────────────────────
 
   return ok();
