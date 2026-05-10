@@ -5,8 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wind Volleyball Club</title>
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Italiana&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -102,7 +103,7 @@
       position: absolute;
       bottom: -3rem; left: 50%;
       transform: translateX(-50%);
-      font-family: 'Italiana', serif;
+      font-family: 'Playfair Display', serif;
       font-size: clamp(8rem, 22vw, 20rem);
       letter-spacing: -.02em;
       color: rgba(26,111,212,.08);
@@ -146,14 +147,13 @@
       animation: fadeUp .7s .2s forwards;
     }
 
-    /* ── KEY FIX: Italiana, no italic, two lines via em ── */
     .hero h1 {
-      font-family: 'Italiana', serif;
+      font-family: 'Playfair Display', serif;
       font-weight: 400;
       font-style: normal;
-      font-size: clamp(5rem, 16vw, 13rem);
-      line-height: 1;
-      letter-spacing: .02em;
+      font-size: clamp(2.8rem, 8vw, 5.5rem);
+      line-height: .95;
+      letter-spacing: .01em;
       color: var(--white);
       opacity: 0;
       animation: fadeUp .7s .35s forwards;
@@ -163,11 +163,9 @@
       font-weight: 400;
       color: #5aacf5;
       display: block;
-      font-size: .38em;
-      letter-spacing: .25em;
-      line-height: 1.6;
-      text-transform: uppercase;
-      margin-top: .3rem;
+      font-size: 1em;
+      letter-spacing: .01em;
+      line-height: 1.1;
     }
 
     .hero-sub {
