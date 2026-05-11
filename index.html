@@ -7,7 +7,7 @@
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -61,8 +61,8 @@
     nav a {
       text-decoration: none;
       color: rgba(255,255,255,.65);
-      font-size: .82rem;
-      letter-spacing: .14em;
+      font-size: .78rem;
+      letter-spacing: .16em;
       text-transform: uppercase;
       transition: color .2s;
     }
@@ -78,7 +78,6 @@
       position: relative;
       overflow: hidden;
     }
-
     .hero-bg {
       position: absolute; inset: 0;
       background:
@@ -89,16 +88,11 @@
     .hero-bg::after {
       content: '';
       position: absolute; inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          -18deg,
-          transparent,
-          transparent 60px,
-          rgba(26,111,212,.07) 60px,
-          rgba(26,111,212,.07) 61px
-        );
+      background-image: repeating-linear-gradient(
+        -18deg, transparent, transparent 60px,
+        rgba(26,111,212,.07) 60px, rgba(26,111,212,.07) 61px
+      );
     }
-
     .hero-watermark {
       position: absolute;
       bottom: -3rem; left: 50%;
@@ -111,21 +105,14 @@
       pointer-events: none;
       user-select: none;
     }
-
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
+    .hero-orb { position: absolute; border-radius: 50%; pointer-events: none; }
     .hero-orb-1 {
-      width: 32rem; height: 32rem;
-      top: -8rem; right: -10rem;
+      width: 32rem; height: 32rem; top: -8rem; right: -10rem;
       background: radial-gradient(circle, rgba(26,111,212,.22) 0%, transparent 70%);
       animation: drift 9s ease-in-out infinite alternate;
     }
     .hero-orb-2 {
-      width: 20rem; height: 20rem;
-      bottom: 4rem; left: 5%;
+      width: 20rem; height: 20rem; bottom: 4rem; left: 5%;
       background: radial-gradient(circle, rgba(26,111,212,.14) 0%, transparent 70%);
       animation: drift 12s ease-in-out infinite alternate-reverse;
     }
@@ -146,7 +133,6 @@
       opacity: 0;
       animation: fadeUp .7s .2s forwards;
     }
-
     .hero h1 {
       font-family: 'Playfair Display', serif;
       font-weight: 400;
@@ -167,7 +153,6 @@
       letter-spacing: .01em;
       line-height: 1.1;
     }
-
     .hero-sub {
       margin-top: 1.8rem;
       font-size: clamp(.88rem, 2vw, 1rem);
@@ -198,6 +183,7 @@
       cursor: pointer;
       border: none;
       transition: all .22s;
+      font-family: 'DM Sans', sans-serif;
     }
     .btn-sky { background: var(--blue); color: #fff; }
     .btn-sky:hover { background: var(--blue2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,111,212,.45); }
@@ -208,7 +194,10 @@
 
     /* ── SHARED SECTION ── */
     section { padding: 7rem 6vw; }
+
     .section-label {
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
       font-size: .68rem;
       letter-spacing: .38em;
       text-transform: uppercase;
@@ -216,21 +205,24 @@
       margin-bottom: .8rem;
     }
     .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      line-height: 1;
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: clamp(2.2rem, 5vw, 3.8rem);
+      line-height: 1.05;
       color: var(--ink);
       margin-bottom: 1.2rem;
+      letter-spacing: .01em;
     }
     .section-intro {
       color: var(--muted);
       max-width: 55ch;
       font-size: 1rem;
+      line-height: 1.75;
     }
     .divider {
-      width: 3rem; height: 3px;
+      width: 2.5rem; height: 2px;
       background: var(--sky);
-      margin: 1.5rem 0 3rem;
+      margin: 1.4rem 0 3rem;
       border-radius: 2px;
     }
 
@@ -239,8 +231,7 @@
     #about::before {
       content: '';
       position: absolute; top: -10rem; right: -10rem;
-      width: 36rem; height: 36rem;
-      border-radius: 50%;
+      width: 36rem; height: 36rem; border-radius: 50%;
       background: radial-gradient(circle, rgba(58,172,219,.07) 0%, transparent 68%);
       pointer-events: none;
     }
@@ -275,11 +266,12 @@
     .about-card:hover::after { opacity: 1; }
 
     .about-card h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.45rem;
-      letter-spacing: .05em;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      font-size: 1.15rem;
+      letter-spacing: .01em;
       color: var(--ink);
-      margin-bottom: .6rem;
+      margin-bottom: .8rem;
     }
     .about-card p, .about-card li {
       font-size: .91rem;
@@ -288,7 +280,11 @@
     }
     .about-card ul { list-style: none; padding: 0; }
     .about-card li { padding: .25rem 0; display: flex; align-items: baseline; gap: .5rem; }
-    .about-card li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--sky); flex-shrink: 0; margin-top: .35rem; }
+    .about-card li::before {
+      content: ''; display: inline-block;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--sky); flex-shrink: 0; margin-top: .38rem;
+    }
 
     /* coaches */
     .coaches-strip {
@@ -300,7 +296,7 @@
     .coach-card {
       background: var(--bg);
       border: 1px solid rgba(58,172,219,.15);
-      border-radius: 6px;
+      border-radius: 10px;
       padding: 1.6rem;
       display: flex;
       align-items: center;
@@ -315,13 +311,27 @@
       background: var(--sky-pale);
       border: 2px solid var(--sky);
       display: grid; place-items: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: .85rem;
       color: var(--sky2);
       flex-shrink: 0;
+      letter-spacing: .05em;
     }
-    .coach-info h4 { font-weight: 500; font-size: .95rem; margin-bottom: .15rem; color: var(--ink); }
-    .coach-role { font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sky); }
+    .coach-info h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 1rem;
+      margin-bottom: .2rem;
+      color: var(--ink);
+    }
+    .coach-role {
+      font-size: .72rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--sky);
+      font-family: 'DM Sans', sans-serif;
+    }
 
     /* ── SEASON ── */
     #season { background: var(--navy); }
@@ -329,6 +339,7 @@
     #season .section-title { color: var(--white); }
     #season .section-intro { color: rgba(255,255,255,.6); }
     #season .divider { background: var(--blue); }
+
     .season-layout {
       display: grid;
       grid-template-columns: 1fr 1.5fr;
@@ -347,24 +358,38 @@
     }
     .tl-item { position: relative; margin-bottom: 2.2rem; }
     .tl-dot {
-      position: absolute; left: -1.95rem; top: .4rem;
-      width: 10px; height: 10px;
-      border-radius: 50%;
+      position: absolute; left: -1.95rem; top: .5rem;
+      width: 10px; height: 10px; border-radius: 50%;
       background: var(--blue);
       border: 2px solid var(--navy);
     }
-    .tl-date { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: #5aacf5; margin-bottom: .25rem; }
-    .tl-item h4 { font-weight: 500; margin-bottom: .2rem; color: var(--white); }
-    .tl-item p { font-size: .88rem; color: rgba(255,255,255,.55); }
+    .tl-date {
+      font-size: .68rem; letter-spacing: .22em;
+      text-transform: uppercase; color: #5aacf5;
+      margin-bottom: .3rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .tl-item h4 {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 1.05rem;
+      margin-bottom: .25rem;
+      color: var(--white);
+    }
+    .tl-item p { font-size: .88rem; color: rgba(255,255,255,.55); line-height: 1.65; }
 
     .detail-row {
-      display: flex;
-      gap: 1rem;
+      display: flex; gap: 1rem;
       padding: 1rem 0;
       border-bottom: 1px solid rgba(255,255,255,.08);
     }
-    .detail-label { font-size: .73rem; letter-spacing: .16em; text-transform: uppercase; color: #5aacf5; min-width: 8rem; padding-top: .1rem; }
-    .detail-value { font-size: .91rem; color: rgba(255,255,255,.65); }
+    .detail-label {
+      font-size: .68rem; letter-spacing: .16em;
+      text-transform: uppercase; color: #5aacf5;
+      min-width: 8rem; padding-top: .15rem;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .detail-value { font-size: .91rem; color: rgba(255,255,255,.65); line-height: 1.65; }
 
     /* ── CONTACT ── */
     #contact { background: var(--card); }
@@ -376,19 +401,32 @@
     }
     @media (max-width: 780px) { .contact-layout { grid-template-columns: 1fr; gap: 2rem; } }
 
-    .contact-blurb p { color: var(--muted); font-size: .95rem; margin-bottom: 1.4rem; }
+    .contact-blurb p { color: var(--muted); font-size: .95rem; margin-bottom: 1.4rem; line-height: 1.75; }
     .contact-item { display: flex; align-items: flex-start; gap: .8rem; margin-bottom: 1rem; }
     .contact-item-icon { font-size: 1.1rem; margin-top: .1rem; }
     .contact-item-text { font-size: .88rem; color: var(--muted); }
-    .contact-item-text strong { color: var(--ink); display: block; font-weight: 500; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .1rem; }
+    .contact-item-text strong {
+      color: var(--ink); display: block;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500; font-size: .72rem;
+      letter-spacing: .12em; text-transform: uppercase;
+      margin-bottom: .15rem;
+    }
 
     form { display: flex; flex-direction: column; gap: 1.1rem; }
     .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
     @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
 
     .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-label { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-    .form-label .optional { font-size: .68rem; text-transform: none; letter-spacing: 0; color: rgba(74,106,130,.6); }
+    .form-label {
+      font-size: .68rem; letter-spacing: .16em;
+      text-transform: uppercase; color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+    }
+    .form-label .optional {
+      font-size: .68rem; text-transform: none;
+      letter-spacing: 0; color: rgba(74,106,130,.6);
+    }
     .form-input, .form-select, .form-textarea {
       background: var(--bg);
       border: 1px solid rgba(58,172,219,.22);
@@ -408,9 +446,11 @@
     .form-submit {
       width: 100%;
       padding: .9rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: .1em;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 500;
+      font-size: .82rem;
+      letter-spacing: .18em;
+      text-transform: uppercase;
       background: var(--sky);
       color: #fff;
       border: none;
@@ -443,8 +483,14 @@
       gap: 1rem;
       border-top: 1px solid rgba(26,111,212,.3);
     }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--white); letter-spacing: .08em; }
-    .footer-logo span { color: #5aacf5; }
+    .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-weight: 400;
+      font-size: 1.2rem;
+      color: var(--white);
+      letter-spacing: .02em;
+    }
+    .footer-logo span { color: #5aacf5; font-style: italic; }
     footer p { font-size: .78rem; color: rgba(255,255,255,.45); }
 
     /* ── ANIMATIONS ── */
@@ -509,13 +555,13 @@
         <h3>Practice Schedule</h3>
         <ul>
           <li>2 regular practices per week</li>
-          <li>1 optional practices per week (strength training &amp; skills deep dive)</li>
+          <li>1 optional practice per week (strength training &amp; skills deep dive)</li>
         </ul>
       </div>
       <div class="about-card">
         <h3>Where We Practice</h3>
         <ul>
-          <li>All training sessions held at <strong style="color:var(--ink)">The Prairie School</strong></li>
+          <li>All training sessions held at <strong style="color:var(--ink); font-family:'Playfair Display',serif; font-weight:600;">The Prairie School</strong></li>
         </ul>
       </div>
     </div>
@@ -523,7 +569,7 @@
     <!-- COACHES -->
     <div class="reveal" style="margin-top: 3.5rem;">
       <p class="section-label">Coaching Staff</p>
-      <h3 class="section-title" style="font-size: clamp(2rem, 4vw, 3.2rem);">Meet Your Coaches</h3>
+      <h3 class="section-title" style="font-size: clamp(1.8rem, 4vw, 2.8rem);">Meet Your Coaches</h3>
       <div class="divider"></div>
     </div>
     <div class="coaches-strip reveal">
@@ -532,7 +578,7 @@
         <div class="coach-info">
           <h4>Kei Kondo</h4>
           <div class="coach-role">Head Coach U13</div>
-          <p style="font-size:.88rem; color: var(--muted); margin-top:.5rem;">• Head Varsity Volleyball Coach for The Prairie School</p>
+          <p style="font-size:.85rem; color: var(--muted); margin-top:.5rem;">Head Varsity Volleyball Coach, The Prairie School</p>
         </div>
       </div>
       <div class="coach-card">
@@ -540,7 +586,7 @@
         <div class="coach-info">
           <h4>Henry Yunker</h4>
           <div class="coach-role">Head Coach U14</div>
-          <p style="font-size:.88rem; color: var(--muted); margin-top:.5rem;">• Head JV Volleyball coach for the Prairie School</p>
+          <p style="font-size:.85rem; color: var(--muted); margin-top:.5rem;">Head JV Volleyball Coach, The Prairie School</p>
         </div>
       </div>
     </div>
@@ -572,7 +618,7 @@
           </div>
           <div class="tl-item">
             <div class="tl-dot"></div>
-            <div class="tl-date">December 2026 - May 2027</div>
+            <div class="tl-date">December 2026 – May 2027</div>
             <h4>Regular Season</h4>
             <p>Practices begin in early December. Practices and tournaments will run throughout the season.</p>
           </div>
@@ -622,7 +668,6 @@
         <h2 class="section-title">Contact Us</h2>
         <div class="divider"></div>
         <p>Questions about tryouts, the season, or joining the club? Fill out the form and we'll get back to you within 48 hours.</p>
-
         <div class="contact-item">
           <div class="contact-item-icon">📧</div>
           <div class="contact-item-text">
@@ -652,7 +697,6 @@
             <label class="form-label" for="parentName">Parent / Guardian Name *</label>
             <input class="form-input" type="text" id="parentName" name="parentName" required autocomplete="name">
           </div>
-
           <div class="form-row">
             <div class="form-group">
               <label class="form-label" for="email">Email *</label>
@@ -663,12 +707,10 @@
               <input class="form-input" type="tel" id="phone" name="phone" autocomplete="tel">
             </div>
           </div>
-
           <div class="form-group">
             <label class="form-label" for="playerName">Player Name *</label>
             <input class="form-input" type="text" id="playerName" name="playerName" required>
           </div>
-
           <div class="form-group">
             <label class="form-label">Player Birth Month &amp; Year *</label>
             <div class="birth-row">
@@ -702,14 +744,11 @@
               </select>
             </div>
           </div>
-
           <div class="form-group">
             <label class="form-label" for="message">Message <span class="optional">(optional)</span></label>
             <textarea class="form-textarea" id="message" name="message" placeholder="Any questions or additional info..."></textarea>
           </div>
-
-          <button type="submit" class="form-submit" id="submitBtn">SEND MESSAGE</button>
-
+          <button type="submit" class="form-submit" id="submitBtn">Send Message</button>
           <div class="form-status" id="formStatus"></div>
         </form>
       </div>
@@ -718,9 +757,9 @@
 
   <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <div class="footer-logo">Wind <span>Volleyball Club</span></div>
     <p>© 2025 Wind Volleyball Club · Founding Season</p>
-    <p style="color:var(--muted); font-size:.75rem;">Built with ❤️ for the sport</p>
+    <p style="font-size:.75rem;">Built with ❤️ for the sport</p>
   </footer>
 
   <script>
@@ -740,23 +779,15 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       const required = form.querySelectorAll('[required]');
       let valid = true;
       required.forEach(field => {
-        if (!field.value.trim()) {
-          field.style.borderColor = '#ef4444';
-          valid = false;
-        } else {
-          field.style.borderColor = '';
-        }
+        if (!field.value.trim()) { field.style.borderColor = '#ef4444'; valid = false; }
+        else { field.style.borderColor = ''; }
       });
-
       if (!valid) return;
-
       submitBtn.disabled = true;
-      submitBtn.textContent = 'SENDING...';
-
+      submitBtn.textContent = 'Sending...';
       const data = {
         parentName: document.getElementById('parentName').value.trim(),
         email: document.getElementById('email').value.trim(),
@@ -765,15 +796,12 @@
         birthMonthYear: document.getElementById('birthMonth').value + ' ' + document.getElementById('birthYear').value,
         message: document.getElementById('message').value.trim(),
       };
-
       try {
         await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
+          method: 'POST', mode: 'no-cors',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data),
         });
-
         formStatus.className = 'form-status success';
         formStatus.textContent = 'Thank you! Your information has been submitted. A coach will be in touch soon.';
         form.reset();
@@ -781,9 +809,8 @@
         formStatus.className = 'form-status error';
         formStatus.textContent = 'Something went wrong. Please try again or reach out to us directly.';
       }
-
       submitBtn.disabled = false;
-      submitBtn.textContent = 'SEND MESSAGE';
+      submitBtn.textContent = 'Send Message';
     });
 
     form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
