@@ -2,17 +2,19 @@
 // Google Apps Script — Wind VBC Forms → Sheets + Email
 // ═══════════════════════════════════════════════════════
 //
-// Handles three form types, each written to its own sheet tab:
+// Handles four form types, each written to its own sheet tab:
 //   - Contact form         → "Contact Form" tab
 //   - Tryout registration  → "Tryout Registrations" tab
 //   - Clinic registration  → "Clinic Registrations" tab
+//   - Open House RSVP      → "Open House June 2026" tab
 //
 // SETUP:
 // 1. Open your Google Sheet
-// 2. Create three tabs named exactly:
+// 2. Create four tabs named exactly:
 //      Contact Form
 //      Tryout Registrations
 //      Clinic Registrations
+//      Open House June 2026
 //
 // 3. Add these headers in Row 1 of each tab:
 //
@@ -25,9 +27,12 @@
 //    Clinic Registrations (A1–M1):
 //      Timestamp | Parent Name | Phone | Email | Player Name | School | Grade | USAV ID | Street | City | State | ZIP | Positions | Prior Club
 //
+//    Open House June 2026 (A1–F1):
+//      Timestamp | Parent Name | Email | Player Name | Birth Month | Birth Year
+//
 // 4. Go to Extensions > Apps Script, paste this file, save
 // 5. Deploy as Web App (Execute as: Me, Who has access: Anyone)
-// 6. Copy the Web App URL into all three HTML files' GOOGLE_SCRIPT_URL constant
+// 6. Copy the Web App URL into all HTML files' GOOGLE_SCRIPT_URL constant
 // ═══════════════════════════════════════════════════════
 
 var NOTIFY_EMAIL = 'kondo.kei@windvbc.com';
@@ -40,6 +45,8 @@ function doPost(e) {
     return handleTryout(data);
   } else if (formType === 'clinicRegistration') {
     return handleClinic(data);
+  } else if (formType === 'openHouseRSVP') {
+    return handleOpenHouse(data);
   } else {
     return handleContact(data);
   }
@@ -193,6 +200,36 @@ function handleClinic(data) {
     'Address:         ' + (data.street || '') + ', ' + (data.city || '') + ', ' + (data.state || '') + ' ' + (data.zip || '') + '\n\n' +
     '──────────────────────────────────────\n' +
     'Sent automatically by the Wind VBC clinic registration form.';
+
+  GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
+  return ok();
+}
+
+// ── Open House RSVP ───────────────────────────────────────
+function handleOpenHouse(data) {
+  var sheet = getSheet('Open House June 2026');
+  var timestamp = new Date();
+
+  sheet.appendRow([
+    timestamp,
+    data.parentName || '',
+    data.email      || '',
+    data.playerName || '',
+    data.birthMonth || '',
+    data.birthYear  || '',
+  ]);
+
+  var subject = 'New Open House RSVP – Wind VBC: ' + (data.parentName || '');
+  var body =
+    'A new Open House RSVP was submitted.\n\n' +
+    'Timestamp:    ' + timestamp.toLocaleString() + '\n' +
+    'Parent Name:  ' + (data.parentName || '') + '\n' +
+    'Email:        ' + (data.email || '') + '\n\n' +
+    'Player Name:  ' + (data.playerName || '') + '\n' +
+    'Birth Month:  ' + (data.birthMonth || '') + '\n' +
+    'Birth Year:   ' + (data.birthYear || '') + '\n\n' +
+    '──────────────────────────────────────\n' +
+    'Sent automatically by the Wind VBC Open House RSVP form.';
 
   GmailApp.sendEmail(NOTIFY_EMAIL, subject, body);
   return ok();
