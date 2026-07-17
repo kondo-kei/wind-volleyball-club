@@ -106,6 +106,29 @@
       border-radius: 2px;
     }
 
+    .tryout-details {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .6rem 2rem;
+      margin-top: 1.4rem;
+    }
+    .tryout-detail {
+      display: flex;
+      flex-direction: column;
+      gap: .15rem;
+    }
+    .tryout-detail-label {
+      font-size: .62rem;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.4);
+    }
+    .tryout-detail-value {
+      font-size: .95rem;
+      color: var(--white);
+      font-weight: 400;
+    }
+
     /* ── FORM AREA ── */
     .form-area {
       padding: 4rem 6vw 6rem;
@@ -308,8 +331,22 @@
     <div class="page-header-inner">
       <p class="page-eyebrow">Wind Volleyball Club · 2026–27</p>
       <h1 class="page-title">Tryout <em>Registration</em></h1>
-      <p class="page-desc">Fill out the form below to register your player for Wind VC tryouts. We'll follow up with tryout details within 48 hours.</p>
+      <p class="page-desc">Fill out the form below to register your player for Wind VC tryouts.</p>
       <div class="page-divider"></div>
+      <div class="tryout-details">
+        <div class="tryout-detail">
+          <span class="tryout-detail-label">Dates</span>
+          <span class="tryout-detail-value">July 18–19, 2026</span>
+        </div>
+        <div class="tryout-detail">
+          <span class="tryout-detail-label">Time</span>
+          <span class="tryout-detail-value">4:00–6:00 PM</span>
+        </div>
+        <div class="tryout-detail">
+          <span class="tryout-detail-label">Location</span>
+          <span class="tryout-detail-value">The Prairie School</span>
+        </div>
+      </div>
     </div>
   </div>
 
