@@ -425,7 +425,6 @@
   .div-table-head small { font-size: .75rem; color: var(--muted); }
   .team-row {
     display: flex;
-    justify-content: space-between;
     align-items: center;
     padding: .65rem 1.4rem;
     border-top: 1px solid var(--line);
@@ -443,10 +442,10 @@
     vertical-align: 1px;
   }
   .team-row.dropped .team-name { opacity: .45; text-decoration: line-through; }
-  .team-name { font-size: .88rem; font-weight: 500; }
-  .team-club { font-size: .75rem; color: var(--muted); text-align: right; flex: 0 1 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .team-ranks { display: flex; gap: .65rem; flex-shrink: 0; }
-  .rank-col { display: flex; flex-direction: column; align-items: flex-end; min-width: 2.4rem; }
+  .team-name { font-size: .88rem; font-weight: 500; flex: 1; min-width: 0; }
+  .team-club { font-size: .75rem; color: var(--muted); text-align: right; width: 38%; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .team-ranks { display: flex; gap: .4rem; flex-shrink: 0; width: 6rem; }
+  .rank-col { flex: 1; display: flex; flex-direction: column; align-items: flex-end; }
   .rank-num { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .04em; color: var(--muted); line-height: 1.1; }
   .rank-num.wind { color: var(--blue); }
   .rank-num.empty { opacity: .25; }
@@ -945,18 +944,17 @@ function renderRegField(){
       <small>${d.acc} accepted · ${d.pen} pending${d.max?` · ${d.max} spots`:""}${drops?` · ${drops} dropped`:""}</small></div>`;
   const rankData=state.rankings[state.divSel];
   const rankLoading=state._rankLoading.has(state.divSel);
+  const showRanks=rankLoading||(rankData&&rankData.byId);
   html+=rows.map(t=>{
     const currRank=rankData?.byId?.get(t.id)??null;
     const prevRank=rankData?.byCode?.get(t.code??"")?? null;
     const isOurs=t.clubId===ourClub;
-    const rankHtml=rankLoading
-      ?`<div class="team-ranks"><span class="team-rank-loading">loading…</span></div>`
-      :(currRank!=null||prevRank!=null)
-        ?`<div class="team-ranks">
-            <div class="rank-col"><span class="rank-num ${isOurs?"wind":""} ${currRank==null?"empty":""}">${currRank!=null?"#"+currRank:"—"}</span><span class="rank-lbl">cur</span></div>
-            <div class="rank-col"><span class="rank-num ${prevRank==null?"empty":""}">${prevRank!=null?"#"+prevRank:"—"}</span><span class="rank-lbl">prev</span></div>
-          </div>`
-        :``;
+    const rankHtml=!showRanks?``
+      :rankLoading?`<div class="team-ranks"><span class="team-rank-loading">loading…</span></div>`
+      :`<div class="team-ranks">
+          <div class="rank-col"><span class="rank-num ${isOurs&&currRank!=null?"wind":""} ${currRank==null?"empty":""}">${currRank!=null?"#"+currRank:"—"}</span><span class="rank-lbl">cur</span></div>
+          <div class="rank-col"><span class="rank-num ${prevRank==null?"empty":""}">${prevRank!=null?"#"+prevRank:"—"}</span><span class="rank-lbl">prev</span></div>
+        </div>`;
     return `<div class="team-row ${isOurs?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
       <div class="team-name">${esc(t.name)}${isOurs?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${rankHtml}${statusPill(t.status)}</div>`;
   }).join("");
@@ -987,18 +985,17 @@ function renderField(divs, totalTeams){
       <small>${list.length} teams · ${nClubs} clubs${nOurs?` · ${nOurs} Wind`:""}</small></div>`;
   const rankData2=state.rankings[d.DivisionId];
   const rankLoading2=state._rankLoading.has(d.DivisionId);
+  const showRanks2=rankLoading2||(rankData2&&rankData2.byId);
   html+=sorted.map(t=>{
     const currRank=rankData2?.byId?.get(t.id)??null;
     const prevRank=rankData2?.byCode?.get(t.code??"")?? null;
     const isOurs=t.clubId===clubId;
-    const rankHtml=rankLoading2
-      ?`<div class="team-ranks"><span class="team-rank-loading">loading…</span></div>`
-      :(currRank!=null||prevRank!=null)
-        ?`<div class="team-ranks">
-            <div class="rank-col"><span class="rank-num ${isOurs?"wind":""} ${currRank==null?"empty":""}">${currRank!=null?"#"+currRank:"—"}</span><span class="rank-lbl">cur</span></div>
-            <div class="rank-col"><span class="rank-num ${prevRank==null?"empty":""}">${prevRank!=null?"#"+prevRank:"—"}</span><span class="rank-lbl">prev</span></div>
-          </div>`
-        :``;
+    const rankHtml=!showRanks2?``
+      :rankLoading2?`<div class="team-ranks"><span class="team-rank-loading">loading…</span></div>`
+      :`<div class="team-ranks">
+          <div class="rank-col"><span class="rank-num ${isOurs&&currRank!=null?"wind":""} ${currRank==null?"empty":""}">${currRank!=null?"#"+currRank:"—"}</span><span class="rank-lbl">cur</span></div>
+          <div class="rank-col"><span class="rank-num ${prevRank==null?"empty":""}">${prevRank!=null?"#"+prevRank:"—"}</span><span class="rank-lbl">prev</span></div>
+        </div>`;
     return `<div class="team-row ${isOurs?"ours":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
       <div class="team-name">${esc(stripRegion(t.name))}</div>${rankHtml}<div class="team-club">${esc(t.club)}</div></div>`;
   }).join("");
