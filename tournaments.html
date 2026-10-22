@@ -918,8 +918,9 @@ function renderRegField(){
   if (!reg.divisions.some(d=>d.id===state.divSel))
     state.divSel=(reg.divisions.find(d=>ourDivs.has(d.id))||reg.divisions[0]).id;
   const active=reg.teams.filter(t=>!isDropped(t)), acc=active.filter(t=>/accept/i.test(t.status)).length;
+  const sortedRegDivs=[...reg.divisions].sort((a,b)=>(parseInt(a.name)||999)-(parseInt(b.name)||999));
   let html=`<div class="fsum">${reg.divisions.length} divisions · ${active.length} teams · ${acc} accepted</div>`;
-  html+=`<div class="filters">${reg.divisions.map(x=>{
+  html+=`<div class="filters">${sortedRegDivs.map(x=>{
     const n=reg.teams.filter(t=>t.divId===x.id&&!isDropped(t)).length;
     return `<button class="fbtn ${x.id===state.divSel?"on":""} ${ourDivs.has(x.id)?"ours":""}" data-d="${x.id}">${esc(x.name)}<span class="n">${n}${x.max?"/"+x.max:""}</span>${ourDivs.has(x.id)?`<span class="wd"></span>`:""}</button>`;
   }).join("")}</div>`;
@@ -948,8 +949,9 @@ function renderField(divs, totalTeams){
   if (!divs.some(d=>d.DivisionId===state.divSel))
     state.divSel=(divs.find(d=>ours.has(d.DivisionId))||divs[0]).DivisionId;
   const d=divs.find(x=>x.DivisionId===state.divSel);
+  const sortedDivs=[...divs].sort((a,b)=>(parseInt(a.Name)||999)-(parseInt(b.Name)||999));
   let html=`<div class="fsum">${divs.length} division${divs.length===1?"":"s"} · ${totalTeams} teams</div>`;
-  html+=`<div class="filters">${divs.map(x=>`<button class="fbtn ${x.DivisionId===state.divSel?"on":""} ${ours.has(x.DivisionId)?"ours":""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount??""}</span>${ours.has(x.DivisionId)?`<span class="wd"></span>`:""}</button>`).join("")}</div>`;
+  html+=`<div class="filters">${sortedDivs.map(x=>`<button class="fbtn ${x.DivisionId===state.divSel?"on":""} ${ours.has(x.DivisionId)?"ours":""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount??""}</span>${ours.has(x.DivisionId)?`<span class="wd"></span>`:""}</button>`).join("")}</div>`;
   const list=state.field[d.DivisionId];
   if (list===undefined){ loadDivision(d.DivisionId); return html+`<div class="skel"></div>`; }
   if (list===null) return html+`<div class="empty-state"><b>${DEMO?"Not in the demo sample":"Couldn't load this division"}</b>${DEMO?"Demo only carries 12 & 14 Girls.":"Tap Refresh to try again."}</div>`;
