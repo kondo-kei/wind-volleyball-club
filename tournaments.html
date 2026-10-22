@@ -445,9 +445,12 @@
   .team-row.dropped .team-name { opacity: .45; text-decoration: line-through; }
   .team-name { font-size: .88rem; font-weight: 500; }
   .team-club { font-size: .75rem; color: var(--muted); text-align: right; flex: 0 1 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .team-rank { font-family: 'Bebas Neue', sans-serif; font-size: .95rem; letter-spacing: .04em; color: var(--muted); min-width: 2.8rem; flex-shrink: 0; text-align: right; }
-  .team-rank.ours { color: var(--blue); }
-  .team-rank small { font-family: 'DM Sans', sans-serif; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; display: block; }
+  .team-rank { display: flex; flex-direction: column; align-items: flex-end; min-width: 3.8rem; flex-shrink: 0; }
+  .rank-curr { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: .04em; color: var(--muted); line-height: 1.1; }
+  .rank-curr.wind { color: var(--blue); }
+  .rank-prev { font-size: .72rem; color: var(--muted); opacity: .6; line-height: 1.2; }
+  .rank-lbl { font-size: .55rem; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); opacity: .5; margin-top: 1px; }
+  .team-rank-loading { font-size: .65rem; color: var(--muted); opacity: .5; }
   .team-row[hidden] { display: none; }
   .no-match { padding: .9rem 1.4rem; font-size: .82rem; color: var(--muted); }
 
@@ -657,10 +660,10 @@ async function getDivisionTeams(key, divId){
   if (DEMO) {
     const rows = DEMO_FIELD.teams[divId];
     if (!rows) return null;
-    return rows.map(([id, name, clubId]) => ({ id, name, clubId, club: DEMO_FIELD.clubs[clubId] || "" }));
+    return rows.map(([id, name, clubId]) => ({ id, name, code: "", clubId, club: DEMO_FIELD.clubs[clubId] || "" }));
   }
   const r = await get(`/odata/${key}/nextassignments(dId=${divId},cId=null,tIds=[])?$orderby=TeamName,TeamCode&$select=TeamId,TeamName,TeamCode,TeamClub`);
-  return (r && r.value ? r.value : []).map(t => ({ id: t.TeamId, name: t.TeamName, clubId: t.TeamClub?.ClubId, club: t.TeamClub?.Name || "" }));
+  return (r && r.value ? r.value : []).map(t => ({ id: t.TeamId, name: t.TeamName, code: String(t.TeamCode || "").toLowerCase(), clubId: t.TeamClub?.ClubId, club: t.TeamClub?.Name || "" }));
 }
 const REG_COLORS = ["#5F9FFF","#FF5F7F","#3CC48C","#B57BFF","#F5A623","#4FC3D9","#E86FB8","#9AA84B"];
 function eventNumber(e){
@@ -939,15 +942,23 @@ function renderRegField(){
   html+=`<div class="field-wrap"><div class="div-table">
     <div class="div-table-head"><b><span class="color-dot" style="background:${esc(d.color)}"></span>${esc(d.name)}</b>
       <small>${d.acc} accepted · ${d.pen} pending${d.max?` · ${d.max} spots`:""}${drops?` · ${drops} dropped`:""}</small></div>`;
-  const rankMap=state.rankings[state.divSel];
+  const rankData=state.rankings[state.divSel];
   const rankLoading=state._rankLoading.has(state.divSel);
   html+=rows.map(t=>{
-    const r=rankMap&&rankMap.get(t.id);
-    const rankHtml=rankLoading?`<div class="team-rank"><small>ranking…</small></div>`
-      :r?`<div class="team-rank ${t.clubId===ourClub?"ours":""}">#${r.nat||r.reg}<small>nat rank</small></div>`
-      :``;
-    return `<div class="team-row ${t.clubId===ourClub?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
-      <div class="team-name">${esc(t.name)}${t.clubId===ourClub?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${rankHtml}${statusPill(t.status)}</div>`;
+    const currRank=rankData?.byId?.get(t.id)??null;
+    const prevRank=rankData?.byCode?.get(t.code??"")?? null;
+    const isOurs=t.clubId===ourClub;
+    const rankHtml=rankLoading
+      ?`<div class="team-rank"><span class="team-rank-loading">loading…</span></div>`
+      :(currRank!=null||prevRank!=null)
+        ?`<div class="team-rank">
+            ${currRank!=null?`<span class="rank-curr ${isOurs?"wind":""}">#${currRank}</span>`:`<span class="rank-curr" style="opacity:.3">—</span>`}
+            ${prevRank!=null?`<span class="rank-prev">#${prevRank} '${String(PREV_SEASON).slice(2)}</span>`:""}
+            <span class="rank-lbl">cur · prev</span>
+          </div>`
+        :``;
+    return `<div class="team-row ${isOurs?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
+      <div class="team-name">${esc(t.name)}${isOurs?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${rankHtml}${statusPill(t.status)}</div>`;
   }).join("");
   if (!rows.length) html+=`<div class="no-match">${d.list.length?"No teams with this status.":"No teams registered yet."}</div>`;
   html+=`<div class="no-match" id="nomatch" hidden>No teams match.</div></div></div>`;
@@ -974,14 +985,22 @@ function renderField(divs, totalTeams){
   html+=`<div class="field-wrap"><div class="div-table">
     <div class="div-table-head"><b><span class="color-dot" style="background:${esc(d.ColorHex||"var(--blue)")}"></span>${esc(d.Name)}</b>
       <small>${list.length} teams · ${nClubs} clubs${nOurs?` · ${nOurs} Wind`:""}</small></div>`;
-  const rankMap2=state.rankings[d.DivisionId];
+  const rankData2=state.rankings[d.DivisionId];
   const rankLoading2=state._rankLoading.has(d.DivisionId);
   html+=sorted.map(t=>{
-    const r=rankMap2&&rankMap2.get(t.id);
-    const rankHtml=rankLoading2?`<div class="team-rank"><small>ranking…</small></div>`
-      :r?`<div class="team-rank ${t.clubId===clubId?"ours":""}">#${r.nat||r.reg}<small>nat rank</small></div>`
-      :``;
-    return `<div class="team-row ${t.clubId===clubId?"ours":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
+    const currRank=rankData2?.byId?.get(t.id)??null;
+    const prevRank=rankData2?.byCode?.get(t.code??"")?? null;
+    const isOurs=t.clubId===clubId;
+    const rankHtml=rankLoading2
+      ?`<div class="team-rank"><span class="team-rank-loading">loading…</span></div>`
+      :(currRank!=null||prevRank!=null)
+        ?`<div class="team-rank">
+            ${currRank!=null?`<span class="rank-curr ${isOurs?"wind":""}">#${currRank}</span>`:`<span class="rank-curr" style="opacity:.3">—</span>`}
+            ${prevRank!=null?`<span class="rank-prev">#${prevRank} '${String(PREV_SEASON).slice(2)}</span>`:""}
+            <span class="rank-lbl">cur · prev</span>
+          </div>`
+        :``;
+    return `<div class="team-row ${isOurs?"ours":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
       <div class="team-name">${esc(stripRegion(t.name))}</div>${rankHtml}<div class="team-club">${esc(t.club)}</div></div>`;
   }).join("");
   if (!list.length) html+=`<div class="no-match">No teams registered yet.</div>`;
@@ -1006,29 +1025,41 @@ async function loadDivision(divId){
 }
 
 const AES_RANK = "https://www.advancedeventsystems.com/api/ranking";
+const CURR_SEASON = new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear()-1;
+const PREV_SEASON = CURR_SEASON - 1;
+
 async function loadRankings(divId, teamIds){
   if (DEMO || state.rankings[divId]!==undefined || state._rankLoading.has(divId)) return;
   if (!teamIds || !teamIds.length) return;
   state._rankLoading.add(divId);
   try {
-    const meta = await fetch(`${AES_RANK}/${teamIds[0]}`).then(r=>r.ok?r.json():null);
-    if (!meta) { state.rankings[divId]=null; return; }
-    const gcId=meta.genderClassTypeId, dtId=meta.divisionType?.divisionTypeId;
-    if (!gcId||!dtId) { state.rankings[divId]=null; return; }
-    const seasonYear = new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear()-1;
-    const data = await fetch(`${AES_RANK}/${gcId}/${dtId}/${seasonYear}/national/aes`,
-      {headers:{Accept:"application/json"}}).then(r=>r.ok?r.json():null);
-    if (!data || !data.value) { state.rankings[divId]=null; return; }
-    const map = new Map();
-    for (const t of data.value) {
-      const nat=t.national?.current?.rank, reg=t.regional?.current?.rank;
-      if (nat!=null||reg!=null) map.set(t.teamId, {nat, reg});
+    const meta = await fetch(`${AES_RANK}/${teamIds[0]}`).then(r=>r.ok?r.json():null).catch(()=>null);
+    if (!meta?.genderClassTypeId || !meta?.divisionType?.divisionTypeId) {
+      state.rankings[divId] = null; return;
     }
-    state.rankings[divId]=map;
-  } catch { state.rankings[divId]=null; }
+    const gcId = meta.genderClassTypeId, dtId = meta.divisionType.divisionTypeId;
+    const safeGet = url => fetch(url,{headers:{Accept:"application/json"}}).then(r=>r.ok?r.json():null).catch(()=>null);
+    const [curr, prev] = await Promise.all([
+      safeGet(`${AES_RANK}/${gcId}/${dtId}/${CURR_SEASON}/national/aes`),
+      safeGet(`${AES_RANK}/${gcId}/${dtId}/${PREV_SEASON}/national/aes`),
+    ]);
+    // Current season: teamId is populated — key by numeric id
+    const byId = new Map();
+    for (const t of (curr?.value || [])) {
+      const rank = t.national?.current?.rank ?? t.regional?.current?.rank;
+      if (rank != null && t.teamId != null) byId.set(t.teamId, rank);
+    }
+    // Previous season: teamId is null in AES — key by teamCode instead
+    const byCode = new Map();
+    for (const t of (prev?.value || [])) {
+      const rank = t.national?.current?.rank ?? t.regional?.current?.rank;
+      if (rank != null && t.teamCode) byCode.set(String(t.teamCode).toLowerCase(), rank);
+    }
+    state.rankings[divId] = { byId, byCode };
+  } catch { state.rankings[divId] = null; }
   finally {
     state._rankLoading.delete(divId);
-    if (state.view==="field" && state.divSel===divId) renderMain();
+    renderMain(); // always re-render so ranks appear as soon as loaded
   }
 }
 
