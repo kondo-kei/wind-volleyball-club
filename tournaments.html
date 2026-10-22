@@ -445,6 +445,9 @@
   .team-row.dropped .team-name { opacity: .45; text-decoration: line-through; }
   .team-name { font-size: .88rem; font-weight: 500; }
   .team-club { font-size: .75rem; color: var(--muted); text-align: right; flex: 0 1 40%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .team-rank { font-family: 'Bebas Neue', sans-serif; font-size: .95rem; letter-spacing: .04em; color: var(--muted); min-width: 2.8rem; flex-shrink: 0; text-align: right; }
+  .team-rank.ours { color: var(--blue); }
+  .team-rank small { font-family: 'DM Sans', sans-serif; font-size: .6rem; letter-spacing: .06em; text-transform: uppercase; display: block; }
   .team-row[hidden] { display: none; }
   .no-match { padding: .9rem 1.4rem; font-size: .82rem; color: var(--muted); }
 
@@ -767,7 +770,7 @@ function collectGames(d, teamId){
 }
 
 const state = { idx:null, teams:[], data:{}, filter: store.get("filter")||"all", event:null, club:null, timer:null, loading:false,
-                view: store.get("view")||"ours", divSel:null, field:{}, q:"", reg:null, st:"all" };
+                view: store.get("view")||"ours", divSel:null, field:{}, q:"", reg:null, st:"all", rankings:{}, _rankLoading:new Set() };
 
 function renderSidebar(){
   $("#events").innerHTML = CONFIG.events.map((e,i) => {
@@ -919,6 +922,8 @@ function renderRegField(){
     state.divSel=(reg.divisions.find(d=>ourDivs.has(d.id))||reg.divisions[0]).id;
   const active=reg.teams.filter(t=>!isDropped(t)), acc=active.filter(t=>/accept/i.test(t.status)).length;
   const sortedRegDivs=[...reg.divisions].sort((a,b)=>(parseInt(a.name)||999)-(parseInt(b.name)||999));
+  const divTeamIds=reg.teams.filter(t=>t.divId===state.divSel&&!isDropped(t)).map(t=>t.id);
+  if (divTeamIds.length) loadRankings(state.divSel, divTeamIds);
   let html=`<div class="fsum">${reg.divisions.length} divisions · ${active.length} teams · ${acc} accepted</div>`;
   html+=`<div class="filters">${sortedRegDivs.map(x=>{
     const n=reg.teams.filter(t=>t.divId===x.id&&!isDropped(t)).length;
@@ -934,8 +939,16 @@ function renderRegField(){
   html+=`<div class="field-wrap"><div class="div-table">
     <div class="div-table-head"><b><span class="color-dot" style="background:${esc(d.color)}"></span>${esc(d.name)}</b>
       <small>${d.acc} accepted · ${d.pen} pending${d.max?` · ${d.max} spots`:""}${drops?` · ${drops} dropped`:""}</small></div>`;
-  html+=rows.map(t=>`<div class="team-row ${t.clubId===ourClub?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
-      <div class="team-name">${esc(t.name)}${t.clubId===ourClub?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${statusPill(t.status)}</div>`).join("");
+  const rankMap=state.rankings[state.divSel];
+  const rankLoading=state._rankLoading.has(state.divSel);
+  html+=rows.map(t=>{
+    const r=rankMap&&rankMap.get(t.id);
+    const rankHtml=rankLoading?`<div class="team-rank"><small>ranking…</small></div>`
+      :r?`<div class="team-rank ${t.clubId===ourClub?"ours":""}">#${r.nat||r.reg}<small>nat rank</small></div>`
+      :``;
+    return `<div class="team-row ${t.clubId===ourClub?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
+      <div class="team-name">${esc(t.name)}${t.clubId===ourClub?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${rankHtml}${statusPill(t.status)}</div>`;
+  }).join("");
   if (!rows.length) html+=`<div class="no-match">${d.list.length?"No teams with this status.":"No teams registered yet."}</div>`;
   html+=`<div class="no-match" id="nomatch" hidden>No teams match.</div></div></div>`;
   return html;
@@ -961,8 +974,16 @@ function renderField(divs, totalTeams){
   html+=`<div class="field-wrap"><div class="div-table">
     <div class="div-table-head"><b><span class="color-dot" style="background:${esc(d.ColorHex||"var(--blue)")}"></span>${esc(d.Name)}</b>
       <small>${list.length} teams · ${nClubs} clubs${nOurs?` · ${nOurs} Wind`:""}</small></div>`;
-  html+=sorted.map(t=>`<div class="team-row ${t.clubId===clubId?"ours":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
-      <div class="team-name">${esc(stripRegion(t.name))}</div><div class="team-club">${esc(t.club)}</div></div>`).join("");
+  const rankMap2=state.rankings[d.DivisionId];
+  const rankLoading2=state._rankLoading.has(d.DivisionId);
+  html+=sorted.map(t=>{
+    const r=rankMap2&&rankMap2.get(t.id);
+    const rankHtml=rankLoading2?`<div class="team-rank"><small>ranking…</small></div>`
+      :r?`<div class="team-rank ${t.clubId===clubId?"ours":""}">#${r.nat||r.reg}<small>nat rank</small></div>`
+      :``;
+    return `<div class="team-row ${t.clubId===clubId?"ours":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
+      <div class="team-name">${esc(stripRegion(t.name))}</div>${rankHtml}<div class="team-club">${esc(t.club)}</div></div>`;
+  }).join("");
   if (!list.length) html+=`<div class="no-match">No teams registered yet.</div>`;
   html+=`<div class="no-match" id="nomatch" hidden>No teams match.</div></div></div>`;
   return html;
@@ -981,6 +1002,34 @@ async function loadDivision(divId){
   let list; try{ list=await getDivisionTeams(key,divId); }catch{ list=null; }
   state._divLoading=null; if(state.idx!==idx) return;
   state.field[divId]=list; if(state.view==="field") renderMain();
+  if (list && list.length) loadRankings(divId, list.map(t=>t.id));
+}
+
+const AES_RANK = "https://www.advancedeventsystems.com/api/ranking";
+async function loadRankings(divId, teamIds){
+  if (DEMO || state.rankings[divId]!==undefined || state._rankLoading.has(divId)) return;
+  if (!teamIds || !teamIds.length) return;
+  state._rankLoading.add(divId);
+  try {
+    const meta = await fetch(`${AES_RANK}/${teamIds[0]}`).then(r=>r.ok?r.json():null);
+    if (!meta) { state.rankings[divId]=null; return; }
+    const gcId=meta.genderClassTypeId, dtId=meta.divisionType?.divisionTypeId;
+    if (!gcId||!dtId) { state.rankings[divId]=null; return; }
+    const seasonYear = new Date().getMonth() >= 6 ? new Date().getFullYear() : new Date().getFullYear()-1;
+    const data = await fetch(`${AES_RANK}/${gcId}/${dtId}/${seasonYear}/national/aes`,
+      {headers:{Accept:"application/json"}}).then(r=>r.ok?r.json():null);
+    if (!data || !data.value) { state.rankings[divId]=null; return; }
+    const map = new Map();
+    for (const t of data.value) {
+      const nat=t.national?.current?.rank, reg=t.regional?.current?.rank;
+      if (nat!=null||reg!=null) map.set(t.teamId, {nat, reg});
+    }
+    state.rankings[divId]=map;
+  } catch { state.rankings[divId]=null; }
+  finally {
+    state._rankLoading.delete(divId);
+    if (state.view==="field" && state.divSel===divId) renderMain();
+  }
 }
 
 const NOT_POSTED = `<div class="empty-state"><b>Schedule not posted yet</b>The tournament is in AES but the schedule isn't public yet. It'll appear here automatically once the director publishes it, usually a few days before.</div>`;
@@ -988,7 +1037,7 @@ const NOT_POSTED = `<div class="empty-state"><b>Schedule not posted yet</b>The t
 async function load(idx, quiet){
   if (state.loading) return;
   const changed=idx!==state.idx; state.idx=idx;
-  if (changed){ state.event=null; state.teams=[]; state.data={}; state.updated=null; state.club=null; state.field={}; state.divSel=null; state.q=""; state.reg=null; state.st="all"; }
+  if (changed){ state.event=null; state.teams=[]; state.data={}; state.updated=null; state.club=null; state.field={}; state.divSel=null; state.q=""; state.reg=null; state.st="all"; state.rankings={}; state._rankLoading=new Set(); }
   renderSidebar();
   const e=CONFIG.events[idx];
   if (DEMO) e._demo=true;
