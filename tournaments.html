@@ -246,6 +246,8 @@
   }
   .fbtn:hover { border-color: var(--blue); color: var(--blue); }
   .fbtn.on { background: var(--ink); color: var(--card); border-color: var(--ink); }
+  .fbtn.ours { border-color: var(--blue); border-width: 2px; }
+  .fbtn.ours:not(.on) { color: var(--blue); }
   .fbtn .n { font-weight: 300; opacity: .6; margin-left: .25rem; }
   .fbtn .wd { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-left: 4px; vertical-align: 1px; }
 
@@ -919,7 +921,7 @@ function renderRegField(){
   let html=`<div class="fsum">${reg.divisions.length} divisions · ${active.length} teams · ${acc} accepted</div>`;
   html+=`<div class="filters">${reg.divisions.map(x=>{
     const n=reg.teams.filter(t=>t.divId===x.id&&!isDropped(t)).length;
-    return `<button class="fbtn ${x.id===state.divSel?"on":""}" data-d="${x.id}">${esc(x.name)}<span class="n">${n}${x.max?"/"+x.max:""}</span>${ourDivs.has(x.id)?`<span class="wd"></span>`:""}</button>`;
+    return `<button class="fbtn ${x.id===state.divSel?"on":""} ${ourDivs.has(x.id)?"ours":""}" data-d="${x.id}">${esc(x.name)}<span class="n">${n}${x.max?"/"+x.max:""}</span>${ourDivs.has(x.id)?`<span class="wd"></span>`:""}</button>`;
   }).join("")}</div>`;
   const d=regDivStats(state.divSel), drops=d.list.length-d.active;
   html+=`<div class="filters">${[["all","All"],["acc",`Accepted ${d.acc}`],["pen",`Pending ${d.pen}`]].map(([v,l])=>
@@ -947,7 +949,7 @@ function renderField(divs, totalTeams){
     state.divSel=(divs.find(d=>ours.has(d.DivisionId))||divs[0]).DivisionId;
   const d=divs.find(x=>x.DivisionId===state.divSel);
   let html=`<div class="fsum">${divs.length} division${divs.length===1?"":"s"} · ${totalTeams} teams</div>`;
-  html+=`<div class="filters">${divs.map(x=>`<button class="fbtn ${x.DivisionId===state.divSel?"on":""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount??""}</span>${ours.has(x.DivisionId)?`<span class="wd"></span>`:""}</button>`).join("")}</div>`;
+  html+=`<div class="filters">${divs.map(x=>`<button class="fbtn ${x.DivisionId===state.divSel?"on":""} ${ours.has(x.DivisionId)?"ours":""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount??""}</span>${ours.has(x.DivisionId)?`<span class="wd"></span>`:""}</button>`).join("")}</div>`;
   const list=state.field[d.DivisionId];
   if (list===undefined){ loadDivision(d.DivisionId); return html+`<div class="skel"></div>`; }
   if (list===null) return html+`<div class="empty-state"><b>${DEMO?"Not in the demo sample":"Couldn't load this division"}</b>${DEMO?"Demo only carries 12 & 14 Girls.":"Tap Refresh to try again."}</div>`;
