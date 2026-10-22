@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Wind VBC · Tournaments</title>
+<meta name="theme-color" content="#0f2740">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Wind VBC">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f3f5f8; --card:#ffffff; --ink:#0f1b2b; --muted:#5d6b7d; --line:#e2e7ee;
+    --brand:#0f2740; --brand-2:#1d4f7a; --accent:#2f8cff; --accent-soft:#e6f1ff;
+    --win:#12805c; --win-soft:#e3f5ed; --loss:#b4413a; --loss-soft:#fbeceb;
+    --work:#8a5a00; --work-soft:#fff3d6; --live:#e23d3d;
+    --radius:14px; --shadow:0 1px 2px rgba(15,27,43,.06),0 4px 14px rgba(15,27,43,.06);
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#0b1420; --card:#121e2d; --ink:#e8eef6; --muted:#97a6b8; --line:#223246;
+      --brand:#0a1a2b; --brand-2:#1b3d5e; --accent:#5aa6ff; --accent-soft:#16304d;
+      --win:#4fd1a1; --win-soft:#123528; --loss:#ff8a80; --loss-soft:#3a1b1a;
+      --work:#ffc657; --work-soft:#3a2d10; --shadow:none;
+    }
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:16px;line-height:1.4;
+    -webkit-text-size-adjust:100%}
+  a{color:var(--accent)}
+  .wrap{max-width:720px;margin:0 auto;padding:0 16px}
+
+  header.top{background:linear-gradient(160deg,var(--brand),var(--brand-2));color:#fff;
+    padding:calc(14px + env(safe-area-inset-top)) 0 14px}
+  .brandrow{display:flex;align-items:center;justify-content:space-between;gap:12px}
+  .brand{display:flex;align-items:baseline;gap:8px;text-decoration:none;color:#fff}
+  .brand b{font-weight:800;letter-spacing:.14em;font-size:20px}
+  .brand span{opacity:.75;font-size:14px}
+  .refresh{background:rgba(255,255,255,.14);border:0;color:#fff;border-radius:999px;
+    padding:7px 12px;font:600 13px/1 Inter,system-ui,sans-serif;cursor:pointer;display:flex;gap:6px;align-items:center}
+  .refresh:active{transform:scale(.97)}
+  .refresh.spin svg{animation:spin .8s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  .events{display:flex;gap:8px;overflow-x:auto;padding:14px 16px 2px;margin:0 -16px;scrollbar-width:none;scroll-snap-type:x proximity}
+  .events::-webkit-scrollbar{display:none}
+  .chip{flex:0 0 auto;scroll-snap-align:start;border:1px solid rgba(255,255,255,.22);background:rgba(255,255,255,.06);
+    color:#fff;border-radius:12px;padding:8px 12px;text-align:left;cursor:pointer;font:inherit;min-width:132px}
+  .chip small{display:block;opacity:.75;font-size:12px;margin-top:1px}
+  .chip .nm{font-weight:600;font-size:14px;white-space:nowrap;max-width:200px;overflow:hidden;text-overflow:ellipsis}
+  .chip.on{background:#fff;color:var(--brand);border-color:#fff}
+  .chip .tag{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+    padding:2px 6px;border-radius:6px;margin-bottom:4px;background:rgba(255,255,255,.18)}
+  .chip.on .tag{background:#e6f1ff;color:#1d4f7a}
+  .chip.on{color:#0f2740}
+  .tag.live{background:var(--live)!important;color:#fff!important}
+
+  main{padding:16px 0 40px}
+  .evhead{margin:4px 0 14px}
+  .evhead h1{font-size:22px;line-height:1.2;margin:0 0 4px;font-weight:800}
+  .evhead .meta{color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:4px 12px}
+  .updated{color:var(--muted);font-size:12px;margin-top:6px}
+  .demo{background:var(--work-soft);color:var(--work);border-radius:10px;padding:10px 12px;font-size:13px;margin-bottom:14px}
+
+  .filters{display:flex;gap:8px;overflow-x:auto;margin:0 -16px 12px;padding:0 16px;scrollbar-width:none}
+  .filters::-webkit-scrollbar{display:none}
+  .fbtn{flex:0 0 auto;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:999px;
+    padding:6px 12px;font:600 13px/1.2 Inter,system-ui,sans-serif;cursor:pointer}
+  .fbtn.on{background:var(--ink);color:var(--card);border-color:var(--ink)}
+
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid var(--line);
+    margin-bottom:16px;overflow:hidden}
+  .thead{padding:14px 16px 12px;display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+  .tname{font-weight:800;font-size:18px;display:flex;align-items:center;gap:8px}
+  .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+  .tsub{color:var(--muted);font-size:13px;margin-top:2px}
+  .rank{text-align:right;flex:0 0 auto}
+  .rank b{font-size:20px;font-weight:800;display:block;line-height:1.1}
+  .rank small{color:var(--muted);font-size:12px}
+
+  .next{margin:0 12px 12px;border-radius:12px;padding:12px 14px;background:var(--accent-soft)}
+  .next.work{background:var(--work-soft)}
+  .next .lbl{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+  .next.work .lbl{color:var(--work)}
+  .next .big{font-size:20px;font-weight:800;margin-top:2px}
+  .next .vs{font-size:15px;margin-top:2px}
+  .next .det{font-size:13px;color:var(--muted);margin-top:4px}
+  .waiting{margin:0 12px 12px;border-radius:12px;padding:10px 14px;border:1px dashed var(--line);color:var(--muted);font-size:14px}
+
+  .day{padding:8px 16px 4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);
+    border-top:1px solid var(--line);background:color-mix(in srgb,var(--bg) 55%,var(--card))}
+  .play{padding:8px 16px 0;font-size:12px;color:var(--muted);font-weight:600}
+  .g{display:grid;grid-template-columns:74px 1fr auto;gap:10px;padding:10px 16px;align-items:center;border-top:1px solid var(--line)}
+  .play + .g{border-top:0}
+  .g .t{font-weight:700;font-size:14px;white-space:nowrap}
+  .g .t small{white-space:normal}
+  .g .t small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+  .g .who{font-size:15px;font-weight:600;min-width:0}
+  .g .who .opp{overflow:hidden;text-overflow:ellipsis}
+  .g .who small{display:block;font-weight:400;color:var(--muted);font-size:12px;margin-top:1px}
+  .res{text-align:right;font-size:12px;color:var(--muted);white-space:nowrap}
+  .pill{display:inline-block;font-weight:800;font-size:12px;border-radius:6px;padding:3px 7px;margin-bottom:3px}
+  .pill.w{background:var(--win-soft);color:var(--win)}
+  .pill.l{background:var(--loss-soft);color:var(--loss)}
+  .pill.k{background:var(--work-soft);color:var(--work)}
+  .pill.u{background:var(--accent-soft);color:var(--accent)}
+  .sets{display:block;font-variant-numeric:tabular-nums}
+  .g.isnext{box-shadow:inset 3px 0 0 var(--accent)}
+  .g.workrow .who{color:var(--work)}
+
+  .empty{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:22px 18px;text-align:center;color:var(--muted)}
+  .empty b{display:block;color:var(--ink);font-size:16px;margin-bottom:4px}
+  .err{background:var(--loss-soft);color:var(--loss);border-radius:10px;padding:10px 12px;font-size:14px;margin-bottom:14px}
+  .skel{height:150px;border-radius:var(--radius);margin-bottom:16px;
+    background:linear-gradient(90deg,var(--card),var(--line),var(--card));background-size:200% 100%;animation:sh 1.2s infinite}
+  @keyframes sh{to{background-position:-200% 0}}
+  .seg{display:flex;background:var(--line);border-radius:12px;padding:3px;margin:0 0 14px}
+  .seg button{flex:1;border:0;background:transparent;color:var(--muted);border-radius:9px;padding:9px 6px;
+    font:600 14px/1.2 Inter,system-ui,sans-serif;cursor:pointer}
+  .seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+  .seg button span{font-weight:500;opacity:.7}
+  .fsum{color:var(--muted);font-size:13px;margin:-4px 0 10px}
+  .fbtn .n{font-weight:500;opacity:.65;margin-left:4px}
+  .fbtn .wd{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-left:5px;vertical-align:1px}
+  .search{width:100%;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;
+    padding:10px 12px;font:16px/1.2 Inter,system-ui,sans-serif;margin-bottom:12px;outline:none}
+  .search:focus{border-color:var(--accent)}
+  .dhead{padding:12px 16px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:4px 10px;border-bottom:1px solid var(--line)}
+  .dhead b{font-size:17px;font-weight:800;display:flex;align-items:center;gap:8px}
+  .dhead small{color:var(--muted);font-size:13px}
+  .tr{padding:9px 16px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+  .tr:first-of-type{border-top:0}
+  .tr .nm{font-weight:600;font-size:15px;min-width:0}
+  .tr .cl{color:var(--muted);font-size:12px;text-align:right;flex:0 1 45%;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .tr.ours{background:var(--accent-soft)}
+  .tr.ours .nm::after{content:"WIND";font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--accent);margin-left:6px;vertical-align:1px}
+  .tr[hidden]{display:none}
+  .nomatch{padding:14px 16px;color:var(--muted);font-size:14px}
+  .sp{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.02em;border-radius:6px;padding:3px 7px;white-space:nowrap;flex:0 0 auto}
+  .sp.acc{background:var(--win-soft);color:var(--win)}
+  .sp.pen{background:var(--work-soft);color:var(--work)}
+  .sp.oth{background:var(--line);color:var(--muted)}
+  .tr.reg{align-items:center}
+  .tr.reg .nm small{display:block;color:var(--muted);font-weight:400;font-size:12px;margin-top:1px}
+  .tr.reg.ours .nm::after{content:none}
+  .wtag{font-size:10px;font-weight:800;letter-spacing:.06em;color:var(--accent);margin-left:6px;vertical-align:1px}
+  .tr.dropped .nm{opacity:.55;text-decoration:line-through}
+  .regnote{margin:0 12px 12px;border-radius:12px;padding:12px 14px;background:var(--accent-soft);font-size:14px}
+  .regnote b{display:block;font-size:15px;margin-bottom:2px}
+  .regnote small{display:block;color:var(--muted);font-size:13px;margin-top:6px}
+  footer{color:var(--muted);font-size:12px;padding:8px 0 calc(28px + env(safe-area-inset-bottom));text-align:center}
+  footer a{color:var(--muted)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <div class="brandrow">
+      <a class="brand" href="/"><b>WIND</b><span>Tournaments</span></a>
+      <button class="refresh" id="refresh" aria-label="Refresh">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
+        <span>Refresh</span>
+      </button>
+    </div>
+    <nav class="events" id="events" aria-label="Tournaments"></nav>
+  </div>
+</header>
+
+<main class="wrap" id="app"></main>
+
+<footer class="wrap">
+  Schedules and results come from AES (SportsEngine). If anything looks off, AES is the source of truth.<br>
+  <span id="foot"></span>
+</footer>
+
+<script>
+/* ================================================================
+   CONFIG — the only part you should need to edit
+   ================================================================ */
+const CONFIG = {
+  // Paste your Cloudflare Worker URL here after deploying worker.js.
+  // While this is empty, the page runs in demo mode with sample data.
+  proxy: "https://windvbc-aes.kondo-kei.workers.dev",
+
+  // How the page finds Wind in each tournament, most reliable first:
+  // 1) teamCodes — AES team codes. The page finds these teams, then shows
+  //    every team in the same club (so a future 14U team appears automatically).
+  //    Add new codes here as you get them, e.g. "G14WINVB1BG".
+  teamCodes: ["G13WINVB1BG"],
+  // 2) clubId — shown at the bottom of the page once Wind is in any event.
+  clubId: null,
+  // 3) club name, as a last resort.
+  clubNamePattern: /^wind\b/i,
+
+  // One line per tournament. `aes` is the AES event number (or any AES link
+  // for that event). Dates decide Live / Next. To add a tournament, copy a line.
+  events: [
+    { name: "JVC Winter Classic",             start: "2027-01-16", end: "2027-01-17", aes: "46326", venue: "Baird Center, Milwaukee" },
+    { name: "WI Jr's January Jam",            start: "2027-01-31", end: "2027-01-31", aes: "47570", venue: "Pleasant Prairie RecPlex" },
+    { name: "Molten Wisconsin VB Fest",       start: "2027-03-06", end: "2027-03-07", aes: "47315", venue: "Center Court Sports Complex" },
+    { name: "Badger Regional Championship",   start: "2027-03-13", end: "2027-03-14", aes: "46706", venue: "Baird Center, Milwaukee" },
+    { name: "Mizuno Diggin' in the Dells II", start: "2027-04-10", end: "2027-04-11", aes: "46281", venue: "Woodside Dells Center & Wisconsin Dells HS" },
+    { name: "Cream City Challenge #1",        start: "2027-04-17", end: "2027-04-17", aes: "47556", venue: "New Berlin ARC" },
+    { name: "Cornbelt Showdown",              start: "2027-05-01", end: "2027-05-02", aes: "47618", venue: "Milwaukee County Sports Complex & New Berlin ARC" },
+    { name: "JVC Grand Slam",                 start: "2027-05-15", end: "2027-05-16", aes: "46328", venue: "Wisconsin State Fair Expo Center" },
+  ],
+
+  refreshSeconds: 60, // auto-refresh while a tournament is live
+};
+/* ================================================================ */
+
+const AES_SITE = "https://results.advancedeventsystems.com";
+const qs = new URLSearchParams(location.search);
+const DEMO = qs.has("demo") || !CONFIG.proxy;
+const DEMO_DATA = {"event":{"Key":"PTAwMDAwNDA3MTA90","EventId":40710,"Name":"2025 CEVA Junior Girls Power League","StartDate":"2024-12-15T00:00:00","EndDate":"2025-04-13T23:59:59.9999999","Location":"Various Locations in CEVA","IsOver":false,"Clubs":[{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"}]},"nextassignments":{"value":[{"TeamId":130143,"TeamName":"AGILE 14-1","TeamCode":"g14agile1ce","TeamText":"AGILE 14-1 (CE)","TeamClub":{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"},"TeamDivision":{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},"NextMatch":null,"WorkMatchs":[]},{"TeamId":208223,"TeamName":"AGILE 14-2","TeamCode":"g14agile2ce","TeamText":"AGILE 14-2 (CE)","TeamClub":{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"},"TeamDivision":{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},"NextMatch":null,"WorkMatchs":[]}]},"teams":{"130143":{"past":[{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":false,"SecondTeamId":103715,"SecondTeamName":"McMinnville 14-1 Red","SecondTeamWon":true,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":26,"SecondTeamScore":24},{"FirstTeamScore":18,"SecondTeamScore":25},{"FirstTeamScore":10,"SecondTeamScore":15}],"WorkTeamId":186303,"WorkTeamText":"Aspire NW 13-2 Royal (CE)","MatchId":-51060,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T08:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":true,"SecondTeamId":171491,"SecondTeamName":"NPJ Salem 13 Orange","SecondTeamWon":false,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":15},{"FirstTeamScore":25,"SecondTeamScore":21},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":103715,"WorkTeamText":"McMinnville 14-1 Red (CE)","MatchId":-51062,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T10:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":false,"SecondTeamId":186303,"SecondTeamName":"Aspire NW 13-2 Royal","SecondTeamWon":true,"MatchFullName":"Match 6","MatchShortName":"M6","HasScores":true,"Sets":[{"FirstTeamScore":16,"SecondTeamScore":25},{"FirstTeamScore":13,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":171491,"WorkTeamText":"NPJ Salem 13 Orange (CE)","MatchId":-51065,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T13:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":189682,"FirstTeamName":"Aspire NW 14-4 Force","FirstTeamWon":false,"SecondTeamId":130143,"SecondTeamName":"AGILE 14-1","SecondTeamWon":true,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":23},{"FirstTeamScore":19,"SecondTeamScore":25},{"FirstTeamScore":17,"SecondTeamScore":19}],"WorkTeamId":156712,"WorkTeamText":"MVA 14 - Red (CE)","MatchId":-51524,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T14:15:00"},"Play":{"Type":1,"PlayId":-51464,"FullName":"Cross 15","ShortName":"X15"},"PlayType":1},{"Match":{"FirstTeamId":186303,"FirstTeamName":"Aspire NW 13-2 Royal","FirstTeamWon":true,"SecondTeamId":130143,"SecondTeamName":"AGILE 14-1","SecondTeamWon":false,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":17},{"FirstTeamScore":25,"SecondTeamScore":19},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":189682,"WorkTeamText":"Aspire NW 14-4 Force (CE)","MatchId":-51526,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T15:15:00"},"Play":{"Type":1,"PlayId":-51464,"FullName":"Cross 15","ShortName":"X15"},"PlayType":1}],"standings":[{"TeamId":130143,"MatchesWon":7,"MatchesLost":14,"SetsWon":18,"SetsLost":29,"FinishRank":106,"OverallRank":106,"FinishRankText":"106th","Division":{"DivisionId":190758,"TeamCount":201}}]},"208223":{"past":[{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":90671,"SecondTeamName":"N. Clackamas 14-3 White","SecondTeamWon":false,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":9},{"FirstTeamScore":25,"SecondTeamScore":13},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":210149,"WorkTeamText":"Kingtide 14-2 Black (CE)","MatchId":-51222,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T08:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":false,"SecondTeamId":102072,"SecondTeamName":"Siuslaw 14-1 Gold","SecondTeamWon":true,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":16,"SecondTeamScore":25},{"FirstTeamScore":14,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":90671,"WorkTeamText":"N. Clackamas 14-3 White (CE)","MatchId":-51224,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T10:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":210149,"SecondTeamName":"Kingtide 14-2 Black","SecondTeamWon":false,"MatchFullName":"Match 6","MatchShortName":"M6","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":20},{"FirstTeamScore":27,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":102072,"WorkTeamText":"Siuslaw 14-1 Gold (CE)","MatchId":-51227,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T13:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":209295,"SecondTeamName":"OCJ 14 Black","SecondTeamWon":false,"MatchFullName":"Match 2","MatchShortName":"M2","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":16},{"FirstTeamScore":26,"SecondTeamScore":24},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":209121,"WorkTeamText":"WVE 14-3 (CE)","MatchId":-54934,"Court":{"CourtId":-50018,"Name":"Olympus 6"},"ScheduledStartDateTime":"2025-01-12T14:15:00"},"Play":{"Type":1,"PlayId":-54835,"FullName":"Cross 25","ShortName":"X25"},"PlayType":1},{"Match":{"FirstTeamId":208182,"FirstTeamName":"Courthouse 13 Blue","FirstTeamWon":true,"SecondTeamId":208223,"SecondTeamName":"AGILE 14-2","SecondTeamWon":false,"MatchFullName":"Match 5","MatchShortName":"M5","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":17},{"FirstTeamScore":25,"SecondTeamScore":10},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":209295,"WorkTeamText":"OCJ 14 Black (CE)","MatchId":-54937,"Court":{"CourtId":-50018,"Name":"Olympus 6"},"ScheduledStartDateTime":"2025-01-12T15:15:00"},"Play":{"Type":1,"PlayId":-54835,"FullName":"Cross 25","ShortName":"X25"},"PlayType":1}],"standings":[{"TeamId":208223,"MatchesWon":10,"MatchesLost":11,"SetsWon":23,"SetsLost":24,"FinishRank":167,"OverallRank":167,"FinishRankText":"167th","Division":{"DivisionId":190758,"TeamCount":201}}]}}};
+const DEMO_FIELD = {"divisions":[{"DivisionId":190757,"Name":"12 Girls","TeamCount":70,"CodeAlias":"G12","ColorHex":"#5F9FFF"},{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},{"DivisionId":190759,"Name":"16 Girls","TeamCount":159,"CodeAlias":"G16","ColorHex":"#5FFF7F"},{"DivisionId":190760,"Name":"18 Girls","TeamCount":66,"CodeAlias":"G18","ColorHex":"#FF5FFF"},{"DivisionId":190761,"Name":"Open Girls","TeamCount":52,"CodeAlias":"OPEN","ColorHex":"#FFFF7F"}],"teams":{"190757":[[91806,"Adidas OPV 12-1 National",14476],[186301,"Aspire NW 11-1 Empire",5751],[60862,"Aspire NW 12-1 Empire",5751],[172157,"Aspire NW 12-2 Royal",5751],[146884,"ATHENA VB 11-1 Gold",234],[189472,"ATHENA VB 11-2 Black",234],[41173,"ATHENA VB 12-1 Gold",234],[47964,"ATHENA VB 12-2 Black",234],[168263,"ATHENA VB 12-3 Onyx",234],[73001,"ATHENA VB 12-4 Silver",234],[114299,"Blues 12-1 Gold",15629],[142999,"CHAOS 12-1 GOLD",26583],[189139,"CHAOS 12-2 BURGUNDY",26583],[98732,"Courthouse 12 Blue",20775],[208649,"Courthouse 12 Red",20775],[186238,"Cowlitz 12-1 Black",29917],[155489,"Crushers 12 Black",24586],[73369,"Excel NW 12-1 Lux",667],[101996,"Excel NW 12-2 Gold",667],[203142,"FCA 12u Clark",29025],[184941,"FCA 12u Cowlitz",29025],[186508,"FCA 12u Sandy",29025],[147704,"G3VB 12-1",24386],[113548,"Game Day 12-1",14424],[206299,"HVVC 12-1",30119],[210151,"Kingtide 12-1 Gold",31352],[173175,"LC Elite 12-1 Black",28880],[173176,"LC Elite 12-2 White",28880],[146900,"MAC 12-1",26786],[203253,"MAC 12-2",26786],[203254,"MAC 12-3",26786],[161185,"McMinnville 12-1 Black",21217],[103285,"MHAC 12-1 Red",18211],[104113,"Mt. Hood 12-1 Timberline",11921],[156720,"Mt. Hood 12-2 Meadows",11921],[175514,"Mt. Hood 12-3 ZigZag",11921],[104279,"N. Clackamas 12-1 Black",11993],[205744,"N. Clackamas 12-2 White",11993],[168821,"NPJ Portland 12 Black",27442],[152580,"NPJ Portland 12 National",27442],[209317,"NPJ Portland 12 Orange",27442],[115192,"NPJ Salem 11 National",2654],[73546,"NPJ Salem 12 Black",2654],[73545,"NPJ Salem 12 National",2654],[104078,"NW Elite 12-1 Gold",18391],[104079,"NW Elite 12-2 Black",18391],[104080,"NW Elite 12-3 Red",18391],[156915,"NW Elite 12-4 White",18391],[6222,"OJVA 12-1 Gold",1455],[89922,"OJVA 12-2 Blue",1455],[89923,"OJVA 12-3 White",1455],[104074,"OJVA 12-4 Red",1455],[149252,"OJVA 12-5 Black",1455],[104396,"PDX VB 12-1 Black",11615],[160396,"PDX VB 12-2 Red",11615],[156774,"PNW 12-1 Black",27631],[211136,"Portland VBC 11-1 Navy",652],[16647,"Portland VBC 12-1 Pink",652],[208534,"Rose City VBC 12-1",14924],[131451,"RVC 12-1 Force",23218],[169137,"RVC 12-2 Vision",23218],[156812,"RWVBC 12-1 Bronze",23219],[102064,"Silverton Bearcats 12-1",21111],[185232,"South Coast 12-1",23690],[129796,"Stumptown 12-1 Blue",23537],[204765,"TVC 12-1",21253],[90543,"Webfoot 12-Elite",527],[192387,"Yaquina Juniors 12-1",30438],[101848,"YCVBC 12 Orange",21097],[101849,"YCVBC 12 White",21097]],"190758":[[211539,"Aces 14-1",31540],[91629,"Adidas OPV 14-1 National",14476],[171809,"Adidas OPV 14-2 Premier",14476],[198903,"Adidas OPV 14-3 Gold",14476],[211946,"Adventist VBC 13-1",27864],[160856,"Adventist VBC 14-1",27864],[130143,"AGILE 14-1",24664],[208223,"AGILE 14-2",24664],[154677,"Aspire NW 13-1 Empire",5751],[186303,"Aspire NW 13-2 Royal",5751],[208180,"Aspire NW 13-3 Power",5751],[58399,"Aspire NW 14-2 Royal",5751],[72118,"Aspire NW 14-3 Power",5751],[189682,"Aspire NW 14-4 Force",5751],[483,"ATHENA VB 13-1 Gold",234],[114282,"ATHENA VB 13-2 Black",234],[146885,"ATHENA VB 13-3 Onyx",234],[152822,"ATHENA VB 13-4 Silver",234],[146886,"ATHENA VB 13-5 Chrome",234],[481,"ATHENA VB 14-1 Gold",234],[482,"ATHENA VB 14-2 Black",234],[152828,"ATHENA VB 14-3 Onyx",234],[19028,"ATHENA VB 14-4 Silver",234],[28733,"ATHENA VB 14-5 Chrome",234],[168264,"ATHENA VB 14-6 White",234],[200628,"ATHENAVB Bend 14-1 Gold",31184],[200633,"ATHENAVB Bend 14-2 Black",31184],[89205,"Axiom 14-1 Elite",16256],[102004,"Axiom 14-2",16256],[114300,"Blues 14-1 Gold",15629],[192361,"Blues 14-2 Silver",15629],[208405,"CCJ 14-1 Jeo",23432],[209604,"CCJ 14-2 Chloe",23432],[203526,"CEVC 14-1",31347],[142997,"CHAOS 14-1 NATIONAL",26583],[142998,"CHAOS 14-2 GOLD",26583],[172249,"CHAOS 14-3 BLACK REGIONAL",26583],[192378,"CHAOS 14-4 BURGUNDY",26583],[205028,"CHAOS GIRLS 13U NATIONAL",26583],[208182,"Courthouse 13 Blue",20775],[98730,"Courthouse 14 Blue",20775],[98731,"Courthouse 14 Red",20775],[189579,"Courthouse 14 White",20775],[128153,"COVC 14 Elite",23110],[112310,"COVC 14 Nationals",23110],[186240,"Cowlitz 14-1 Black",29917],[205075,"Crosshill Christian 14-1",31346],[155490,"Crushers 14 Black",24586],[186359,"Crushers 14 Red",24586],[172872,"Crushers 14 White",24586],[191401,"EPUERTO 14-1",30345],[125128,"Excel NW 13-1 Lux",667],[-52819,"Excel NW 14-1 Lux (PL)",667],[73372,"Excel NW 14-2 Gold",667],[125127,"Excel NW 14-3 Silver",667],[175425,"FCA 14-1 Cowlitz",29025],[206670,"FCA 14-2 Cowlitz",29025],[184944,"FCA 14u Clark Elevate",29025],[184943,"FCA 14u Clark Force",29025],[189530,"FCA 14u Clark Rise",29025],[186509,"FCA 14u Sandy",29025],[125880,"G3VB 14-1",24386],[126302,"G3VB 14-2",24386],[156772,"G3VB 14-3",24386],[198260,"Game Day 13-1",14424],[101862,"Game Day 14-1",14424],[113547,"Game Day 14-2",14424],[208087,"Game Day 14-3",14424],[134575,"Gorge Juniors 14-1",14821],[209904,"Hood River 13-1",29024],[204774,"HVVC 14-1",30119],[114712,"Invasion 14-1",12372],[210148,"Kingtide 14-1 Gold",31352],[210149,"Kingtide 14-2 Black",31352],[210150,"Kingtide 14-3 White",31352],[103719,"La Center 14-1",21229],[173179,"LC Elite 13-1 Black",28880],[173177,"LC Elite 14-1 Black",28880],[173178,"LC Elite 14-2 White",28880],[210559,"LC Elite 14-3 Red",28880],[211544,"Lebanon VBC 13-1",28900],[192372,"Lebanon VBC 14-1",28900],[192373,"Lebanon VBC 14-2",28900],[203335,"LevelOne 14-1",31394],[203336,"LevelOne 14-2",31394],[203337,"LevelOne 14-3",31394],[203255,"MAC 13-1",26786],[203256,"MAC 14-1",26786],[203257,"MAC 14-2",26786],[103715,"McMinnville 14-1 Red",21217],[103716,"McMinnville 14-2 Black",21217],[157386,"MHAC 13 Red",18211],[89985,"MHAC 14 Black",18211],[103287,"MHAC 14 Red",18211],[156721,"Mt. Hood 13-1 Timberline",11921],[175487,"Mt. Hood 14 Alpine",11921],[66886,"Mt. Hood 14-1 Timberline",11921],[156722,"Mt. Hood 14-2 Meadows",11921],[156710,"MVA 14 - Gray",24669],[156712,"MVA 14 - Red",24669],[94187,"N. Clackamas 14-1 Black",11993],[66260,"N. Clackamas 14-2 Red",11993],[90671,"N. Clackamas 14-3 White",11993],[153043,"NPJ Bend 13 National",27014],[149181,"NPJ Bend 14 Black",27014],[-52818,"NPJ Bend 14 National (PL)",27014],[168820,"NPJ Portland 13 Black",27442],[168819,"NPJ Portland 13 National",27442],[171734,"NPJ Portland 13 Orange",27442],[152579,"NPJ Portland 14 Black",27442],[-52820,"NPJ Portland 14 National (PL)",27442],[168818,"NPJ Portland 14 Orange",27442],[186620,"NPJ Portland 14 Royal",27442],[186478,"NPJ Portland 14 White",27442],[155932,"NPJ Salem 13 Black",2654],[73544,"NPJ Salem 13 National",2654],[171491,"NPJ Salem 13 Orange",2654],[75877,"NPJ Salem 14 Black",2654],[-52817,"NPJ Salem 14 National (PL)",2654],[75878,"NPJ Salem 14 Orange",2654],[115193,"NPJ Salem 14 White",2654],[192375,"NPVA 14-1",30436],[194702,"NPVA 14-2",30436],[104082,"NW Elite 14-1 Gold",18391],[104083,"NW Elite 14-2 Black",18391],[104084,"NW Elite 14-3 Red",18391],[156917,"NW Elite 14-4 White",18391],[156918,"NW Elite 14-5 Blue",18391],[174651,"NW Elite 14-6 Green",18391],[156919,"NW Elite 14-7 Gray",18391],[156916,"NW Elite 14-8 Navy",18391],[208453,"NW Elite 14-9 Purple",18391],[199395,"NWAS Eugene 14-1 Alpha",31193],[199397,"NWAS Eugene 14-2 Beta",31193],[167644,"NWAS VBC 14-1 Alpha",27582],[167645,"NWAS VBC 14-2 Beta",27582],[209295,"OCJ 14 Black",24670],[130349,"OCJ 14 Gold",24670],[143003,"OJVA 13-1 Gold",1455],[192076,"OJVA 13-2 Blue",1455],[6221,"OJVA 14-1 Gold",1455],[19328,"OJVA 14-2 Blue",1455],[19329,"OJVA 14-3 White",1455],[89924,"OJVA 14-4  Red",1455],[62730,"PDX VB 14-1 Black",11615],[104397,"PDX VB 14-2 Red",11615],[175409,"PDX VB 14-3 White",11615],[114236,"Pirate 14-1",14786],[190329,"Pirate 14-2",14786],[211551,"PNW VBC 13-1 Black",27631],[211553,"PNW VBC 13-2 Green",27631],[156768,"PNW VBC 14-1 Black",27631],[5974,"Portland VBC 14-1 Red",652],[30061,"Portland VBC 14-2 Green",652],[183361,"Rise VBC 14 Regional BLK",23971],[183359,"Rise VBC 14 Regional GOLD",23971],[170292,"Rock Mountain 14-1",27791],[208535,"Rose City VBC 14-1",14924],[208536,"Rose City VBC 14-2",14924],[116542,"RVC 14-1 Chaos",23218],[208095,"RVC 14-2 Spirit",23218],[156781,"RWVBC 14-1 Gold",23219],[209014,"RWVBC 14-2 Silver",23219],[207866,"SEA 14-Shout",29023],[210649,"Sheridan 14-1 Valkyries",29021],[102065,"Silverton Bearcats 14-1",21111],[102066,"Silverton Bearcats 14-2",21111],[203059,"Silverton Bearcats 14-3",21111],[102072,"Siuslaw 14-1 Gold",21112],[153987,"South Coast 14-1",23690],[160448,"Spike It Pure 14-1",27641],[56639,"Spiketown 14-1 National",10184],[118159,"Stumptown 14-1 Blue",23537],[118160,"Stumptown 14-2 Green",23537],[118157,"Stumptown 14-3 White",23537],[209666,"Stumptown 14-4 Black",23537],[53183,"TEAM Hiki No 14-1",5828],[189283,"TSUNAMI 14-1",21298],[189284,"TSUNAMI 14-2",21298],[204766,"TVC 14-1",21253],[204767,"TVC 14-2",21253],[208614,"TVVC 14-1",31510],[208615,"TVVC 14-2",31510],[208969,"Valley VBC 14-1",31589],[176381,"Vancouver VBC 14-1",27664],[202805,"Webfoot 13 Elite",527],[37804,"Webfoot 14-Elite",527],[42995,"Webfoot 14-Force",527],[33220,"Webfoot 14-Power",527],[175415,"West Coast VBC 14-1",29020],[191862,"West Valley Dragons 14-1",30379],[89921,"Wildcats 14-1 Red",18202],[101841,"Wildcats 14-2 Blue",18202],[172805,"Wildcats 14-3 White",18202],[203564,"WVC 14-1",30210],[189508,"WVE 14-1",30208],[209120,"WVE 14-2",30208],[209121,"WVE 14-3",30208],[211554,"Yaquina Juniors 14-1",30438],[101847,"YCVBC 14 Orange",21097],[117588,"YCVBC 14 White",21097]]},"clubs":{"234":"ATHENAVB","527":"Webfoot Juniors Volleyball Club","652":"Portland Volleyball Club","667":"Excel NW Volleyball Club","1455":"Oregon Juniors Volleyball Academy","2654":"North Pacific Juniors Volleyball Club","5751":"Aspire NW Volleyball","5828":"T.E.A.M. Hiki No Volleyball Club","10184":"Spiketown Volleyball Club","11615":"PDX)))VB","11921":"Mt. Hood Volleyball Club","11993":"North Clackamas Volleyball Club","12372":"Invasion Volleyball Club","14424":"Game Day Volleyball Club","14476":"Oregon Premier Volleyball Club","14786":"Pirate Volleyball Club","14821":"Gorge Juniors Volleyball","14924":"Rose City Volleyball Club","15629":"Blues Volleyball Club","16256":"Axiom Volleyball Club","18202":"Wildcats Volleyball Club","18211":"MHAC Volleyball Club","18391":"NW Elite Volleyball Club","20775":"Courthouse Volleyball Club","21097":"YCVBC","21111":"Silverton Bearcats Volleyball Club","21112":"Siuslaw Volleyball Club","21217":"McMinnville Volleyball Association","21229":"La Center Volleyball Club","21253":"Tillamook Volleyball Club","21298":"Tsunami Volleyball Club","23110":"Central Oregon Volleyball Club","23218":"RiverHawk Volleyball Club","23219":"River Warriors Volleyball Club","23432":"Cherry City Jrs","23537":"Stumptown VB","23690":"South Coast Volleyball Club","23971":"Rise Volleyball Club","24386":"G3 Volleyball","24586":"Crushers Volleyball Club","24664":"A.G.I.L.E. Volleyball Club","24669":"Metro Volleyball Academy","24670":"Oregon Coast Juniors","26583":"Portland Chaos Volleyball Club","26786":"MAC Volleyball","27014":"North Pacific Juniors - Bend","27442":"North Pacific Juniors - Portland","27582":"NWAS Volleyball Club","27631":"PNW Volleyball Club","27641":"Spike-It Pure","27664":"Vancouver Volleyball Club","27791":"Rock Mountain Academy","27864":"Adventist Volleyball Club","28880":"Lower Columbia Elite","28900":"Lebanon Warrior Volleyball Club","29020":"West Coast Volleyball Club","29021":"Sheridan Volleyball Club","29023":"SEA Volleyball","29024":"Hood River Volleyball Club","29025":"Fellowship of Christian Athletes","29917":"Cowlitz Volleyball Academy","30119":"Happy Valley Volleyball Club","30208":"Willamette Valley Elite","30210":"Willamina Club Volleyball","30345":"Epuerto Elite Volleyball Club","30379":"West Valley Dragons VBC","30436":"North Portland Volleyball Academy","30438":"Yaquina Juniors Volleyball Club","31184":"ATHENAVB Bend","31193":"NWAS Volleyball Club - Eugene","31346":"Crosshill Christian","31347":"Cascade Elite Volleyball Club","31352":"Kingtide Volleyball","31394":"LevelOne Volleyball Club","31510":"Tualatin Valley Volleyball Club","31540":"Aces Volleyball Club","31589":"Valley Volleyball Club"}};
+
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const stripRegion = s => String(s || "").replace(/\s*\([A-Z]{2,3}\)\s*$/, "");
+const store = {
+  get(k){ try { return JSON.parse(localStorage.getItem("windvbc:"+k)); } catch { return null; } },
+  set(k,v){ try { localStorage.setItem("windvbc:"+k, JSON.stringify(v)); } catch {} },
+};
+
+/* ---------- event keys ---------- */
+function keyFromId(id){
+  const b = btoa("=" + String(id).padStart(10, "0") + "=");
+  const pad = (b.match(/=+$/) || [""])[0].length;
+  return b.replace(/=+$/, "").replace(/\+/g, "-").replace(/\//g, "_") + pad;
+}
+function eventKey(e){
+  const v = String(e.aes || "").trim();
+  if (!v) return null;
+  const m = v.match(/event\/([A-Za-z0-9_-]{8,})/);
+  if (m) return m[1];
+  if (/^\d+$/.test(v)) return keyFromId(v);
+  if (/^[A-Za-z0-9_-]{8,}$/.test(v)) return v;
+  return null;
+}
+
+/* ---------- dates ---------- */
+const DOW = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+const MON = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+function parts(iso){
+  const m = String(iso || "").match(/^(\d{4})-(\d{2})-(\d{2})(?:T(\d{2}):(\d{2}))?/);
+  if (!m) return null;
+  const d = new Date(+m[1], +m[2]-1, +m[3]);
+  return { y:+m[1], mo:+m[2]-1, d:+m[3], h: m[4]!=null ? +m[4] : null, mi: m[5]!=null ? +m[5] : null, dow: d.getDay(), day: m[1]+"-"+m[2]+"-"+m[3], sort: (m[1]+m[2]+m[3]+(m[4]||"00")+(m[5]||"00")) };
+}
+const fmtTime = p => { if (!p || p.h==null) return ""; const h = p.h % 12 || 12; return h + ":" + String(p.mi).padStart(2,"0") + (p.h < 12 ? " AM" : " PM"); };
+const fmtDay  = p => p ? `${DOW[p.dow]}, ${MON[p.mo]} ${p.d}` : "";
+function fmtRange(a, b){
+  const s = parts(a), e = parts(b); if (!s) return "";
+  if (!e || s.day === e.day) return `${MON[s.mo]} ${s.d}, ${s.y}`;
+  if (s.mo === e.mo) return `${MON[s.mo]} ${s.d}–${e.d}, ${s.y}`;
+  return `${MON[s.mo]} ${s.d} – ${MON[e.mo]} ${e.d}, ${e.y}`;
+}
+function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
+function statusOf(e){
+  if (DEMO && e._demo) return "live";
+  const t = todayStr();
+  if (e.start <= t && t <= (e.end || e.start)) return "live";
+  return e.start > t ? "upcoming" : "past";
+}
+
+/* ---------- data layer ---------- */
+async function get(path){
+  const r = await fetch(CONFIG.proxy.replace(/\/$/, "") + path);
+  if (r.status === 204) return null;
+  if (!r.ok) { const e = new Error("AES returned " + r.status); e.status = r.status; throw e; }
+  return r.json();
+}
+const getEvent = key => DEMO ? Promise.resolve({ ...DEMO_DATA.event, Divisions: DEMO_FIELD.divisions }) : get(`/api/event/${key}`);
+async function getDivisionTeams(key, divId){
+  if (DEMO) {
+    const rows = DEMO_FIELD.teams[divId];
+    if (!rows) return null;
+    return rows.map(([id, name, clubId]) => ({ id, name, clubId, club: DEMO_FIELD.clubs[clubId] || "" }));
+  }
+  const r = await get(`/odata/${key}/nextassignments(dId=${divId},cId=null,tIds=[])?$orderby=TeamName,TeamCode&$select=TeamId,TeamName,TeamCode,TeamClub`);
+  return (r && r.value ? r.value : []).map(t => ({ id: t.TeamId, name: t.TeamName, clubId: t.TeamClub?.ClubId, club: t.TeamClub?.Name || "" }));
+}
+const REG_COLORS = ["#5F9FFF", "#FF5F7F", "#3CC48C", "#B57BFF", "#F5A623", "#4FC3D9", "#E86FB8", "#9AA84B"];
+function eventNumber(e){
+  const v = String(e.aes || "").trim();
+  if (/^\d+$/.test(v)) return v;
+  const k = eventKey(e); if (!k) return null;
+  try {
+    const pad = +k.slice(-1);
+    const m = atob(k.slice(0, -1).replace(/-/g, "+").replace(/_/g, "/") + "=".repeat(pad)).match(/\d+/);
+    return m ? String(+m[0]) : null;
+  } catch { return null; }
+}
+async function getRegistration(num){
+  const [d, t] = await Promise.all([get(`/reg/events/${num}/divisions`), get(`/reg/events/${num}/teams`)]);
+  const divisions = ((d && d.value) || []).map((x, i) => ({ id: x.eventDivisionAssignmentId, name: x.description, max: x.maximumTeams || null }));
+  const teams = ((t && t.value) || []).filter(x => !(x.acceptedType && x.acceptedType.hidden)).map(x => ({
+    id: x.teamId, name: x.name, clubId: x.clubId, club: x.clubName || "", code: String(x.teamCode || "").toLowerCase(),
+    divId: x.eventDivisionAssignmentId, div: x.divisionDescription || "", status: (x.acceptedType && x.acceptedType.displayName) || "Registered" }));
+  for (const tm of teams) if (!divisions.some(v => v.id === tm.divId)) divisions.push({ id: tm.divId, name: tm.div, max: null });
+  divisions.forEach((v, i) => v.color = REG_COLORS[i % REG_COLORS.length]);
+  return { divisions, teams };
+}
+const isDropped = t => /drop|withdr|cancel/i.test(t.status);
+function regClubId(){
+  const reg = state.reg; if (!reg) return null;
+  const codes = (CONFIG.teamCodes || []).map(c => String(c).toLowerCase());
+  const byCode = reg.teams.find(t => codes.includes(t.code));
+  if (byCode) return byCode.clubId;
+  const byName = reg.teams.find(t => CONFIG.clubNamePattern.test(t.club));
+  return byName ? byName.clubId : null;
+}
+function regOurs(){ const c = regClubId(); return c == null ? [] : state.reg.teams.filter(t => t.clubId === c && !isDropped(t)); }
+function regDivStats(divId){
+  const d = state.reg.divisions.find(v => v.id === divId) || { name: "", max: null, color: "var(--accent)" };
+  const list = state.reg.teams.filter(t => t.divId === divId);
+  const acc = list.filter(t => /accept/i.test(t.status)).length, pen = list.filter(t => /pend/i.test(t.status)).length;
+  const active = list.filter(t => !isDropped(t)).length;
+  return { ...d, list, acc, pen, active };
+}
+const statusPill = st => `<span class="sp ${/accept/i.test(st) ? "acc" : /pend/i.test(st) ? "pen" : "oth"}">${esc(st)}</span>`;
+
+async function findTeamsByCode(key, codes){
+  const f = codes.map(c => `tolower(TeamCode) eq '${String(c).toLowerCase().replace(/[^a-z0-9]/g, "")}'`).join(" or ");
+  const r = await get(`/odata/${key}/nextassignments(dId=null,cId=null,tIds=[])?$filter=${encodeURIComponent(f)}&$select=TeamId,TeamName,TeamCode,TeamClub,TeamDivision`);
+  return r && r.value ? r.value : [];
+}
+const getClubTeams = (key, clubId) => DEMO
+  ? Promise.resolve(DEMO_DATA.nextassignments.value)
+  : get(`/odata/${key}/nextassignments(dId=null,cId=${clubId},tIds=[])?$orderby=TeamName,TeamCode`).then(r => r ? r.value : []);
+
+async function getTeamData(key, divId, teamId){
+  if (DEMO) return demoTeam(teamId);
+  const base = `/api/event/${key}/division/${divId}/team/${teamId}/schedule/`;
+  const safe = p => p.catch(() => null);
+  const [past, current, work, future, standings] = await Promise.all([
+    safe(get(base + "past")), safe(get(base + "current")), safe(get(base + "work")), safe(get(base + "future")),
+    safe(get(`/odata/${key}/standings(dId=${divId},cId=null,tIds=[${teamId}])`)),
+  ]);
+  return { past: past || [], current: current || [], work: work || [], future: Array.isArray(future) ? future[0] : future,
+           standing: standings && standings.value ? standings.value.find(s => s.TeamId === teamId) : null };
+}
+
+function demoTeam(teamId){
+  const raw = JSON.parse(JSON.stringify(DEMO_DATA.teams[teamId]));
+  const pool = raw.past.slice(0, 3);
+  const cross = raw.past.slice(3, 5);
+  const pending = cross[1].Match;
+  pending.HasScores = false; pending.FirstTeamWon = false; pending.SecondTeamWon = false;
+  pending.Sets.forEach(s => { s.FirstTeamScore = null; s.SecondTeamScore = null; });
+  const work = JSON.parse(JSON.stringify(cross[1]));
+  Object.assign(work.Match, { MatchId: pending.MatchId - 1000, FirstTeamId: 1, FirstTeamName: "Kingtide 14-2 Black",
+    SecondTeamId: 2, SecondTeamName: "WVE 14-3", WorkTeamId: teamId, ScheduledStartDateTime: "2025-01-12T16:15:00", MatchShortName: "M6", MatchFullName: "Match 6" });
+  return {
+    past: pool,
+    current: [{ Play: cross[0].Play, PlayType: 1, Matches: cross.map(c => c.Match) }],
+    work: teamId === 208223 ? [work] : [],
+    future: { NextPendingReseed: true, NextPlay: { FullName: "Gold Bracket" }, PotentialRankText: null },
+    standing: raw.standings[0],
+  };
+}
+
+/* ---------- normalising games ---------- */
+const gameLabel = s => String(s || "").replace(/^Match/i, "Game").replace(/^M(\d+)$/i, "G$1");
+function toGame(m, play, teamId){
+  if (!m || m.MatchId == null) return null;
+  const usFirst = m.FirstTeamId === teamId, usSecond = m.SecondTeamId === teamId;
+  const isWork = !usFirst && !usSecond;
+  const sets = (m.Sets || []).filter(s => s.FirstTeamScore != null && s.SecondTeamScore != null)
+    .map(s => usFirst || isWork ? [s.FirstTeamScore, s.SecondTeamScore] : [s.SecondTeamScore, s.FirstTeamScore]);
+  const done = !!(m.FirstTeamWon || m.SecondTeamWon);
+  const won = usFirst ? m.FirstTeamWon : m.SecondTeamWon;
+  const setW = sets.filter(([a,b]) => a > b).length, setL = sets.length - setW;
+  return {
+    id: m.MatchId, isWork, done, won, sets, setW, setL,
+    when: parts(m.ScheduledStartDateTime),
+    court: m.Court ? m.Court.Name : "",
+    label: gameLabel(m.MatchShortName || m.MatchFullName),
+    play: play ? (play.FullName || play.ShortName || "") : "",
+    opp: isWork ? `${stripRegion(m.FirstTeamName)} vs ${stripRegion(m.SecondTeamName)}`
+                : stripRegion(usFirst ? (m.SecondTeamName || m.SecondTeamText) : (m.FirstTeamName || m.FirstTeamText)) || "TBD",
+    workTeam: !isWork && m.WorkTeamText ? stripRegion(m.WorkTeamText) : "",
+  };
+}
+function collectGames(d, teamId){
+  const map = new Map();
+  const add = (m, play) => { const g = toGame(m, play, teamId); if (g && !map.has(g.id)) map.set(g.id, g); };
+  (d.past || []).forEach(x => add(x.Match, x.Play));
+  (d.current || []).forEach(x => (x.Matches || (x.Match ? [x.Match] : [])).forEach(m => add(m, x.Play)));
+  (d.work || []).forEach(x => add(x.Match, x.Play));
+  if (d.future) { add(d.future.NextMatch, d.future.NextPlay); add(d.future.WorkMatch, d.future.NextPlay); }
+  return [...map.values()].sort((a,b) => (a.when?.sort || "").localeCompare(b.when?.sort || "") || a.isWork - b.isWork);
+}
+
+/* ---------- rendering ---------- */
+const state = { idx: null, teams: [], data: {}, filter: store.get("filter") || "all", event: null, club: null, timer: null, loading: false,
+                view: store.get("view") || "ours", divSel: null, field: {}, q: "", reg: null, st: "all" };
+
+function renderChips(){
+  $("#events").innerHTML = CONFIG.events.map((e, i) => {
+    const st = statusOf(e);
+    const tag = st === "live" ? `<span class="tag live">Live</span>` :
+                i === nextUpcomingIdx() ? `<span class="tag">Next</span>` :
+                st === "past" ? `<span class="tag">Final</span>` : `<span class="tag">${esc(MON[parts(e.start).mo])}</span>`;
+    return `<button class="chip ${i === state.idx ? "on" : ""}" data-i="${i}">${tag}<div class="nm">${esc(e.name)}</div><small>${esc(fmtRange(e.start, e.end))}</small></button>`;
+  }).join("");
+  const on = $("#events .chip.on"); if (on) on.scrollIntoView({ inline: "center", block: "nearest" });
+}
+function nextUpcomingIdx(){ return CONFIG.events.findIndex(e => statusOf(e) === "upcoming"); }
+function defaultIdx(){
+  const fromUrl = qs.get("t"); if (fromUrl != null && CONFIG.events[+fromUrl]) return +fromUrl;
+  const live = CONFIG.events.findIndex(e => statusOf(e) === "live"); if (live >= 0) return live;
+  const up = nextUpcomingIdx(); if (up >= 0) return up;
+  return CONFIG.events.length - 1;
+}
+
+function renderTeam(t){
+  const d = state.data[t.TeamId]; if (!d) return `<div class="skel"></div>`;
+  const games = collectGames(d, t.TeamId);
+  const playing = games.filter(g => !g.isWork);
+  const next = games.find(g => !g.done && !g.isWork) || null;
+  const nextWork = games.find(g => g.isWork && !g.done && (!next || (g.when?.sort || "") < (next.when?.sort || ""))) || null;
+  const focus = nextWork || next;
+
+  const W = playing.filter(g => g.done && g.won).length, L = playing.filter(g => g.done && !g.won).length;
+  const st = d.standing;
+  const div = t.TeamDivision || {};
+  const rankHtml = st && st.OverallRank ? `<b>${esc(st.FinishRankText || st.OverallRank)}</b><small>of ${esc(div.TeamCount || st.Division?.TeamCount || "")}</small>` :
+                   (W + L) ? `<b>${W}–${L}</b><small>games</small>` : "";
+
+  let focusHtml = "";
+  if (focus) {
+    focusHtml = `<div class="next ${focus.isWork ? "work" : ""}">
+      <div class="lbl">${focus.isWork ? "Next up · Work" : "Next game"}</div>
+      <div class="big">${esc(fmtTime(focus.when))}${focus.court ? ` · ${esc(focus.court)}` : ""}</div>
+      <div class="vs">${focus.isWork ? "Work " + esc(focus.opp) : "vs " + esc(focus.opp)}</div>
+      <div class="det">${esc(fmtDay(focus.when))}${focus.play ? " · " + esc(focus.play) : ""}${focus.workTeam ? " · Work team: " + esc(focus.workTeam) : ""}</div>
+    </div>`;
+  } else if (d.future && (d.future.NextPendingReseed || d.future.NextPlay)) {
+    const np = d.future.NextPlay ? esc(d.future.NextPlay.FullName || "") : "";
+    focusHtml = `<div class="waiting">Waiting on results for the next round${np ? ` (${np})` : ""}. Check back after the current pools finish.</div>`;
+  }
+
+  let rows = "", lastDay = "", lastPlay = "";
+  for (const g of games) {
+    const day = g.when ? g.when.day : "";
+    if (day !== lastDay) { rows += `<div class="day">${esc(fmtDay(g.when))}</div>`; lastDay = day; lastPlay = ""; }
+    if (!g.isWork && g.play !== lastPlay) { rows += `<div class="play">${esc(g.play)}</div>`; lastPlay = g.play; }
+    let res;
+    if (g.isWork) res = `<span class="pill k">WORK</span>`;
+    else if (g.done) res = `<span class="pill ${g.won ? "w" : "l"}">${g.won ? "W" : "L"} ${g.setW}–${g.setL}</span><span class="sets">${g.sets.map(s => s.join("-")).join(", ")}</span>`;
+    else res = `<span class="pill u">${g === next ? "NEXT" : "–"}</span>`;
+    rows += `<div class="g ${g === focus ? "isnext" : ""} ${g.isWork ? "workrow" : ""}">
+      <div class="t">${esc(fmtTime(g.when))}<small>${esc(g.court)}</small></div>
+      <div class="who"><div class="opp">${g.isWork ? "Work: " : "vs "}${esc(g.opp)}</div><small>${esc(g.label)}${g.workTeam ? " · Work: " + esc(g.workTeam) : ""}</small></div>
+      <div class="res">${res}</div></div>`;
+  }
+  if (!games.length) rows = `<div class="waiting" style="margin:0 12px 12px">No games posted yet. AES usually publishes pools a few days before the tournament.</div>`;
+
+  return `<section class="card">
+    <div class="thead">
+      <div><div class="tname"><span class="dot" style="background:${esc(div.ColorHex || "var(--accent)")}"></span>${esc(stripRegion(t.TeamName))}</div>
+      <div class="tsub">${esc(div.Name || "")}${(W + L) && st ? ` · ${W}–${L} in games here` : ""}</div></div>
+      <div class="rank">${rankHtml}</div>
+    </div>
+    ${focusHtml}
+    ${rows}
+  </section>`;
+}
+
+function renderMain(msg){
+  const e = CONFIG.events[state.idx];
+  const key = eventKey(e);
+  const ev = state.event;
+  const name = ev ? ev.Name : e.name;
+  const range = ev ? fmtRange(ev.StartDate, ev.EndDate) : fmtRange(e.start, e.end);
+  const loc = ev && ev.Location ? ev.Location : (e.venue || "");
+  let html = DEMO ? `<div class="demo"><b>Demo mode.</b> Showing real data from another club at a past AES event, so you can see how game day looks. Add the proxy URL in CONFIG to go live.</div>` : "";
+  html += `<div class="evhead"><h1>${esc(name)}</h1><div class="meta"><span>${esc(range)}</span>${loc ? `<span>${esc(loc)}</span>` : ""}${key && ev ? `<a href="${AES_SITE}/event/${esc(key)}" target="_blank" rel="noopener">Open in AES →</a>` : ""}</div>
+    ${state.updated ? `<div class="updated">Updated ${esc(state.updated)}${statusOf(e) === "live" ? ` · refreshes every ${CONFIG.refreshSeconds}s` : ""}</div>` : ""}</div>`;
+  if (msg) { $("#app").innerHTML = html + msg; return; }
+
+  const divs = (ev && ev.Divisions) || [];
+  const totalTeams = state.reg ? state.reg.teams.filter(t => !isDropped(t)).length : divs.reduce((n, d) => n + (d.TeamCount || 0), 0);
+  const ourCount = state.teams.length || (state.reg ? regOurs().length : 0);
+  html += `<div class="seg" role="tablist">
+    <button data-v="ours" class="${state.view === "ours" ? "on" : ""}">Our teams <span>${ourCount || ""}</span></button>
+    <button data-v="field" class="${state.view === "field" ? "on" : ""}">Divisions &amp; teams <span>${totalTeams || ""}</span></button></div>`;
+  html += state.view === "field" ? (state.reg ? renderRegField() : renderField(divs, totalTeams)) : renderOurs();
+  $("#app").innerHTML = html;
+  if (state.view === "field") applySearch();
+}
+
+function renderOurs(){
+  if (state.reg && (!state.event || !state.teams.length)) return renderRegOurs();
+  if (!state.club) return emptyBox("Wind isn't listed in this event yet", "Teams appear once the tournament accepts entries in AES. You can still see who's registered under Divisions &amp; teams.");
+  const teams = state.teams;
+  if (!teams.length) return emptyBox("No Wind teams found", "Wind is registered, but no teams are assigned to divisions yet.");
+  let html = "";
+  if (teams.length > 1) {
+    const opts = [["all", "All teams"], ...teams.map(t => [String(t.TeamId), stripRegion(t.TeamName)])];
+    if (!opts.some(o => o[0] === state.filter)) state.filter = "all";
+    html += `<div class="filters">${opts.map(([v, l]) => `<button class="fbtn ${state.filter === v ? "on" : ""}" data-f="${esc(v)}">${esc(l)}</button>`).join("")}</div>`;
+  }
+  return html + teams.filter(t => state.filter === "all" || String(t.TeamId) === state.filter).map(renderTeam).join("");
+}
+
+function renderRegOurs(){
+  const ours = regOurs();
+  if (!ours.length) return emptyBox("No Wind team registered here", "No Wind team shows up in this tournament's AES registration list.");
+  return ours.map(t => {
+    const d = regDivStats(t.divId);
+    const what = /accept/i.test(t.status) ? "You're in."
+               : /pend/i.test(t.status) ? "Registered. Waiting on the tournament director to accept."
+               : `Status: ${esc(t.status)}.`;
+    const spots = `${d.acc} accepted${d.pen ? `, ${d.pen} pending` : ""}${d.max ? ` · ${d.max} spots` : ""}`;
+    return `<section class="card"><div class="thead">
+        <div><div class="tname"><span class="dot" style="background:${esc(d.color)}"></span>${esc(t.name)}</div><div class="tsub">${esc(t.div)}</div></div>
+        <div class="rank">${statusPill(t.status)}</div></div>
+      <div class="regnote"><b>${what}</b>Division so far: ${spots}.
+        <small>${state.event ? "Pools and game times will show up here once they're assigned." : "Pools and game times show up here once the schedule is published, usually a few days before."}</small></div>
+    </section>`;
+  }).join("");
+}
+
+function renderRegField(){
+  const reg = state.reg;
+  if (!reg.divisions.length) return emptyBox("No divisions posted yet", "The tournament hasn't set up divisions in AES.");
+  const ourClub = regClubId();
+  const ourDivs = new Set(regOurs().map(t => t.divId));
+  if (!reg.divisions.some(d => d.id === state.divSel))
+    state.divSel = (reg.divisions.find(d => ourDivs.has(d.id)) || reg.divisions[0]).id;
+  const active = reg.teams.filter(t => !isDropped(t));
+  const acc = active.filter(t => /accept/i.test(t.status)).length;
+
+  let html = `<div class="fsum">${reg.divisions.length} divisions · ${active.length} teams registered · ${acc} accepted</div>`;
+  html += `<div class="filters">${reg.divisions.map(x => { const n = reg.teams.filter(t => t.divId === x.id && !isDropped(t)).length;
+    return `<button class="fbtn ${x.id === state.divSel ? "on" : ""}" data-d="${x.id}">${esc(x.name)}<span class="n">${n}${x.max ? "/" + x.max : ""}</span>${ourDivs.has(x.id) ? `<span class="wd" title="Wind is in this division"></span>` : ""}</button>`; }).join("")}</div>`;
+
+  const d = regDivStats(state.divSel);
+  const drops = d.list.length - d.active;
+  html += `<div class="filters">${[["all", "All"], ["acc", `Accepted ${d.acc}`], ["pen", `Pending ${d.pen}`]].map(([v, l]) =>
+    `<button class="fbtn ${state.st === v ? "on" : ""}" data-st="${v}">${l}</button>`).join("")}</div>`;
+  html += `<input class="search" id="q" type="search" placeholder="Search ${esc(d.name)} teams or clubs" value="${esc(state.q)}" autocomplete="off">`;
+
+  const rank = t => isDropped(t) ? 3 : /accept/i.test(t.status) ? 0 : /pend/i.test(t.status) ? 1 : 2;
+  const rows = d.list
+    .filter(t => state.st === "all" ? true : state.st === "acc" ? /accept/i.test(t.status) : /pend/i.test(t.status))
+    .sort((a, b) => (b.clubId === ourClub) - (a.clubId === ourClub) || rank(a) - rank(b) || a.name.localeCompare(b.name));
+  html += `<section class="card"><div class="dhead"><b><span class="dot" style="background:${esc(d.color)}"></span>${esc(d.name)}</b>
+    <small>${d.acc} accepted · ${d.pen} pending${d.max ? ` · ${d.max} spots` : ""}${drops ? ` · ${drops} dropped` : ""}</small></div>`;
+  html += rows.map(t => `<div class="tr reg ${t.clubId === ourClub ? "ours" : ""} ${isDropped(t) ? "dropped" : ""}" data-s="${esc((t.name + " " + t.club).toLowerCase())}">
+      <div class="nm">${esc(t.name)}${t.clubId === ourClub ? `<span class="wtag">WIND</span>` : ""}<small>${esc(t.club)}</small></div>${statusPill(t.status)}</div>`).join("");
+  if (!rows.length) html += `<div class="nomatch">${d.list.length ? "No teams with this status." : "No teams registered yet."}</div>`;
+  html += `<div class="nomatch" id="nomatch" hidden>No teams match.</div></section>`;
+  return html;
+}
+
+function ourDivIds(){ return new Set(state.teams.map(t => t.TeamDivision?.DivisionId)); }
+
+function renderField(divs, totalTeams){
+  if (!divs.length) return emptyBox("No divisions posted yet", "The tournament hasn't published its divisions in AES.");
+  const ours = ourDivIds();
+  if (!divs.some(d => d.DivisionId === state.divSel))
+    state.divSel = (divs.find(d => ours.has(d.DivisionId)) || divs[0]).DivisionId;
+  const d = divs.find(x => x.DivisionId === state.divSel);
+
+  let html = `<div class="fsum">${divs.length} division${divs.length === 1 ? "" : "s"} · ${totalTeams} teams registered</div>`;
+  html += `<div class="filters">${divs.map(x => `<button class="fbtn ${x.DivisionId === state.divSel ? "on" : ""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount ?? ""}</span>${ours.has(x.DivisionId) ? `<span class="wd" title="Wind is in this division"></span>` : ""}</button>`).join("")}</div>`;
+
+  const list = state.field[d.DivisionId];
+  if (list === undefined) { loadDivision(d.DivisionId); return html + `<div class="skel"></div>`; }
+  if (list === null) return html + emptyBox(DEMO ? "Not in the demo sample" : "Couldn't load this division",
+    DEMO ? "The demo only carries 12 Girls and 14 Girls. Once connected, every division loads live." : "Tap Refresh to try again.");
+
+  const clubId = state.club?.ClubId;
+  const sorted = [...list].sort((a, b) => (b.clubId === clubId) - (a.clubId === clubId) || a.name.localeCompare(b.name));
+  const nClubs = new Set(list.map(t => t.clubId)).size;
+  const nOurs = list.filter(t => t.clubId === clubId).length;
+
+  html += `<input class="search" id="q" type="search" placeholder="Search ${esc(d.Name)} teams or clubs" value="${esc(state.q)}" autocomplete="off">`;
+  html += `<section class="card"><div class="dhead"><b><span class="dot" style="background:${esc(d.ColorHex || "var(--accent)")}"></span>${esc(d.Name)}</b>
+    <small>${list.length} teams · ${nClubs} clubs${nOurs ? ` · ${nOurs} Wind` : ""}</small></div>`;
+  html += sorted.map(t => `<div class="tr ${t.clubId === clubId ? "ours" : ""}" data-s="${esc((t.name + " " + t.club).toLowerCase())}">
+      <div class="nm">${esc(stripRegion(t.name))}</div><div class="cl">${esc(t.club)}</div></div>`).join("");
+  if (!list.length) html += `<div class="nomatch">No teams registered yet.</div>`;
+  html += `<div class="nomatch" id="nomatch" hidden>No teams match.</div></section>`;
+  return html;
+}
+
+function applySearch(){
+  const q = state.q.trim().toLowerCase();
+  let shown = 0;
+  document.querySelectorAll(".tr").forEach(el => { const hit = !q || el.dataset.s.includes(q); el.hidden = !hit; if (hit) shown++; });
+  const nm = $("#nomatch"); if (nm) nm.hidden = shown > 0 || !document.querySelector(".tr");
+}
+
+async function loadDivision(divId){
+  if (state.field[divId] !== undefined || state._divLoading === divId) return;
+  state._divLoading = divId;
+  const idx = state.idx;
+  const key = DEMO ? DEMO_DATA.event.Key : eventKey(CONFIG.events[idx]);
+  let list;
+  try { list = await getDivisionTeams(key, divId); } catch { list = null; }
+  state._divLoading = null;
+  if (state.idx !== idx) return;
+  state.field[divId] = list;
+  if (state.view === "field") renderMain();
+}
+
+const emptyBox = (title, body) => `<div class="empty"><b>${title}</b>${body}</div>`;
+const NOT_POSTED = emptyBox("Schedule not posted yet",
+  "The tournament is set up in AES, but divisions, teams and game times aren't public yet. They show up here automatically once the director publishes them, usually a few days before.");
+
+/* ---------- loading ---------- */
+async function load(idx, quiet){
+  if (state.loading) return;
+  const changed = idx !== state.idx;
+  state.idx = idx;
+  if (changed) { state.event = null; state.teams = []; state.data = {}; state.updated = null; state.club = null; state.field = {}; state.divSel = null; state.q = ""; state.reg = null; state.st = "all"; }
+  renderChips();
+  const e = CONFIG.events[idx];
+  if (DEMO) e._demo = true;
+  const key = DEMO ? DEMO_DATA.event.Key : eventKey(e);
+  try { history.replaceState(null, "", "?t=" + idx + (qs.has("demo") ? "&demo" : "")); } catch {}
+
+  if (!key) {
+    renderMain(NOT_POSTED);
+    return;
+  }
+  if (!quiet) renderMain(`<div class="skel"></div><div class="skel"></div>`);
+  state.loading = true; $("#refresh").classList.add("spin");
+  const num = DEMO ? null : eventNumber(e);
+  const regP = num ? getRegistration(num).catch(() => null) : Promise.resolve(null);
+  const stamp = () => state.updated = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+  try {
+    const ev = await getEvent(key).catch(async err => {
+      if (err.status === 404) { state.event = null; state.reg = await regP; throw Object.assign(err, { unpublished: true }); }
+      throw err;
+    });
+    state.reg = await regP;
+    state.event = ev;
+    const clubs = (ev && ev.Clubs) || [];
+    let club = null;
+    if (!DEMO && CONFIG.teamCodes && CONFIG.teamCodes.length) {
+      const found = await findTeamsByCode(key, CONFIG.teamCodes).catch(() => []);
+      if (found.length && found[0].TeamClub) club = found[0].TeamClub;
+    }
+    if (!club && CONFIG.clubId) club = clubs.find(c => c.ClubId === CONFIG.clubId) || null;
+    if (!club) club = clubs.find(c => CONFIG.clubNamePattern.test(c.Name || "")) || (DEMO ? clubs[0] : null);
+    state.club = club || null;
+    if (!club) { state.teams = []; if (!store.get("view") && !regOurs().length) state.view = "field"; stamp(); renderMain(); return; }
+    $("#foot").textContent = `${club.Name} · AES club ID ${club.ClubId}`;
+    const teams = await getClubTeams(key, club.ClubId);
+    state.teams = teams || [];
+    if (!quiet || !state.teams.length) renderMain();
+    if (!state.teams.length) return;
+    const results = await Promise.all(state.teams.map(t => getTeamData(key, t.TeamDivision?.DivisionId, t.TeamId).catch(() => null)));
+    state.teams.forEach((t, i) => { if (results[i]) state.data[t.TeamId] = results[i]; });
+    stamp();
+    renderMain();
+  } catch (err) {
+    if (err.unpublished) {
+      if (state.reg) {
+        const c = regClubId(); const t = c != null && state.reg.teams.find(x => x.clubId === c);
+        if (t) $("#foot").textContent = `${t.club} · AES club ID ${t.clubId}`;
+        stamp();
+      }
+      renderMain(state.reg ? undefined : NOT_POSTED); return;
+    }
+    renderMain(`<div class="err">Couldn't reach AES right now (${esc(err.message)}). Tap Refresh or try again in a minute.</div>` +
+      (state.teams.length ? state.teams.map(renderTeam).join("") : ""));
+  } finally {
+    state.loading = false; $("#refresh").classList.remove("spin");
+    scheduleRefresh();
+  }
+}
+function scheduleRefresh(){
+  clearTimeout(state.timer);
+  const e = CONFIG.events[state.idx];
+  if (!DEMO && e && statusOf(e) === "live" && eventKey(e))
+    state.timer = setTimeout(() => { if (!document.hidden) load(state.idx, true); else scheduleRefresh(); }, CONFIG.refreshSeconds * 1000);
+}
+
+/* ---------- events ---------- */
+$("#events").addEventListener("click", ev => { const b = ev.target.closest(".chip"); if (b) load(+b.dataset.i); });
+$("#app").addEventListener("click", ev => {
+  const v = ev.target.closest("[data-v]");
+  if (v) { state.view = v.dataset.v; store.set("view", state.view); renderMain(); return; }
+  const d = ev.target.closest("[data-d]");
+  if (d) { state.divSel = +d.dataset.d; state.q = ""; state.st = "all"; renderMain(); return; }
+  const st = ev.target.closest("[data-st]");
+  if (st) { state.st = st.dataset.st; renderMain(); return; }
+  const b = ev.target.closest("[data-f]"); if (!b) return;
+  state.filter = b.dataset.f; store.set("filter", state.filter); renderMain();
+});
+$("#app").addEventListener("input", ev => { if (ev.target.id === "q") { state.q = ev.target.value; applySearch(); } });
+$("#refresh").addEventListener("click", () => { state.field = {}; load(state.idx, true); });
+document.addEventListener("visibilitychange", () => {
+  if (!document.hidden && CONFIG.events[state.idx] && statusOf(CONFIG.events[state.idx]) === "live") load(state.idx, true);
+});
+
+load(DEMO ? 0 : defaultIdx());
+</script>
+</body>
+</html>
