@@ -91,6 +91,7 @@
     }
     .chip-fh { background: rgba(90,172,245,.14); color: var(--sky); border: 1px solid rgba(90,172,245,.32); }
     .chip-unconf { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+    .chip-jac { background: rgba(26,111,212,.07); color: var(--muted); border: 1px solid var(--line); }
 
     /* ── MONTH SECTION ── */
     .month { margin-bottom: 2.5rem; }
@@ -187,15 +188,16 @@
 
     <div class="legend">
       <span class="legend-item">
+        <span class="chip chip-jac">JAC</span>
+        Johnson Athletic Complex
+      </span>
+      <span class="legend-item">
         <span class="chip chip-fh">✓ Fieldhouse</span>
         confirmed venue change
       </span>
       <span class="legend-item">
         <span class="chip chip-unconf">Fieldhouse · ?</span>
         venue unconfirmed
-      </span>
-      <span class="legend-item" style="color:var(--muted); opacity:.5">
-        no chip = Johnson (default)
       </span>
     </div>
 
@@ -269,6 +271,8 @@
         venueHtml = p.conf
           ? '<span class="chip chip-fh">✓ Fieldhouse</span>'
           : '<span class="chip chip-unconf">Fieldhouse · ?</span>';
+      } else {
+        venueHtml = '<span class="chip chip-jac">JAC</span>';
       }
 
       const nextTag = isNext ? '<span class="next-tag">Next</span>' : '';
