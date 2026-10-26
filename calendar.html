@@ -130,6 +130,7 @@
       position: relative;
     }
     .cal-cell.out-range { opacity: .2; pointer-events: none; }
+    .cal-cell.spring-break { background: rgba(100,116,139,.1); color: var(--muted); opacity: .55; }
 
     .cal-cell.practice {
       background: var(--prac-bg);
@@ -245,6 +246,7 @@
       <span class="legend-item"><span class="legend-swatch ls-unconf"></span>Fieldhouse (venue TBD)</span>
       <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
       <span class="legend-item"><span class="legend-swatch ls-major"></span>Regional / Grand Slam</span>
+      <span class="legend-item"><span class="legend-swatch" style="background:rgba(100,116,139,.18)"></span>Spring Break</span>
     </div>
 
     <div class="cal-outer">
@@ -274,8 +276,7 @@
       '2027-02-01','2027-02-03','2027-02-08','2027-02-10',
       '2027-02-15','2027-02-17','2027-02-22','2027-02-24',
       '2027-03-01','2027-03-03','2027-03-08','2027-03-10',
-      '2027-03-15','2027-03-17','2027-03-22','2027-03-24',
-      '2027-03-29','2027-03-31',
+      '2027-03-15','2027-03-17',
       '2027-04-05','2027-04-07','2027-04-12','2027-04-14',
       '2027-04-19','2027-04-21','2027-04-26','2027-04-28',
       '2027-05-03','2027-05-05','2027-05-10','2027-05-12',
@@ -363,6 +364,8 @@
 
           if (!active) {
             cls += ' out-range';
+          } else if (ds >= '2027-03-22' && ds <= '2027-04-04') {
+            cls += ' spring-break'; tip = 'Spring Break';
           } else if (FH_UNCONF.has(ds)) {
             cls += ' unconf'; tip = 'Practice – Fieldhouse (venue TBD)';
           } else if (PRAC_SET.has(ds)) {
