@@ -20,32 +20,33 @@
       --line:  rgba(26,111,212,.13);
       --surf:  #ffffff;
       /* calendar accents */
-      --prac-bg:     #c8e6c9;
-      --prac-text:   #2a6537;
-      --prac-border: #6abf72;
-      --tour-bg:     rgba(26,111,212,.12);
-      --tour-text:   #1358b0;
-      --tour-border: #e04343;
-      --major-bg:    rgba(245,158,11,.14);
-      --major-text:  #a05000;
+      --prac-bg:     rgba(26,111,212,.1);
+      --prac-text:   #1358b0;
+      --prac-border: #5aacf5;
+      --tour-bg:     rgba(220,38,38,.08);
+      --tour-text:   #b91c1c;
+      --tour-border: #ef4444;
+      --major-bg:    rgba(245,158,11,.12);
+      --major-text:  #92400e;
+      --major-border:#f59e0b;
     }
     @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
       --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1); --surf: #0c1b30;
-      --prac-bg:     rgba(56,142,60,.22); --prac-text:   #99d4a0; --prac-border: rgba(56,142,60,.55);
-      --tour-bg:     rgba(26,111,212,.22); --tour-text:   #7db8f0; --tour-border: #ef7070;
-      --major-bg:    rgba(245,158,11,.17); --major-text:  #f0b860;
+      --prac-bg:     rgba(90,172,245,.18); --prac-text:   #7db8f0; --prac-border: #5aacf5;
+      --tour-bg:     rgba(239,68,68,.15);  --tour-text:   #fca5a5; --tour-border: #ef4444;
+      --major-bg:    rgba(245,158,11,.17); --major-text:  #fcd34d; --major-border:#f59e0b;
     }}
     :root[data-theme="dark"] {
       --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1); --surf: #0c1b30;
-      --prac-bg:     rgba(56,142,60,.22); --prac-text:   #99d4a0; --prac-border: rgba(56,142,60,.55);
-      --tour-bg:     rgba(26,111,212,.22); --tour-text:   #7db8f0; --tour-border: #ef7070;
-      --major-bg:    rgba(245,158,11,.17); --major-text:  #f0b860;
+      --prac-bg:     rgba(90,172,245,.18); --prac-text:   #7db8f0; --prac-border: #5aacf5;
+      --tour-bg:     rgba(239,68,68,.15);  --tour-text:   #fca5a5; --tour-border: #ef4444;
+      --major-bg:    rgba(245,158,11,.17); --major-text:  #fcd34d; --major-border:#f59e0b;
     }
 
     html { scroll-behavior: smooth; }
     body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; min-height: 100vh; }
 
-    /* ── NAV ── */
+    /* NAV */
     nav {
       display: flex; align-items: center; justify-content: space-between;
       padding: 1.1rem 5vw;
@@ -58,12 +59,47 @@
     .nav-links { display: flex; gap: 1.8rem; list-style: none; }
     .nav-links a { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,.5); transition: color .2s; }
     .nav-links a:hover, .nav-links a.active { color: #fff; }
-    @media (max-width: 600px) {
-      .nav-links { gap: 1rem; }
-      .nav-links li:nth-child(1), .nav-links li:nth-child(2), .nav-links li:nth-child(4) { display: none; }
+
+    /* hamburger */
+    .nav-toggle {
+      display: none;
+      flex-direction: column; justify-content: center; gap: 5px;
+      width: 2rem; height: 2rem; background: none; border: none; cursor: pointer; padding: .2rem;
+    }
+    .nav-toggle span {
+      display: block; width: 100%; height: 2px;
+      background: rgba(255,255,255,.7); border-radius: 2px;
+      transition: transform .25s, opacity .25s;
+    }
+    .nav-toggle.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .nav-toggle.open span:nth-child(2) { opacity: 0; }
+    .nav-toggle.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    @media (max-width: 640px) {
+      .nav-toggle { display: flex; }
+      .nav-links {
+        display: none; flex-direction: column; gap: 0;
+        position: absolute; top: 100%; left: 0; right: 0;
+        background: rgba(11,31,58,.99);
+        border-bottom: 1px solid rgba(26,111,212,.25);
+        padding: .5rem 0;
+      }
+      .nav-links.open { display: flex; }
+      .nav-links li { width: 100%; }
+      .nav-links a { display: block; padding: .75rem 5vw; font-size: .8rem; }
+      .nav-links a:hover { background: rgba(90,172,245,.08); }
     }
 
-    /* ── PAGE HEADER ── */
+    /* THEME TOGGLE */
+    .theme-btn {
+      background: none; border: 1px solid rgba(255,255,255,.2); border-radius: 20px;
+      color: rgba(255,255,255,.6); font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .75rem; cursor: pointer; transition: border-color .2s, color .2s;
+      white-space: nowrap; margin-left: 1.2rem; flex-shrink: 0;
+    }
+    .theme-btn:hover { border-color: rgba(255,255,255,.5); color: #fff; }
+
+    /* PAGE HEADER */
     .page-hd {
       padding: 3.5rem 6vw 3rem;
       background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
@@ -79,10 +115,10 @@
     .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1; color: #fff; margin-bottom: 1rem; }
     .page-sub { color: rgba(255,255,255,.55); font-size: .92rem; max-width: 50ch; }
 
-    /* ── CONTENT ── */
-    .content { padding: 2.5rem 6vw 5rem; max-width: 760px; }
+    /* CONTENT */
+    .content { padding: 2.5rem 6vw 5rem; max-width: 820px; }
 
-    /* ── LEGEND ── */
+    /* LEGEND */
     .legend {
       display: flex; flex-wrap: wrap; gap: .45rem 1.6rem;
       margin-bottom: 2rem;
@@ -93,36 +129,58 @@
     .legend-item { display: flex; align-items: center; gap: .45rem; }
     .legend-swatch { width: 1rem; height: 1rem; border-radius: 4px; flex-shrink: 0; }
     .ls-prac    { background: var(--prac-bg); }
-    .ls-unconf  { background: var(--prac-bg); border: 2px dashed var(--prac-border); }
     .ls-tour    { background: var(--tour-bg); border: 2px solid var(--tour-border); }
-    .ls-major   { background: var(--major-bg); border: 2px solid var(--tour-border); }
+    .ls-major   { background: var(--major-bg); border: 2px solid var(--major-border); }
+    .ls-sb      { background: rgba(100,116,139,.18); }
 
-    /* ── CALENDAR ── */
-    .cal-outer { overflow-x: auto; }
+    /* CALENDAR */
+    .cal-outer {
+      overflow-x: auto;
+      background: var(--surf);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem 1.2rem 1.2rem;
+    }
+    .cal-hd-row {
+      display: grid;
+      grid-template-columns: 2rem repeat(7, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 560px;
+      border-bottom: 2px solid var(--line);
+      margin-bottom: 4px;
+    }
     .cal-grid {
       display: grid;
-      grid-template-columns: 2.5rem repeat(7, minmax(0, 1fr));
-      gap: 3px;
-      max-width: 500px;
+      grid-template-columns: 2rem repeat(7, minmax(0, 1fr));
+      gap: 2px;
+      max-width: 560px;
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
     }
+    .cal-grid > * {
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .cal-month-lbl,
+    .cal-grid > div:not(.cal-cell):not(.cal-col-hd) { border-color: transparent !important; }
 
     .cal-col-hd {
-      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
-      color: var(--muted); text-align: center; padding: .3rem 0 .55rem;
+      font-size: .55rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--ink); font-weight: 500; text-align: center; padding: .2rem 0 .4rem;
     }
 
     .cal-month-lbl {
       display: flex; align-items: center;
-      font-family: 'Bebas Neue', sans-serif; font-size: .95rem; letter-spacing: .05em;
-      color: var(--muted); padding-right: .25rem;
+      font-family: 'Bebas Neue', sans-serif; font-size: .8rem; letter-spacing: .05em;
+      color: var(--muted); padding-right: .2rem;
       padding-top: .05rem;
     }
 
     .cal-cell {
       aspect-ratio: 1;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 6px;
-      font-size: clamp(.68rem, 1.35vw, .82rem);
+      border-radius: 4px;
+      font-size: clamp(.6rem, 1.1vw, .72rem);
       font-weight: 400;
       font-variant-numeric: tabular-nums;
       color: var(--muted);
@@ -137,12 +195,6 @@
       color: var(--prac-text);
       font-weight: 500;
     }
-    .cal-cell.unconf {
-      background: var(--prac-bg);
-      color: var(--prac-text);
-      border: 2px dashed var(--prac-border);
-      font-weight: 500;
-    }
     .cal-cell.tournament {
       background: var(--tour-bg);
       color: var(--tour-text);
@@ -152,7 +204,7 @@
     .cal-cell.major {
       background: var(--major-bg);
       color: var(--major-text);
-      border: 2px solid var(--tour-border);
+      border: 2px solid var(--major-border);
       font-weight: 500;
     }
     .cal-cell.today-cell {
@@ -181,8 +233,14 @@
       letter-spacing: 0;
     }
 
-    /* ── TOURNAMENT LIST ── */
-    .event-list { margin-top: 2.5rem; }
+    /* TOURNAMENT LIST */
+    .event-list {
+      margin-top: 2.5rem;
+      background: var(--surf);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 1rem 1.2rem 1.2rem;
+    }
     .event-list-hd {
       font-family: 'Bebas Neue', sans-serif;
       font-size: 1.2rem; letter-spacing: .06em;
@@ -192,10 +250,14 @@
     }
     .event-row {
       display: flex; align-items: center; gap: .75rem;
-      padding: .52rem 0;
+      padding: .6rem .6rem .6rem .85rem;
       border-bottom: 1px solid var(--line);
       font-size: .84rem;
+      border-left: 3px solid transparent;
+      border-radius: 0 4px 4px 0;
     }
+    .event-row.is-tour  { border-left-color: var(--tour-border); }
+    .event-row.is-major { border-left-color: var(--major-border); }
     .event-date { min-width: 5.5rem; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .79rem; flex-shrink: 0; }
     .event-name { flex: 1; font-weight: 400; }
     .event-badge {
@@ -203,9 +265,9 @@
       padding: .14rem .42rem; border-radius: 3px; flex-shrink: 0;
     }
     .badge-tour  { background: var(--tour-bg);  color: var(--tour-text);  border: 1px solid var(--tour-border); }
-    .badge-major { background: var(--major-bg); color: var(--major-text); border: 1px solid var(--tour-border); }
+    .badge-major { background: var(--major-bg); color: var(--major-text); border: 1px solid var(--major-border); }
 
-    /* ── FOOTER ── */
+    /* FOOTER */
     footer {
       border-top: 1px solid var(--line);
       padding: 2rem 6vw;
@@ -221,7 +283,10 @@
 
   <nav>
     <a href="index.html" class="nav-logo">Wind<span> VC</span></a>
-    <ul class="nav-links">
+    <button class="nav-toggle" id="navToggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
       <li><a href="index.html#about">About</a></li>
       <li><a href="index.html#season">Season</a></li>
       <li><a href="tournaments.html">Tournaments</a></li>
@@ -229,6 +294,7 @@
       <li><a href="calendar.html" class="active">Calendar</a></li>
       <li><a href="index.html#contact">Contact</a></li>
     </ul>
+    <button class="theme-btn" id="themeBtn">Light</button>
   </nav>
 
   <div class="page-hd">
@@ -243,13 +309,12 @@
 
     <div class="legend">
       <span class="legend-item"><span class="legend-swatch ls-prac"></span>Practice</span>
-      <span class="legend-item"><span class="legend-swatch ls-unconf"></span>Fieldhouse (venue TBD)</span>
-      <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
-      <span class="legend-item"><span class="legend-swatch ls-major"></span>Regional / Grand Slam</span>
-      <span class="legend-item"><span class="legend-swatch" style="background:rgba(100,116,139,.18)"></span>Spring Break</span>
+      <span class="legend-item"><span class="legend-swatch ls-tour"></span><span class="legend-swatch ls-major" style="margin-left:3px"></span>Tournament</span>
+      <span class="legend-item"><span class="legend-swatch ls-sb"></span>Spring Break</span>
     </div>
 
     <div class="cal-outer">
+      <div class="cal-hd-row" id="cal-hd"></div>
       <div class="cal-grid" id="cal"></div>
     </div>
 
@@ -266,6 +331,34 @@
   </footer>
 
   <script>
+    // THEME TOGGLE
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('themeBtn');
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initDark = saved ? saved === 'dark' : prefersDark;
+    if (initDark) { root.dataset.theme = 'dark'; themeBtn.textContent = 'Light'; }
+    else           { root.dataset.theme = 'light'; themeBtn.textContent = 'Dark'; }
+    themeBtn.addEventListener('click', () => {
+      const dark = root.dataset.theme !== 'dark';
+      root.dataset.theme = dark ? 'dark' : 'light';
+      themeBtn.textContent = dark ? 'Light' : 'Dark';
+      try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch(e){}
+    });
+
+    // HAMBURGER
+    const navToggle = document.getElementById('navToggle');
+    const navLinks  = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      navToggle.classList.toggle('open', open);
+    });
+    navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      navToggle.classList.remove('open');
+    }));
+
+    // CALENDAR
     const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
     const PRAC_SET = new Set([
@@ -302,7 +395,6 @@
         String(d.getDate()).padStart(2,'0');
     }
 
-    // Build tournament → date map
     const TMAP = new Map();
     for (const t of TOURNAMENTS) {
       const s = pdate(t.start), e = pdate(t.end);
@@ -320,19 +412,16 @@
     function render() {
       const cal = document.getElementById('cal');
 
-      // Header row: blank label + M T W T F S S
-      let html = '<div></div>';
-      for (const d of ['M','T','W','T','F','S','S'])
-        html += `<div class="cal-col-hd">${d}</div>`;
+      document.getElementById('cal-hd').innerHTML =
+        '<div></div>' + ['M','T','W','T','F','S','S'].map(d=>`<div class="cal-col-hd">${d}</div>`).join('');
+      let html = '';
 
-      // Weeks: Mon 2026-11-30 → Sun 2027-06-06
       const calStart = pdate('2026-11-30');
       const calEnd   = pdate('2027-06-06');
       const labeled  = new Set();
       const cur = new Date(calStart);
 
       while (cur <= calEnd) {
-        // Build 7-day array for this week
         const days = [];
         for (let i = 0; i < 7; i++) {
           const d = new Date(cur);
@@ -340,7 +429,6 @@
           days.push(d);
         }
 
-        // Month label: show when the 1st of an in-season month appears in this row
         let rowLabel = '';
         for (const d of days) {
           const m = d.getMonth(), y = d.getFullYear();
@@ -354,7 +442,6 @@
           ? `<div class="cal-month-lbl">${rowLabel}</div>`
           : '<div></div>';
 
-        // Day cells
         for (const d of days) {
           const ds = fmt(d);
           const m = d.getMonth(), y = d.getFullYear();
@@ -366,11 +453,9 @@
             cls += ' out-range';
           } else if (ds >= '2027-03-22' && ds <= '2027-04-04') {
             cls += ' spring-break'; tip = 'Spring Break';
-          } else if (FH_UNCONF.has(ds)) {
-            cls += ' unconf'; tip = 'Practice – Fieldhouse (venue TBD)';
-          } else if (PRAC_SET.has(ds)) {
+          } else if (FH_UNCONF.has(ds) || PRAC_SET.has(ds)) {
             cls += ' practice';
-            tip = FH_CONF.has(ds) ? 'Practice – Fieldhouse' : 'Practice – Johnson Athletic Complex';
+            tip = FH_CONF.has(ds) ? 'Practice – Fieldhouse' : FH_UNCONF.has(ds) ? 'Practice – Fieldhouse (venue TBD)' : 'Practice – Johnson Athletic Complex';
           } else if (TMAP.has(ds)) {
             const t = TMAP.get(ds);
             cls += t.major ? ' major' : ' tournament';
@@ -387,7 +472,6 @@
 
       cal.innerHTML = html;
 
-      // Tournament list
       const rows = document.getElementById('event-rows');
       let evHtml = '';
       for (const t of TOURNAMENTS) {
@@ -398,11 +482,11 @@
           ? `${m1} ${d1}`
           : m1 === m2 ? `${m1} ${d1}–${d2}` : `${m1} ${d1} – ${m2} ${d2}`;
         const bc = t.major ? 'badge-major' : 'badge-tour';
-        const bl = t.major ? 'Major' : 'Tournament';
-        evHtml += `<div class="event-row">
+        const rowCls = t.major ? 'is-major' : 'is-tour';
+        evHtml += `<div class="event-row ${rowCls}">
           <span class="event-date">${dateStr}</span>
           <span class="event-name">${t.name}</span>
-          <span class="event-badge ${bc}">${bl}</span>
+          <span class="event-badge ${bc}">Tournament</span>
         </div>`;
       }
       rows.innerHTML = evHtml;
