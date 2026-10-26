@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wind VC · Practices</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:          #0b1f3a;
+      --blue:          #1a6fd4;
+      --sky:           #5aacf5;
+      --bg:            #f4f8ff;
+      --ink:           #0b1f3a;
+      --muted:         #4a6a8a;
+      --line:          rgba(26,111,212,.13);
+      --surf:          #ffffff;
+      --amber:         #b45309;
+      --amber-bg:      rgba(245,158,11,.1);
+      --amber-border:  rgba(245,158,11,.28);
+    }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1);
+      --surf: #0c1b30; --amber: #fbbf24; --amber-bg: rgba(251,191,36,.1); --amber-border: rgba(251,191,36,.25);
+    }}
+    :root[data-theme="dark"] {
+      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1);
+      --surf: #0c1b30; --amber: #fbbf24; --amber-bg: rgba(251,191,36,.1); --amber-border: rgba(251,191,36,.25);
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5vw;
+      background: rgba(11,31,58,.98);
+      border-bottom: 1px solid rgba(26,111,212,.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .08em; color: #fff; text-decoration: none; }
+    .nav-logo span { color: var(--sky); }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,.5); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    @media (max-width: 600px) { .nav-links { gap: 1rem; } .nav-links li:nth-child(1), .nav-links li:nth-child(2), .nav-links li:nth-child(4) { display: none; } }
+
+    /* ── PAGE HEADER ── */
+    .page-hd {
+      padding: 3.5rem 6vw 3rem;
+      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
+      border-bottom: 1px solid rgba(26,111,212,.2);
+      position: relative; overflow: hidden;
+    }
+    .page-hd::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(-18deg, transparent, transparent 60px, rgba(26,111,212,.055) 60px, rgba(26,111,212,.055) 61px);
+    }
+    .page-hd-inner { position: relative; z-index: 1; max-width: 760px; }
+    .eyebrow { font-size: .7rem; letter-spacing: .36em; text-transform: uppercase; color: var(--sky); margin-bottom: .7rem; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1; color: #fff; margin-bottom: 1rem; }
+    .page-sub { color: rgba(255,255,255,.55); font-size: .92rem; max-width: 50ch; }
+    .page-meta { display: flex; flex-wrap: wrap; gap: .5rem 2.5rem; margin-top: 1.8rem; }
+    .meta-item { display: flex; flex-direction: column; gap: .2rem; }
+    .meta-val { font-size: .9rem; color: #fff; font-weight: 400; }
+    .meta-lbl { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.38); }
+
+    /* ── CONTENT ── */
+    .content { padding: 2.5rem 6vw 5rem; max-width: 760px; }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: .5rem 1.8rem;
+      margin-bottom: 2.5rem;
+      padding: .85rem 1rem;
+      background: var(--surf); border: 1px solid var(--line); border-radius: 6px;
+      font-size: .78rem; color: var(--muted); align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: .5rem; }
+
+    /* ── CHIPS ── */
+    .chip {
+      display: inline-flex; align-items: center; gap: .22rem;
+      font-size: .64rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+      padding: .17rem .48rem; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
+    }
+    .chip-fh { background: rgba(90,172,245,.14); color: var(--sky); border: 1px solid rgba(90,172,245,.32); }
+    .chip-unconf { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+
+    /* ── MONTH SECTION ── */
+    .month { margin-bottom: 2.5rem; }
+    .month-hd { display: flex; align-items: baseline; gap: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--blue); }
+    .month-nm { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .05em; }
+    .month-ct { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+
+    /* ── COLUMN HEADERS ── */
+    .col-heads { display: grid; grid-template-columns: 1fr 1fr; }
+    .col-head { padding: .35rem .75rem; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+
+    /* ── WEEK PAIR ── */
+    .week-pair { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
+    .week-pair + .week-pair { border-top-color: var(--line); }
+
+    /* ── DAY CELL ── */
+    .day-cell {
+      display: flex; align-items: center; gap: .55rem;
+      padding: .58rem .75rem;
+      font-size: .88rem;
+      min-height: 2.5rem;
+    }
+    .day-cell + .day-cell { border-left: 1px solid var(--line); }
+    .day-cell.past { opacity: .32; }
+    .day-cell.next-up {
+      background: rgba(26,111,212,.07);
+      box-shadow: inset 3px 0 0 var(--blue);
+    }
+    .day-cell.next-up + .day-cell.next-up { box-shadow: none; }
+    .cell-day { font-size: .63rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 1.7rem; flex-shrink: 0; }
+    .cell-date { flex: 1; font-weight: 400; font-variant-numeric: tabular-nums; }
+    .next-tag { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); font-weight: 500; background: rgba(26,111,212,.12); padding: .13rem .38rem; border-radius: 3px; flex-shrink: 0; }
+
+    /* ── MOBILE: collapse to single column ── */
+    @media (max-width: 500px) {
+      .col-heads { display: none; }
+      .week-pair { grid-template-columns: 1fr; }
+      .day-cell + .day-cell { border-left: none; border-top: 1px solid var(--line); }
+      .day-cell.empty { display: none; }
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 6vw;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      background: var(--surf);
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: .08em; color: var(--ink); }
+    .footer-logo span { color: var(--blue); }
+    footer p { font-size: .75rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Wind<span> VC</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#season">Season</a></li>
+      <li><a href="tournaments.html">Tournaments</a></li>
+      <li><a href="practices.html" class="active">Practices</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hd">
+    <div class="page-hd-inner">
+      <p class="eyebrow">Wind Volleyball Club · 2026–27 Season</p>
+      <h1 class="page-title">Practice Schedule</h1>
+      <p class="page-sub">All practices run 6:00–8:00 PM. Mondays and Wednesdays, December through May.</p>
+      <div class="page-meta">
+        <div class="meta-item">
+          <span class="meta-val">51 total</span>
+          <span class="meta-lbl">Practices</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-val" id="meta-upcoming">—</span>
+          <span class="meta-lbl">Upcoming</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-val">6:00 – 8:00 PM</span>
+          <span class="meta-lbl">Every Session</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-val" id="meta-next">—</span>
+          <span class="meta-lbl">Next Practice</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="legend">
+      <span class="legend-item">
+        <span class="chip chip-fh">✓ Fieldhouse</span>
+        confirmed venue change
+      </span>
+      <span class="legend-item">
+        <span class="chip chip-unconf">Fieldhouse · ?</span>
+        venue unconfirmed
+      </span>
+      <span class="legend-item" style="color:var(--muted); opacity:.5">
+        no chip = Johnson (default)
+      </span>
+    </div>
+
+    <div id="schedule"></div>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <p>© 2026 Wind Volleyball Club · 2026–27 Season</p>
+  </footer>
+
+  <script>
+    const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    const PRACTICES = [
+      // December 2026
+      {d:'2026-12-07'}, {d:'2026-12-09'},
+      {d:'2026-12-14', venue:'Fieldhouse', conf:true}, {d:'2026-12-16'},
+      {d:'2026-12-21'}, {d:'2026-12-23'},
+      {d:'2026-12-28'}, {d:'2026-12-30'},
+      // January 2027
+      {d:'2027-01-04'}, {d:'2027-01-06'},
+      {d:'2027-01-11'}, {d:'2027-01-13', venue:'Fieldhouse', conf:false},
+      {d:'2027-01-18'}, {d:'2027-01-20'},
+      {d:'2027-01-25'}, {d:'2027-01-27'},
+      // February 2027
+      {d:'2027-02-01'}, {d:'2027-02-03'},
+      {d:'2027-02-08'}, {d:'2027-02-10'},
+      {d:'2027-02-15'}, {d:'2027-02-17'},
+      {d:'2027-02-22'}, {d:'2027-02-24'},
+      // March 2027
+      {d:'2027-03-01'}, {d:'2027-03-03'},
+      {d:'2027-03-08'}, {d:'2027-03-10'},
+      {d:'2027-03-15'}, {d:'2027-03-17'},
+      {d:'2027-03-22'}, {d:'2027-03-24'},
+      {d:'2027-03-29'}, {d:'2027-03-31'},
+      // April 2027
+      {d:'2027-04-05'}, {d:'2027-04-07'},
+      {d:'2027-04-12'}, {d:'2027-04-14'},
+      {d:'2027-04-19'}, {d:'2027-04-21'},
+      {d:'2027-04-26'}, {d:'2027-04-28'},
+      // May 2027
+      {d:'2027-05-03'}, {d:'2027-05-05'},
+      {d:'2027-05-10'}, {d:'2027-05-12'},
+      {d:'2027-05-17'}, {d:'2027-05-19'},
+      {d:'2027-05-24'}, {d:'2027-05-26'},
+      {d:'2027-05-31'},
+    ];
+
+    function pdate(s) {
+      const [y,m,d] = s.split('-').map(Number);
+      return new Date(y, m-1, d);
+    }
+
+    function cellHtml(p, nextIdx) {
+      if (!p) return '<div class="day-cell empty"></div>';
+
+      const date  = pdate(p.d);
+      const idx   = PRACTICES.indexOf(p);
+      const today = window._today;
+      const isPast = date < today;
+      const isNext = idx === nextIdx;
+
+      const dayAbbr = DAYS_SHORT[date.getDay()];
+      const dateStr = MONTHS[date.getMonth()].slice(0,3) + ' ' + date.getDate();
+
+      let venueHtml = '';
+      if (p.venue === 'Fieldhouse') {
+        venueHtml = p.conf
+          ? '<span class="chip chip-fh">✓ Fieldhouse</span>'
+          : '<span class="chip chip-unconf">Fieldhouse · ?</span>';
+      }
+
+      const nextTag = isNext ? '<span class="next-tag">Next</span>' : '';
+
+      const cls = ['day-cell', isPast && 'past', isNext && 'next-up'].filter(Boolean).join(' ');
+
+      return `<div class="${cls}">
+        <span class="cell-day">${dayAbbr}</span>
+        <span class="cell-date">${dateStr}</span>
+        ${venueHtml}${nextTag}
+      </div>`;
+    }
+
+    function render() {
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      window._today = today;
+
+      // Find next practice
+      let nextIdx = -1;
+      for (let i = 0; i < PRACTICES.length; i++) {
+        if (pdate(PRACTICES[i].d) >= today) { nextIdx = i; break; }
+      }
+
+      // Update header meta
+      const upcoming = nextIdx >= 0 ? PRACTICES.length - nextIdx : 0;
+      document.getElementById('meta-upcoming').textContent = upcoming;
+      if (nextIdx >= 0) {
+        const np = PRACTICES[nextIdx];
+        const nd = pdate(np.d);
+        document.getElementById('meta-next').textContent =
+          MONTHS[nd.getMonth()].slice(0,3) + ' ' + nd.getDate();
+      } else {
+        document.getElementById('meta-next').textContent = 'Season complete';
+      }
+
+      // Group by month
+      const groups = new Map();
+      for (const p of PRACTICES) {
+        const key = p.d.slice(0, 7);
+        if (!groups.has(key)) groups.set(key, []);
+        groups.get(key).push(p);
+      }
+
+      let html = '';
+      for (const [key, list] of groups) {
+        const [y, m] = key.split('-').map(Number);
+        const mName = MONTHS[m - 1];
+
+        // Pair Mondays and Wednesdays
+        const pairs = [];
+        let i = 0;
+        while (i < list.length) {
+          const day = pdate(list[i].d).getDay();
+          if (day === 1) {
+            // Monday — pair with next if it's Wednesday
+            const wed = list[i + 1] && pdate(list[i + 1].d).getDay() === 3 ? list[i + 1] : null;
+            pairs.push([list[i], wed]);
+            i += wed ? 2 : 1;
+          } else {
+            // Wednesday without a Monday (shouldn't happen but handle gracefully)
+            pairs.push([null, list[i]]);
+            i++;
+          }
+        }
+
+        html += `<section class="month">
+          <div class="month-hd">
+            <span class="month-nm">${mName} ${y}</span>
+            <span class="month-ct">${list.length} practice${list.length === 1 ? '' : 's'}</span>
+          </div>
+          <div class="col-heads">
+            <div class="col-head">Monday</div>
+            <div class="col-head">Wednesday</div>
+          </div>`;
+
+        for (const [mon, wed] of pairs) {
+          html += `<div class="week-pair">
+            ${cellHtml(mon, nextIdx)}
+            ${wed !== undefined ? cellHtml(wed, nextIdx) : '<div class="day-cell empty"></div>'}
+          </div>`;
+        }
+
+        html += '</section>';
+      }
+
+      document.getElementById('schedule').innerHTML = html;
+
+      // Scroll to next practice if not near the top
+      if (nextIdx > 3) {
+        const el = document.querySelector('.next-up');
+        if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
+      }
+    }
+
+    render();
+  </script>
+</body>
+</html>
