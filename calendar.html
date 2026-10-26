@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Wind VC · Season Calendar</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:  #0b1f3a;
+      --blue:  #1a6fd4;
+      --sky:   #5aacf5;
+      --bg:    #f4f8ff;
+      --ink:   #0b1f3a;
+      --muted: #4a6a8a;
+      --line:  rgba(26,111,212,.13);
+      --surf:  #ffffff;
+      /* calendar accents */
+      --prac-bg:     #c8e6c9;
+      --prac-text:   #2a6537;
+      --prac-border: #6abf72;
+      --tour-bg:     rgba(26,111,212,.12);
+      --tour-text:   #1358b0;
+      --tour-border: #e04343;
+      --major-bg:    rgba(245,158,11,.14);
+      --major-text:  #a05000;
+    }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1); --surf: #0c1b30;
+      --prac-bg:     rgba(56,142,60,.22); --prac-text:   #99d4a0; --prac-border: rgba(56,142,60,.55);
+      --tour-bg:     rgba(26,111,212,.22); --tour-text:   #7db8f0; --tour-border: #ef7070;
+      --major-bg:    rgba(245,158,11,.17); --major-text:  #f0b860;
+    }}
+    :root[data-theme="dark"] {
+      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1); --surf: #0c1b30;
+      --prac-bg:     rgba(56,142,60,.22); --prac-text:   #99d4a0; --prac-border: rgba(56,142,60,.55);
+      --tour-bg:     rgba(26,111,212,.22); --tour-text:   #7db8f0; --tour-border: #ef7070;
+      --major-bg:    rgba(245,158,11,.17); --major-text:  #f0b860;
+    }
+
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--ink); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; min-height: 100vh; }
+
+    /* ── NAV ── */
+    nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 5vw;
+      background: rgba(11,31,58,.98);
+      border-bottom: 1px solid rgba(26,111,212,.25);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: .08em; color: #fff; text-decoration: none; }
+    .nav-logo span { color: var(--sky); }
+    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    .nav-links a { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,.5); transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: #fff; }
+    @media (max-width: 600px) {
+      .nav-links { gap: 1rem; }
+      .nav-links li:nth-child(1), .nav-links li:nth-child(2), .nav-links li:nth-child(4) { display: none; }
+    }
+
+    /* ── PAGE HEADER ── */
+    .page-hd {
+      padding: 3.5rem 6vw 3rem;
+      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
+      border-bottom: 1px solid rgba(26,111,212,.2);
+      position: relative; overflow: hidden;
+    }
+    .page-hd::before {
+      content: ''; position: absolute; inset: 0;
+      background-image: repeating-linear-gradient(-18deg, transparent, transparent 60px, rgba(26,111,212,.055) 60px, rgba(26,111,212,.055) 61px);
+    }
+    .page-hd-inner { position: relative; z-index: 1; max-width: 760px; }
+    .eyebrow { font-size: .7rem; letter-spacing: .36em; text-transform: uppercase; color: var(--sky); margin-bottom: .7rem; }
+    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1; color: #fff; margin-bottom: 1rem; }
+    .page-sub { color: rgba(255,255,255,.55); font-size: .92rem; max-width: 50ch; }
+
+    /* ── CONTENT ── */
+    .content { padding: 2.5rem 6vw 5rem; max-width: 760px; }
+
+    /* ── LEGEND ── */
+    .legend {
+      display: flex; flex-wrap: wrap; gap: .45rem 1.6rem;
+      margin-bottom: 2rem;
+      padding: .8rem 1rem;
+      background: var(--surf); border: 1px solid var(--line); border-radius: 6px;
+      font-size: .77rem; color: var(--muted); align-items: center;
+    }
+    .legend-item { display: flex; align-items: center; gap: .45rem; }
+    .legend-swatch { width: 1rem; height: 1rem; border-radius: 4px; flex-shrink: 0; }
+    .ls-prac    { background: var(--prac-bg); }
+    .ls-unconf  { background: var(--prac-bg); border: 2px dashed var(--prac-border); }
+    .ls-tour    { background: var(--tour-bg); border: 2px solid var(--tour-border); }
+    .ls-major   { background: var(--major-bg); border: 2px solid var(--tour-border); }
+
+    /* ── CALENDAR ── */
+    .cal-outer { overflow-x: auto; }
+    .cal-grid {
+      display: grid;
+      grid-template-columns: 2.5rem repeat(7, minmax(0, 1fr));
+      gap: 3px;
+      max-width: 500px;
+    }
+
+    .cal-col-hd {
+      font-size: .6rem; letter-spacing: .15em; text-transform: uppercase;
+      color: var(--muted); text-align: center; padding: .3rem 0 .55rem;
+    }
+
+    .cal-month-lbl {
+      display: flex; align-items: center;
+      font-family: 'Bebas Neue', sans-serif; font-size: .95rem; letter-spacing: .05em;
+      color: var(--muted); padding-right: .25rem;
+      padding-top: .05rem;
+    }
+
+    .cal-cell {
+      aspect-ratio: 1;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 6px;
+      font-size: clamp(.68rem, 1.35vw, .82rem);
+      font-weight: 400;
+      font-variant-numeric: tabular-nums;
+      color: var(--muted);
+      user-select: none;
+      position: relative;
+    }
+    .cal-cell.out-range { opacity: .2; pointer-events: none; }
+
+    .cal-cell.practice {
+      background: var(--prac-bg);
+      color: var(--prac-text);
+      font-weight: 500;
+    }
+    .cal-cell.unconf {
+      background: var(--prac-bg);
+      color: var(--prac-text);
+      border: 2px dashed var(--prac-border);
+      font-weight: 500;
+    }
+    .cal-cell.tournament {
+      background: var(--tour-bg);
+      color: var(--tour-text);
+      border: 2px solid var(--tour-border);
+      font-weight: 500;
+    }
+    .cal-cell.major {
+      background: var(--major-bg);
+      color: var(--major-text);
+      border: 2px solid var(--tour-border);
+      font-weight: 500;
+    }
+    .cal-cell.today-cell {
+      outline: 2px solid var(--blue);
+      outline-offset: 1px;
+    }
+
+    /* tooltip */
+    .cal-cell[data-tip] { cursor: default; }
+    .cal-cell[data-tip]:hover::after {
+      content: attr(data-tip);
+      position: absolute;
+      top: calc(100% + 5px);
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1f3a;
+      color: #fff;
+      font-size: .67rem;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 400;
+      white-space: nowrap;
+      padding: .28rem .55rem;
+      border-radius: 4px;
+      z-index: 20;
+      pointer-events: none;
+      letter-spacing: 0;
+    }
+
+    /* ── TOURNAMENT LIST ── */
+    .event-list { margin-top: 2.5rem; }
+    .event-list-hd {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 1.2rem; letter-spacing: .06em;
+      margin-bottom: .75rem;
+      padding-bottom: .5rem;
+      border-bottom: 2px solid var(--blue);
+    }
+    .event-row {
+      display: flex; align-items: center; gap: .75rem;
+      padding: .52rem 0;
+      border-bottom: 1px solid var(--line);
+      font-size: .84rem;
+    }
+    .event-date { min-width: 5.5rem; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .79rem; flex-shrink: 0; }
+    .event-name { flex: 1; font-weight: 400; }
+    .event-badge {
+      font-size: .61rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
+      padding: .14rem .42rem; border-radius: 3px; flex-shrink: 0;
+    }
+    .badge-tour  { background: var(--tour-bg);  color: var(--tour-text);  border: 1px solid var(--tour-border); }
+    .badge-major { background: var(--major-bg); color: var(--major-text); border: 1px solid var(--tour-border); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 2rem 6vw;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
+      background: var(--surf);
+    }
+    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: .08em; color: var(--ink); }
+    .footer-logo span { color: var(--blue); }
+    footer p { font-size: .75rem; color: var(--muted); }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Wind<span> VC</span></a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="index.html#season">Season</a></li>
+      <li><a href="tournaments.html">Tournaments</a></li>
+      <li><a href="practices.html">Practices</a></li>
+      <li><a href="calendar.html" class="active">Calendar</a></li>
+      <li><a href="index.html#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <div class="page-hd">
+    <div class="page-hd-inner">
+      <p class="eyebrow">Wind Volleyball Club · 2026–27 Season</p>
+      <h1 class="page-title">Season Calendar</h1>
+      <p class="page-sub">Practices and tournaments, December 2026 through May 2027.</p>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <div class="legend">
+      <span class="legend-item"><span class="legend-swatch ls-prac"></span>Practice</span>
+      <span class="legend-item"><span class="legend-swatch ls-unconf"></span>Fieldhouse (venue TBD)</span>
+      <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
+      <span class="legend-item"><span class="legend-swatch ls-major"></span>Regional / Grand Slam</span>
+    </div>
+
+    <div class="cal-outer">
+      <div class="cal-grid" id="cal"></div>
+    </div>
+
+    <div class="event-list">
+      <div class="event-list-hd">Tournaments</div>
+      <div id="event-rows"></div>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
+    <p>© 2026 Wind Volleyball Club · 2026–27 Season</p>
+  </footer>
+
+  <script>
+    const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    const PRAC_SET = new Set([
+      '2026-12-07','2026-12-09','2026-12-14','2026-12-16',
+      '2026-12-21','2026-12-23','2026-12-28','2026-12-30',
+      '2027-01-04','2027-01-06','2027-01-11','2027-01-13',
+      '2027-01-18','2027-01-20','2027-01-25','2027-01-27',
+      '2027-02-01','2027-02-03','2027-02-08','2027-02-10',
+      '2027-02-15','2027-02-17','2027-02-22','2027-02-24',
+      '2027-03-01','2027-03-03','2027-03-08','2027-03-10',
+      '2027-03-15','2027-03-17','2027-03-22','2027-03-24',
+      '2027-03-29','2027-03-31',
+      '2027-04-05','2027-04-07','2027-04-12','2027-04-14',
+      '2027-04-19','2027-04-21','2027-04-26','2027-04-28',
+      '2027-05-03','2027-05-05','2027-05-10','2027-05-12',
+      '2027-05-17','2027-05-19','2027-05-24','2027-05-26','2027-05-31',
+    ]);
+    const FH_CONF   = new Set(['2026-12-14']);
+    const FH_UNCONF = new Set(['2027-01-13']);
+
+    const TOURNAMENTS = [
+      { name: 'JVC Winter Classic',             start: '2027-01-16', end: '2027-01-17', major: false },
+      { name: "WI Jr's January Jam",            start: '2027-01-31', end: '2027-01-31', major: false },
+      { name: 'Molten Wisconsin VB Fest',       start: '2027-03-06', end: '2027-03-07', major: false },
+      { name: 'Badger Regional Championship',   start: '2027-03-13', end: '2027-03-14', major: true  },
+      { name: "Mizuno Diggin' in the Dells II", start: '2027-04-10', end: '2027-04-11', major: false },
+      { name: 'Cream City Challenge #1',        start: '2027-04-17', end: '2027-04-17', major: false },
+      { name: 'Cornbelt Showdown',              start: '2027-05-01', end: '2027-05-02', major: false },
+      { name: 'JVC Grand Slam',                 start: '2027-05-15', end: '2027-05-16', major: true  },
+    ];
+
+    function pdate(s) { return new Date(s + 'T12:00:00'); }
+    function fmt(d) {
+      return d.getFullYear() + '-' +
+        String(d.getMonth()+1).padStart(2,'0') + '-' +
+        String(d.getDate()).padStart(2,'0');
+    }
+
+    // Build tournament → date map
+    const TMAP = new Map();
+    for (const t of TOURNAMENTS) {
+      const s = pdate(t.start), e = pdate(t.end);
+      for (const d = new Date(s); d <= e; d.setDate(d.getDate()+1)) {
+        TMAP.set(fmt(d), t);
+      }
+    }
+
+    const TODAY = fmt(new Date());
+
+    function inSeason(m, y) {
+      return (m === 11 && y === 2026) || (m >= 0 && m <= 4 && y === 2027);
+    }
+
+    function render() {
+      const cal = document.getElementById('cal');
+
+      // Header row: blank label + M T W T F S S
+      let html = '<div></div>';
+      for (const d of ['M','T','W','T','F','S','S'])
+        html += `<div class="cal-col-hd">${d}</div>`;
+
+      // Weeks: Mon 2026-11-30 → Sun 2027-06-06
+      const calStart = pdate('2026-11-30');
+      const calEnd   = pdate('2027-06-06');
+      const labeled  = new Set();
+      const cur = new Date(calStart);
+
+      while (cur <= calEnd) {
+        // Build 7-day array for this week
+        const days = [];
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(cur);
+          d.setDate(d.getDate() + i);
+          days.push(d);
+        }
+
+        // Month label: show when the 1st of an in-season month appears in this row
+        let rowLabel = '';
+        for (const d of days) {
+          const m = d.getMonth(), y = d.getFullYear();
+          if (inSeason(m, y) && d.getDate() === 1) {
+            const key = m + '_' + y;
+            if (!labeled.has(key)) { rowLabel = MON[m]; labeled.add(key); }
+            break;
+          }
+        }
+        html += rowLabel
+          ? `<div class="cal-month-lbl">${rowLabel}</div>`
+          : '<div></div>';
+
+        // Day cells
+        for (const d of days) {
+          const ds = fmt(d);
+          const m = d.getMonth(), y = d.getFullYear();
+          const active = inSeason(m, y);
+          const dayNum = d.getDate();
+          let cls = 'cal-cell', tip = '';
+
+          if (!active) {
+            cls += ' out-range';
+          } else if (FH_UNCONF.has(ds)) {
+            cls += ' unconf'; tip = 'Practice – Fieldhouse (venue TBD)';
+          } else if (PRAC_SET.has(ds)) {
+            cls += ' practice';
+            tip = FH_CONF.has(ds) ? 'Practice – Fieldhouse' : 'Practice – Johnson Athletic Complex';
+          } else if (TMAP.has(ds)) {
+            const t = TMAP.get(ds);
+            cls += t.major ? ' major' : ' tournament';
+            tip = t.name;
+          }
+          if (ds === TODAY) cls += ' today-cell';
+
+          const ta = tip ? ` data-tip="${tip}"` : '';
+          html += `<div class="${cls}"${ta}>${dayNum}</div>`;
+        }
+
+        cur.setDate(cur.getDate() + 7);
+      }
+
+      cal.innerHTML = html;
+
+      // Tournament list
+      const rows = document.getElementById('event-rows');
+      let evHtml = '';
+      for (const t of TOURNAMENTS) {
+        const s = pdate(t.start), e = pdate(t.end);
+        const m1 = MON[s.getMonth()], m2 = MON[e.getMonth()];
+        const d1 = s.getDate(), d2 = e.getDate();
+        const dateStr = t.start === t.end
+          ? `${m1} ${d1}`
+          : m1 === m2 ? `${m1} ${d1}–${d2}` : `${m1} ${d1} – ${m2} ${d2}`;
+        const bc = t.major ? 'badge-major' : 'badge-tour';
+        const bl = t.major ? 'Major' : 'Tournament';
+        evHtml += `<div class="event-row">
+          <span class="event-date">${dateStr}</span>
+          <span class="event-name">${t.name}</span>
+          <span class="event-badge ${bc}">${bl}</span>
+        </div>`;
+      }
+      rows.innerHTML = evHtml;
+    }
+
+    render();
+  </script>
+</body>
+</html>
