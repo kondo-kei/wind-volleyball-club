@@ -3,795 +3,287 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wind Volleyball Club</title>
-  <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&family=Italiana&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --navy:     #0b1f3a;
-      --navy2:    #112847;
-      --blue:     #1a6fd4;
-      --blue2:    #1358b0;
-      --blue-pale:#dbeafe;
-      --white:    #ffffff;
-      --off-white:#f4f8ff;
-      --ink:      #0b1f3a;
-      --muted:    #4a6a8a;
-      --card:     #ffffff;
-
-      --bg:       #f4f8ff;
-      --bg2:      #e8f0fb;
-      --sky:      var(--blue);
-      --sky2:     var(--blue2);
-      --sky-pale: var(--blue-pale);
-    }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      background: var(--bg);
-      color: var(--ink);
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      line-height: 1.65;
-      overflow-x: hidden;
-    }
-
-    /* ── NAV ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.1rem 5vw;
-      background: rgba(11,31,58,.96);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(26,111,212,.25);
-    }
-    .nav-logo {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.7rem;
-      letter-spacing: .08em;
-      color: var(--white);
-    }
-    .nav-logo span { color: var(--blue); }
-    nav ul { list-style: none; display: flex; gap: 2.4rem; }
-    nav a {
-      text-decoration: none;
-      color: rgba(255,255,255,.65);
-      font-size: .82rem;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      transition: color .2s;
-    }
-    nav a:hover { color: var(--white); }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      place-items: center;
-      text-align: center;
-      padding: 0 6vw;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 70% 55% at 60% 40%, rgba(26,111,212,.35) 0%, transparent 65%),
-        radial-gradient(ellipse 50% 50% at 10% 70%, rgba(26,111,212,.15) 0%, transparent 55%),
-        linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
-    }
-    .hero-bg::after {
-      content: '';
-      position: absolute; inset: 0;
-      background-image:
-        repeating-linear-gradient(
-          -18deg,
-          transparent,
-          transparent 60px,
-          rgba(26,111,212,.07) 60px,
-          rgba(26,111,212,.07) 61px
-        );
-    }
-
-    .hero-watermark {
-      position: absolute;
-      bottom: -3rem; left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Italiana', serif;
-      font-size: clamp(8rem, 22vw, 20rem);
-      letter-spacing: -.02em;
-      color: rgba(26,111,212,.08);
-      white-space: nowrap;
-      pointer-events: none;
-      user-select: none;
-    }
-
-    .hero-orb {
-      position: absolute;
-      border-radius: 50%;
-      pointer-events: none;
-    }
-    .hero-orb-1 {
-      width: 32rem; height: 32rem;
-      top: -8rem; right: -10rem;
-      background: radial-gradient(circle, rgba(26,111,212,.22) 0%, transparent 70%);
-      animation: drift 9s ease-in-out infinite alternate;
-    }
-    .hero-orb-2 {
-      width: 20rem; height: 20rem;
-      bottom: 4rem; left: 5%;
-      background: radial-gradient(circle, rgba(26,111,212,.14) 0%, transparent 70%);
-      animation: drift 12s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes drift {
-      from { transform: translateY(0) translateX(0); }
-      to   { transform: translateY(-20px) translateX(12px); }
-    }
-
-    .hero-content { position: relative; z-index: 1; }
-    .hero-eyebrow {
-      font-family: 'DM Sans', sans-serif;
-      font-weight: 300;
-      font-size: .72rem;
-      letter-spacing: .38em;
-      text-transform: uppercase;
-      color: var(--blue-pale);
-      margin-bottom: 1.4rem;
-      opacity: 0;
-      animation: fadeUp .7s .2s forwards;
-    }
-
-    .hero h1 {
-      font-family: 'Italiana', serif;
-      font-weight: 400;
-      font-style: normal;
-      font-size: clamp(5rem, 16vw, 13rem);
-      line-height: 1;
-      letter-spacing: .02em;
-      color: var(--white);
-      opacity: 0;
-      animation: fadeUp .7s .35s forwards;
-    }
-    .hero h1 em {
-      font-style: normal;
-      font-weight: 400;
-      color: #5aacf5;
-      display: block;
-      font-size: .38em;
-      letter-spacing: .25em;
-      line-height: 1.6;
-      text-transform: uppercase;
-      margin-top: .3rem;
-    }
-
-    .hero-sub {
-      margin-top: 1.8rem;
-      font-size: clamp(.88rem, 2vw, 1rem);
-      color: rgba(255,255,255,.65);
-      max-width: 46ch;
-      margin-left: auto; margin-right: auto;
-      line-height: 1.8;
-      letter-spacing: .01em;
-      opacity: 0;
-      animation: fadeUp .7s .5s forwards;
-    }
-    .hero-ctas {
-      margin-top: 2.8rem;
-      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
-      opacity: 0;
-      animation: fadeUp .7s .65s forwards;
-    }
-
-    .btn {
-      display: inline-block;
-      padding: .75rem 2rem;
-      border-radius: 3px;
-      font-size: .78rem;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      text-decoration: none;
-      font-weight: 500;
-      cursor: pointer;
-      border: none;
-      transition: all .22s;
-    }
-    .btn-sky { background: var(--blue); color: #fff; }
-    .btn-sky:hover { background: var(--blue2); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(26,111,212,.45); }
-    .btn-outline { background: transparent; color: var(--white); border: 1.5px solid rgba(255,255,255,.35); }
-    .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.08); transform: translateY(-2px); }
-    .btn-tryout { background: #5aacf5; color: var(--navy); font-weight: 600; }
-    .btn-tryout:hover { background: #3d9ae8; transform: translateY(-2px); box-shadow: 0 8px 28px rgba(90,172,245,.4); }
-
-    /* ── SHARED SECTION ── */
-    section { padding: 7rem 6vw; }
-    .section-label {
-      font-size: .68rem;
-      letter-spacing: .38em;
-      text-transform: uppercase;
-      color: var(--sky);
-      margin-bottom: .8rem;
-    }
-    .section-title {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      line-height: 1;
-      color: var(--ink);
-      margin-bottom: 1.2rem;
-    }
-    .section-intro {
-      color: var(--muted);
-      max-width: 55ch;
-      font-size: 1rem;
-    }
-    .divider {
-      width: 3rem; height: 3px;
-      background: var(--sky);
-      margin: 1.5rem 0 3rem;
-      border-radius: 2px;
-    }
-
-    /* ── ABOUT ── */
-    #about { background: var(--card); position: relative; overflow: hidden; }
-    #about::before {
-      content: '';
-      position: absolute; top: -10rem; right: -10rem;
-      width: 36rem; height: 36rem;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(58,172,219,.07) 0%, transparent 68%);
-      pointer-events: none;
-    }
-
-    .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 1.6rem;
-      margin-top: 1rem;
-    }
-    @media (max-width: 860px) { .about-grid { grid-template-columns: 1fr; } }
-
-    .about-card {
-      background: var(--card);
-      border: 1px solid rgba(58,172,219,.12);
-      border-radius: 16px;
-      padding: 2.2rem 2rem;
-      position: relative;
-      overflow: hidden;
-      transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease;
-      box-shadow: 0 2px 12px rgba(13,42,64,.06);
-    }
-    .about-card::after {
-      content: '';
-      position: absolute; inset: 0;
-      background: linear-gradient(135deg, rgba(26,111,212,.05) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity .28s ease;
-      pointer-events: none;
-    }
-    .about-card:hover { transform: translateY(-6px); box-shadow: 0 16px 40px rgba(11,31,58,.12), 0 0 0 1px rgba(26,111,212,.3); border-color: transparent; }
-    .about-card:hover::after { opacity: 1; }
-
-    .about-card h3 {
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.45rem;
-      letter-spacing: .05em;
-      color: var(--ink);
-      margin-bottom: .6rem;
-    }
-    .about-card p, .about-card li {
-      font-size: .91rem;
-      color: var(--muted);
-      line-height: 1.75;
-    }
-    .about-card ul { list-style: none; padding: 0; }
-    .about-card li { padding: .25rem 0; display: flex; align-items: baseline; gap: .5rem; }
-    .about-card li::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--sky); flex-shrink: 0; margin-top: .35rem; }
-
-    /* coaches */
-    .coaches-strip {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 1.2rem;
-      margin-top: 3rem;
-    }
-    .coach-card {
-      background: var(--bg);
-      border: 1px solid rgba(58,172,219,.15);
-      border-radius: 6px;
-      padding: 1.6rem;
-      display: flex;
-      align-items: center;
-      gap: 1.2rem;
-      transition: border-color .25s, box-shadow .25s;
-      box-shadow: 0 2px 10px rgba(58,172,219,.05);
-    }
-    .coach-card:hover { border-color: rgba(58,172,219,.4); box-shadow: 0 6px 22px rgba(58,172,219,.10); }
-    .coach-avatar {
-      width: 54px; height: 54px;
-      border-radius: 50%;
-      background: var(--sky-pale);
-      border: 2px solid var(--sky);
-      display: grid; place-items: center;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.3rem;
-      color: var(--sky2);
-      flex-shrink: 0;
-    }
-    .coach-info h4 { font-weight: 500; font-size: .95rem; margin-bottom: .15rem; color: var(--ink); }
-    .coach-role { font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; color: var(--sky); }
-
-    /* ── SEASON ── */
-    #season { background: var(--navy); }
-    #season .section-label { color: #5aacf5; }
-    #season .section-title { color: var(--white); }
-    #season .section-intro { color: rgba(255,255,255,.6); }
-    #season .divider { background: var(--blue); }
-    .season-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 4rem;
-      align-items: start;
-    }
-    @media (max-width: 780px) { .season-layout { grid-template-columns: 1fr; gap: 2rem; } }
-
-    .timeline { position: relative; padding-left: 1.6rem; }
-    .timeline::before {
-      content: '';
-      position: absolute; left: 0; top: .5rem; bottom: .5rem;
-      width: 2px;
-      background: linear-gradient(to bottom, var(--blue), rgba(26,111,212,.1));
-      border-radius: 2px;
-    }
-    .tl-item { position: relative; margin-bottom: 2.2rem; }
-    .tl-dot {
-      position: absolute; left: -1.95rem; top: .4rem;
-      width: 10px; height: 10px;
-      border-radius: 50%;
-      background: var(--blue);
-      border: 2px solid var(--navy);
-    }
-    .tl-date { font-size: .7rem; letter-spacing: .22em; text-transform: uppercase; color: #5aacf5; margin-bottom: .25rem; }
-    .tl-item h4 { font-weight: 500; margin-bottom: .2rem; color: var(--white); }
-    .tl-item p { font-size: .88rem; color: rgba(255,255,255,.55); }
-
-    .detail-row {
-      display: flex;
-      gap: 1rem;
-      padding: 1rem 0;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-    }
-    .detail-label { font-size: .73rem; letter-spacing: .16em; text-transform: uppercase; color: #5aacf5; min-width: 8rem; padding-top: .1rem; }
-    .detail-value { font-size: .91rem; color: rgba(255,255,255,.65); }
-
-    /* ── CONTACT ── */
-    #contact { background: var(--card); }
-    .contact-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.4fr;
-      gap: 5rem;
-      align-items: start;
-    }
-    @media (max-width: 780px) { .contact-layout { grid-template-columns: 1fr; gap: 2rem; } }
-
-    .contact-blurb p { color: var(--muted); font-size: .95rem; margin-bottom: 1.4rem; }
-    .contact-item { display: flex; align-items: flex-start; gap: .8rem; margin-bottom: 1rem; }
-    .contact-item-icon { font-size: 1.1rem; margin-top: .1rem; }
-    .contact-item-text { font-size: .88rem; color: var(--muted); }
-    .contact-item-text strong { color: var(--ink); display: block; font-weight: 500; font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; margin-bottom: .1rem; }
-
-    form { display: flex; flex-direction: column; gap: 1.1rem; }
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.1rem; }
-    @media (max-width: 500px) { .form-row { grid-template-columns: 1fr; } }
-
-    .form-group { display: flex; flex-direction: column; gap: .4rem; }
-    .form-label { font-size: .7rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-    .form-label .optional { font-size: .68rem; text-transform: none; letter-spacing: 0; color: rgba(74,106,130,.6); }
-    .form-input, .form-select, .form-textarea {
-      background: var(--bg);
-      border: 1px solid rgba(58,172,219,.22);
-      border-radius: 4px;
-      padding: .75rem 1rem;
-      color: var(--ink);
-      font-family: 'DM Sans', sans-serif;
-      font-size: .92rem;
-      outline: none;
-      transition: border-color .2s, box-shadow .2s;
-      width: 100%;
-    }
-    .form-input::placeholder, .form-textarea::placeholder { color: rgba(74,106,130,.4); }
-    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--sky); box-shadow: 0 0 0 3px rgba(58,172,219,.1); }
-    .form-select option { background: #fff; }
-    .form-textarea { resize: vertical; min-height: 110px; }
-    .form-submit {
-      width: 100%;
-      padding: .9rem;
-      font-family: 'Bebas Neue', sans-serif;
-      font-size: 1.1rem;
-      letter-spacing: .1em;
-      background: var(--sky);
-      color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      transition: background .2s, transform .2s;
-    }
-    .form-submit:hover { background: var(--sky2); transform: translateY(-1px); }
-    .form-submit:disabled { opacity: .6; cursor: not-allowed; transform: none; }
-    .form-status {
-      display: none;
-      padding: 14px 18px;
-      border-radius: 4px;
-      font-size: .9rem;
-      margin-top: 16px;
-      line-height: 1.5;
-    }
-    .form-status.success { display: block; background: #ecfdf5; color: #065f46; border: 1px solid #a7f3d0; }
-    .form-status.error   { display: block; background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-    .birth-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--navy);
-      padding: 2.5rem 6vw;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 1rem;
-      border-top: 1px solid rgba(26,111,212,.3);
-    }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; color: var(--white); letter-spacing: .08em; }
-    .footer-logo span { color: #5aacf5; }
-    footer p { font-size: .78rem; color: rgba(255,255,255,.45); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(22px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-    .reveal {
-      opacity: 0;
-      transform: translateY(28px);
-      transition: opacity .65s, transform .65s;
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-  </style>
+  <title>Wind VBC</title>
+  <meta name="claude:viewport-fit-sides" content="cover">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 </head>
 <body>
 
-  <!-- NAV -->
-  <nav>
-    <div class="nav-logo">Wind<span> VC</span></div>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#season">Season</a></li>
-      <li><a href="tournaments.html">Tournaments</a></li>
-      <li><a href="practices.html">Practices</a></li>
-      <li><a href="calendar.html">Calendar</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
+<style>
+:root {
+  --bg:     #0b1f3a;
+  --surf:   #0d2448;
+  --ink:    #f0f5ff;
+  --muted:  rgba(200,220,255,.65);
+  --rule:   rgba(90,172,245,.12);
+  --accent: #c9a84c;
+  color-scheme: dark;
+}
 
-  <!-- HERO -->
-  <section class="hero" id="home">
-    <div class="hero-bg"></div>
-    <div class="hero-orb hero-orb-1"></div>
-    <div class="hero-orb hero-orb-2"></div>
-    <div class="hero-watermark">WIND</div>
-    <div class="hero-content">
-      <p class="hero-eyebrow">Founding Season · 2026–27</p>
-      <h1>Wind<em>Volleyball Club</em></h1>
-      <p class="hero-sub">A selective volleyball club with no fluff — competitive by nature, small by design, and focused only on what actually makes you better.</p>
-      <div class="hero-ctas">
-        <a href="#about" class="btn btn-outline">About the Club</a>
-        <a href="#contact" class="btn btn-outline">Get in Touch</a>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+
+/* NAV */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--rule);
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100;
+  background: var(--bg);
+  margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
+  margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
+  padding: 1.4rem max(2rem, env(safe-area-inset-left, 0px));
+  padding-left: max(2rem, env(safe-area-inset-left, 0px));
+  padding-right: max(2rem, env(safe-area-inset-right, 0px));
+}
+.nav-logo {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem; font-weight: 400; letter-spacing: .01em;
+  color: var(--ink); text-decoration: none;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; color: var(--muted); transition: color .2s;
+}
+.nav-links a:hover { color: var(--ink); }
+.nav-links a.active { color: var(--ink); font-weight: 500; }
+.nav-toggle {
+  display: none; flex-direction: column; gap: 5px;
+  width: 1.8rem; height: 1.8rem; background: none; border: none; cursor: pointer;
+}
+.nav-toggle span {
+  display: block; height: 1.5px; background: var(--ink); border-radius: 1px;
+  transition: transform .25s, opacity .25s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+@media (max-width: 560px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none; flex-direction: column; gap: 0;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--bg); border-bottom: 1px solid var(--rule);
+    padding: .5rem 0;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li a { display: block; padding: .75rem 2rem; }
+}
+
+/* LAYOUT */
+.wrap { max-width: 880px; margin: 0 auto; }
+
+/* HERO */
+.hero {
+  padding: 4rem 0 3rem;
+  border-bottom: 1px solid var(--rule);
+}
+.eyebrow {
+  font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
+  color: var(--ink); opacity: .55; margin-bottom: .6rem;
+}
+.hero-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  font-weight: 400; line-height: 1.05;
+  color: var(--ink); margin-bottom: 1.2rem;
+  text-wrap: balance;
+}
+.hero-mission {
+  font-size: 1rem; color: var(--muted);
+  max-width: 56ch; line-height: 1.75;
+  font-style: italic;
+}
+@media (max-width: 600px) {
+  .hero { padding: 1.8rem 0 1.4rem; }
+  .hero-title { font-size: 2rem; margin-bottom: .8rem; }
+  .hero-mission { font-size: .88rem; }
+}
+
+/* CONTENT */
+.content { padding-block: 2rem 4rem; }
+
+/* SECTION LABEL */
+.section-label {
+  font-size: .65rem; letter-spacing: .26em; text-transform: uppercase;
+  color: var(--accent); margin-bottom: .8rem; font-weight: 500;
+}
+
+/* PILLARS */
+.pillars {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 3rem;
+}
+@media (max-width: 600px) {
+  .pillars { grid-template-columns: 1fr; margin-bottom: 2rem; }
+}
+.pillar {
+  background: var(--surf);
+  padding: 1.4rem 1.2rem;
+}
+.pillar-num {
+  font-family: 'Oswald', sans-serif; font-size: 1.8rem; font-weight: 300;
+  color: var(--accent); line-height: 1; margin-bottom: .6rem;
+}
+.pillar-title {
+  font-size: .82rem; font-weight: 600; color: var(--ink);
+  margin-bottom: .4rem; letter-spacing: .01em;
+}
+.pillar-body { font-size: .8rem; color: var(--muted); line-height: 1.6; }
+
+/* SEASON FACTS */
+.facts {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 3rem;
+}
+@media (max-width: 600px) {
+  .facts { grid-template-columns: 1fr; margin-bottom: 2rem; }
+}
+.fact {
+  background: var(--surf); padding: 1.1rem 1.2rem;
+  display: flex; flex-direction: column; gap: .25rem;
+}
+.fact-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+.fact-value { font-size: .9rem; color: var(--ink); font-weight: 400; }
+
+/* STAFF / CONTACT */
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--rule); border: 1px solid var(--rule);
+  border-radius: 2px; overflow: hidden;
+  margin-bottom: 3rem;
+}
+@media (max-width: 600px) {
+  .about-grid { grid-template-columns: 1fr; margin-bottom: 2rem; }
+}
+.about-cell {
+  background: var(--surf); padding: 1.4rem 1.2rem;
+}
+.about-cell-title { font-size: .82rem; font-weight: 600; color: var(--ink); margin-bottom: .5rem; }
+.about-cell-body { font-size: .82rem; color: var(--muted); line-height: 1.7; }
+.about-cell-body a { color: var(--accent); text-decoration: none; }
+.about-cell-body a:hover { text-decoration: underline; }
+
+/* FOOTER */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 2rem 0;
+  font-size: .74rem; color: var(--muted);
+  display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem;
+}
+.footer-logo { font-family: 'Oswald', sans-serif; font-size: .9rem; color: var(--ink); }
+</style>
+
+<nav>
+  <a href="index.html" class="nav-logo">WIND VBC</a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html" class="active">About the Club</a></li>
+    <li><a href="team.html">U13 Team</a></li>
+    <li><a href="calendar.html">Calendar</a></li>
+  </ul>
+</nav>
+
+<div class="wrap">
+  <div class="hero">
+    <p class="eyebrow">Wind Volleyball Club · Racine, WI</p>
+    <h1 class="hero-title">Wind VBC</h1>
+  </div>
+
+  <div class="content">
+
+    <p class="section-label">What We're About</p>
+    <div class="pillars">
+      <div class="pillar">
+        <div class="pillar-num">01</div>
+        <div class="pillar-title">No fluff</div>
+        <div class="pillar-body">Great volleyball doesn't require flying across the country for tournaments. We'd rather put that time and money into reps, coaching, and getting better — not road trips and flights to Florida.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">02</div>
+        <div class="pillar-title">Grow as a person</div>
+        <div class="pillar-body">Volleyball is the vehicle. The real goal is helping players become capable, grounded adults who know how to work hard, handle adversity, and get things done with other people.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">03</div>
+        <div class="pillar-title">Commit together</div>
+        <div class="pillar-body">We hold players to a high standard — show up, follow through, and lift your teammates. The work is shared, and so is the satisfaction.</div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-num">04</div>
+        <div class="pillar-title">Keep perspective</div>
+        <div class="pillar-body">Volleyball is, at the end of the day, a game. We take it seriously — but never so seriously that it stops being fun.</div>
       </div>
     </div>
-  </section>
 
-  <!-- ABOUT -->
-  <section id="about">
-    <div class="reveal">
-      <p class="section-label">Who We Are</p>
-      <h2 class="section-title">About the Club</h2>
-      <p class="section-intro">Wind Volleyball Club strips away the noise — experienced coaches, more playing time, and none of the travel, cost, or pressure that club volleyball doesn't need.</p>
-      <div class="divider"></div>
-    </div>
-
-    <div class="about-grid reveal">
-      <div class="about-card">
-        <h3>Our Philosophy</h3>
-        <p>At Wind Volleyball Club, we believe the best way to develop players is simple — give them plenty of time with a ball in their hands, guided by experienced coaches who know the game. We keep our program local and intentional: overnight travel and far-away tournaments aren't something we pursue unless a team has genuinely earned a shot at national-level competition unavailable in our region. We proudly support multi-sport athletes and the families working hard to make that balance a reality — we ask for commitment to the program and, more importantly, to your teammates, but we have no interest in making volleyball an unreasonable burden and will always work with you to find a path that works.</p>
+    <p class="section-label">2026–27 Season</p>
+    <div class="facts">
+      <div class="fact">
+        <span class="fact-label">Team</span>
+        <span class="fact-value">Girls 13U</span>
       </div>
-      <div class="about-card">
-        <h3>Practice Schedule</h3>
-        <ul>
-          <li>2 regular practices per week</li>
-          <li>1 optional practices per week (strength training &amp; skills deep dive)</li>
-        </ul>
+      <div class="fact">
+        <span class="fact-label">Practice</span>
+        <span class="fact-value">Mon &amp; Wed, 6–8 PM · The Prairie School</span>
       </div>
-      <div class="about-card">
-        <h3>Where We Practice</h3>
-        <ul>
-          <li>All training sessions held at <strong style="color:var(--ink)">The Prairie School</strong></li>
-        </ul>
+      <div class="fact">
+        <span class="fact-label">Season</span>
+        <span class="fact-value">December 2026 – May 2027</span>
+      </div>
+      <div class="fact">
+        <span class="fact-label">Tournaments</span>
+        <span class="fact-value">8 tournaments, including Badger Regionals &amp; JVC Grand Slam</span>
       </div>
     </div>
 
-    <!-- COACHES -->
-    <div class="reveal" style="margin-top: 3.5rem;">
-      <p class="section-label">Coaching Staff</p>
-      <h3 class="section-title" style="font-size: clamp(2rem, 4vw, 3.2rem);">Meet Your Coaches</h3>
-      <div class="divider"></div>
-    </div>
-    <div class="coaches-strip reveal">
-      <div class="coach-card">
-        <div class="coach-avatar">KK</div>
-        <div class="coach-info">
-          <h4>Kei Kondo</h4>
-          <div class="coach-role">Head Coach U13</div>
-          <p style="font-size:.88rem; color: var(--muted); margin-top:.5rem;">• Head Varsity Volleyball Coach for The Prairie School</p>
-        </div>
+    <p class="section-label">Staff &amp; Contact</p>
+    <div class="about-grid">
+      <div class="about-cell">
+        <div class="about-cell-title">Head Coach &amp; Club Director</div>
+        <div class="about-cell-body">Kei Kondo</div>
       </div>
-      <div class="coach-card">
-        <div class="coach-avatar">HY</div>
-        <div class="coach-info">
-          <h4>Henry Yunker</h4>
-          <div class="coach-role">Head Coach U14</div>
-          <p style="font-size:.88rem; color: var(--muted); margin-top:.5rem;">• Head JV Volleyball coach for the Prairie School</p>
+      <div class="about-cell">
+        <div class="about-cell-title">Get in Touch</div>
+        <div class="about-cell-body">
+          Interested in joining? We accept players on a rolling basis.<br><br>
+          <a href="mailto:kondo.kei@windvbc.com">kondo.kei@windvbc.com</a>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- SEASON -->
-  <section id="season">
-    <div class="reveal">
-      <p class="section-label">Year One</p>
-      <h2 class="section-title">The First Season</h2>
-      <p class="section-intro">Here's what our inaugural season will look like — from tryouts through the end-of-season tournament.</p>
-      <div class="divider"></div>
-    </div>
+  </div>
 
-    <div class="season-layout reveal">
-      <div>
-        <div class="timeline">
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">July 13–16, 2026</div>
-            <h4>Pre-Tryout Tune-Up Clinic</h4>
-            <p>A 4-day clinic to tune up and refresh your skills before tryout season — open to players trying out for any club.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">July 18–19, 2026</div>
-            <h4>Tryouts</h4>
-            <p>Open tryouts for all age-eligible players.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">December 2026 - May 2027</div>
-            <h4>Regular Season</h4>
-            <p>Practices begin in early December. Practices and tournaments will run throughout the season.</p>
-          </div>
-          <div class="tl-item">
-            <div class="tl-dot"></div>
-            <div class="tl-date">May 2027</div>
-            <h4>End-of-Season Tournament</h4>
-            <p></p>
-          </div>
-        </div>
-      </div>
-
-      <div class="season-details">
-        <div class="detail-row">
-          <div class="detail-label">Age Group</div>
-          <div class="detail-value">14U (Born on or after July 1, 2012)<br>13U (Born on or after July 1, 2013)<br>Younger players are welcome to try out for U13</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">Season Dates</div>
-          <div class="detail-value">December 2026 – May 2027</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">Tournaments</div>
-          <div class="detail-value">Targeting 2 regional tournaments per month</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">Practice Days</div>
-          <div class="detail-value">2 regular practices per week with an optional third practice</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">Season Fee</div>
-          <div class="detail-value">$2,500</div>
-        </div>
-        <div class="detail-row">
-          <div class="detail-label">Tryout Info</div>
-          <div class="detail-value">Register via the contact form below</div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- CONTACT -->
-  <section id="contact">
-    <div class="contact-layout">
-      <div class="contact-blurb reveal">
-        <p class="section-label">Get in Touch</p>
-        <h2 class="section-title">Contact Us</h2>
-        <div class="divider"></div>
-        <p>Questions about tryouts, the season, or joining the club? Fill out the form and we'll get back to you within 48 hours.</p>
-
-        <div class="contact-item">
-          <div class="contact-item-icon">✉</div>
-          <div class="contact-item-text">
-            <strong>Email</strong>
-            kondo.kei@windvbc.com
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">📍</div>
-          <div class="contact-item-text">
-            <strong>Practice Facility</strong>
-            The Prairie School
-          </div>
-        </div>
-        <div class="contact-item">
-          <div class="contact-item-icon">📅</div>
-          <div class="contact-item-text">
-            <strong>Tryout Season</strong>
-            July 2026 — register early
-          </div>
-        </div>
-      </div>
-
-      <div class="reveal">
-        <form id="contactForm" novalidate>
-          <div class="form-group">
-            <label class="form-label" for="parentName">Parent / Guardian Name *</label>
-            <input class="form-input" type="text" id="parentName" name="parentName" required autocomplete="name">
-          </div>
-
-          <div class="form-row">
-            <div class="form-group">
-              <label class="form-label" for="email">Email *</label>
-              <input class="form-input" type="email" id="email" name="email" required autocomplete="email">
-            </div>
-            <div class="form-group">
-              <label class="form-label" for="phone">Phone <span class="optional">(optional)</span></label>
-              <input class="form-input" type="tel" id="phone" name="phone" autocomplete="tel">
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="playerName">Player Name *</label>
-            <input class="form-input" type="text" id="playerName" name="playerName" required>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label">Player Birth Month &amp; Year *</label>
-            <div class="birth-row">
-              <select class="form-select" id="birthMonth" name="birthMonth" required>
-                <option value="">Month</option>
-                <option value="January">January</option>
-                <option value="February">February</option>
-                <option value="March">March</option>
-                <option value="April">April</option>
-                <option value="May">May</option>
-                <option value="June">June</option>
-                <option value="July">July</option>
-                <option value="August">August</option>
-                <option value="September">September</option>
-                <option value="October">October</option>
-                <option value="November">November</option>
-                <option value="December">December</option>
-              </select>
-              <select class="form-select" id="birthYear" name="birthYear" required>
-                <option value="">Year</option>
-                <option value="2017">2017</option>
-                <option value="2016">2016</option>
-                <option value="2015">2015</option>
-                <option value="2014">2014</option>
-                <option value="2013">2013</option>
-                <option value="2012">2012</option>
-                <option value="2011">2011</option>
-                <option value="2010">2010</option>
-                <option value="2009">2009</option>
-                <option value="2008">2008</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="message">Message <span class="optional">(optional)</span></label>
-            <textarea class="form-textarea" id="message" name="message" placeholder="Any questions or additional info..."></textarea>
-          </div>
-
-          <button type="submit" class="form-submit" id="submitBtn">SEND MESSAGE</button>
-
-          <div class="form-status" id="formStatus"></div>
-        </form>
-      </div>
-    </div>
-  </section>
-
-  <!-- FOOTER -->
   <footer>
-    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
-    <p>© 2025 Wind Volleyball Club · Founding Season</p>
-    <p style="color:var(--muted); font-size:.75rem;">Built with ❤ for the sport</p>
+    <span class="footer-logo">Wind Volleyball Club</span>
+    <span>© 2026 · Racine, WI</span>
   </footer>
+</div>
 
-  <script>
-    const reveals = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(el => io.observe(el));
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links  = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('open');
+    links.classList.toggle('open');
+  });
+</script>
 
-    const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzB6pewIuaoDhSJPIW6rxKKjfJfhnFNW-ncTiAk7mcmuzm9KR2zkMacO3e315T-kjEL/exec';
-
-    const form = document.getElementById('contactForm');
-    const submitBtn = document.getElementById('submitBtn');
-    const formStatus = document.getElementById('formStatus');
-
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-
-      const required = form.querySelectorAll('[required]');
-      let valid = true;
-      required.forEach(field => {
-        if (!field.value.trim()) {
-          field.style.borderColor = '#ef4444';
-          valid = false;
-        } else {
-          field.style.borderColor = '';
-        }
-      });
-
-      if (!valid) return;
-
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'SENDING...';
-
-      const data = {
-        parentName: document.getElementById('parentName').value.trim(),
-        email: document.getElementById('email').value.trim(),
-        phone: document.getElementById('phone').value.trim(),
-        playerName: document.getElementById('playerName').value.trim(),
-        birthMonthYear: document.getElementById('birthMonth').value + ' ' + document.getElementById('birthYear').value,
-        message: document.getElementById('message').value.trim(),
-      };
-
-      try {
-        await fetch(GOOGLE_SCRIPT_URL, {
-          method: 'POST',
-          mode: 'no-cors',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(data),
-        });
-
-        formStatus.className = 'form-status success';
-        formStatus.textContent = 'Thank you! Your information has been submitted. A coach will be in touch soon.';
-        form.reset();
-      } catch (err) {
-        formStatus.className = 'form-status error';
-        formStatus.textContent = 'Something went wrong. Please try again or reach out to us directly.';
-      }
-
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'SEND MESSAGE';
-    });
-
-    form.querySelectorAll('.form-input, .form-select, .form-textarea').forEach(field => {
-      field.addEventListener('input', () => { field.style.borderColor = ''; });
-    });
-
-  </script>
 </body>
 </html>
