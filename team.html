@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wind VBC · U13 Team</title>
+  <title>Wind VBC · U13</title>
   <meta name="claude:viewport-fit-sides" content="cover">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
@@ -12,12 +12,15 @@
 
 <style>
 :root {
-  --bg:     #0b1f3a;
-  --surf:   #0d2448;
-  --ink:    #f0f5ff;
-  --muted:  rgba(200,220,255,.65);
-  --rule:   rgba(90,172,245,.12);
-  --accent: #c9a84c;
+  --bg:      #0b1f3a;
+  --surf:    #0d2448;
+  --ink:     #f0f5ff;
+  --muted:   rgba(200,220,255,.65);
+  --rule:    rgba(90,172,245,.12);
+  --prac:    #5aacf5;
+  --tour:    #ef4444;
+  --major:   #f59e0b;
+  --accent:  #c9a84c;
   color-scheme: dark;
 }
 
@@ -37,12 +40,12 @@ body {
 /* NAV */
 nav {
   display: flex; align-items: center; justify-content: space-between;
+  padding: 1.4rem max(2rem, env(safe-area-inset-left, 0px));
   border-bottom: 1px solid var(--rule);
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100;
   background: var(--bg);
   margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
   margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
-  padding: 1.4rem max(2rem, env(safe-area-inset-left, 0px));
   padding-left: max(2rem, env(safe-area-inset-left, 0px));
   padding-right: max(2rem, env(safe-area-inset-right, 0px));
 }
@@ -58,6 +61,7 @@ nav {
 }
 .nav-links a:hover { color: var(--ink); }
 .nav-links a.active { color: var(--ink); font-weight: 500; }
+
 .nav-toggle {
   display: none; flex-direction: column; gap: 5px;
   width: 1.8rem; height: 1.8rem; background: none; border: none; cursor: pointer;
@@ -69,6 +73,7 @@ nav {
 .nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
 .nav-toggle.open span:nth-child(2) { opacity: 0; }
 .nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
 @media (max-width: 560px) {
   .nav-toggle { display: flex; }
   .nav-links {
@@ -78,67 +83,212 @@ nav {
     padding: .5rem 0;
   }
   .nav-links.open { display: flex; }
-  .nav-links li a { display: block; padding: .75rem 2rem; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: .8rem 2rem; }
 }
 
-/* LAYOUT */
-.wrap { max-width: 880px; margin: 0 auto; }
-
-/* HERO */
-.hero {
-  padding: 4rem 0 3rem;
+/* PAGE HEADER */
+.page-hd {
+  padding: 2rem 0 1.5rem;
   border-bottom: 1px solid var(--rule);
+  max-width: 880px; margin: 0 auto;
 }
 .eyebrow {
   font-size: .68rem; letter-spacing: .28em; text-transform: uppercase;
   color: var(--ink); opacity: .55; margin-bottom: .6rem;
 }
-.hero-title {
+.page-title {
   font-family: 'Oswald', sans-serif;
-  font-size: clamp(2.4rem, 7vw, 4.5rem);
+  font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 400; line-height: 1.05;
-  color: var(--ink); margin-bottom: 1.2rem;
+  color: var(--ink); margin-bottom: .6rem;
   text-wrap: balance;
 }
-.hero-sub { font-size: 1rem; color: var(--muted); max-width: 52ch; line-height: 1.75; }
+.page-sub { color: var(--muted); font-size: .85rem; max-width: 42ch; }
+
 @media (max-width: 600px) {
-  .hero { padding: 1.8rem 0 1.4rem; }
-  .hero-title { font-size: 2rem; margin-bottom: .8rem; }
-  .hero-sub { font-size: .88rem; }
+  .page-hd { padding: 1rem 0 .8rem; }
+  .page-title { font-size: 1.3rem; margin-bottom: 0; }
+  .page-sub { display: none; }
+  .eyebrow { margin-bottom: .4rem; font-size: .6rem; }
 }
 
 /* CONTENT */
-.content { padding-block: 2rem 4rem; }
+.content { max-width: 880px; margin: 0 auto; padding-block: 1.5rem 3rem; }
+@media (max-width: 600px) {
+  .content { padding-block: 1.2rem 3rem; }
+}
 
 /* SECTION LABEL */
 .section-label {
   font-size: .65rem; letter-spacing: .26em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: .8rem; font-weight: 500;
-}
-
-/* FACTS GRID */
-.facts {
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
-  background: var(--rule); border: 1px solid var(--rule);
-  border-radius: 2px; overflow: hidden;
-  margin-bottom: 3rem;
+  color: var(--accent); margin-bottom: .7rem; font-weight: 500;
 }
 @media (max-width: 600px) {
-  .facts { grid-template-columns: 1fr; margin-bottom: 2rem; }
+  .section-label { margin-bottom: .6rem; font-size: .6rem; }
 }
-.fact {
-  background: var(--surf); padding: 1.1rem 1.2rem;
-  display: flex; flex-direction: column; gap: .25rem;
+
+/* NEXT UP */
+.next-up {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
+  background: var(--rule);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  overflow: hidden;
+  margin-bottom: 2rem;
 }
-.fact-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
-.fact-value { font-size: .9rem; color: var(--ink); font-weight: 400; }
-.fact-value a { color: var(--accent); text-decoration: none; }
-.fact-value a:hover { text-decoration: underline; }
+@media (max-width: 600px) {
+  .next-up { margin-bottom: 1.4rem; }
+}
+.next-card {
+  background: var(--surf);
+  padding: .9rem 1.2rem;
+}
+@media (max-width: 600px) {
+  .next-card { padding: .8rem 1rem; }
+}
+.next-card-label {
+  font-size: .65rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: .8rem;
+  display: flex; align-items: center; gap: .6rem;
+}
+@media (max-width: 600px) {
+  .next-card-label { margin-bottom: .5rem; font-size: .58rem; }
+}
+.next-card-date {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.3rem; font-weight: 400; line-height: 1.1;
+  color: var(--ink); margin-bottom: .3rem;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 600px) {
+  .next-card-date { font-size: 1.05rem; margin-bottom: .2rem; }
+}
+.next-card-name { font-size: .88rem; font-weight: 400; color: var(--ink); margin-bottom: .3rem; }
+@media (max-width: 600px) {
+  .next-card-name { font-size: .78rem; margin-bottom: .1rem; }
+}
+.next-card-detail { font-size: .78rem; color: var(--muted); }
+@media (max-width: 600px) {
+  .next-card-detail { font-size: .7rem; }
+}
+
+/* ANNOUNCEMENTS */
+.announcements {
+  border-top: 1px solid var(--rule);
+  margin-bottom: 2rem;
+}
+@media (max-width: 600px) {
+  .announcements { margin-bottom: 1.4rem; }
+}
+.ann-row {
+  display: grid; grid-template-columns: 5rem 1fr;
+  gap: 1.5rem; align-items: baseline;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--rule);
+}
+@media (max-width: 600px) {
+  .ann-row { padding: .65rem 0; gap: .8rem; grid-template-columns: 4rem 1fr; }
+}
+.ann-date { font-size: .72rem; color: var(--muted); letter-spacing: .04em; }
+.ann-text { font-size: .9rem; font-weight: 400; color: var(--ink); }
+@media (max-width: 600px) {
+  .ann-date { font-size: .65rem; }
+  .ann-text { font-size: .8rem; }
+}
+.ann-text.urgent { color: var(--tour); }
+.ann-empty { padding: .7rem 0; font-size: .82rem; color: var(--muted); font-style: italic; }
+@media (max-width: 600px) {
+  .ann-empty { padding: .65rem 0; font-size: .78rem; }
+}
+
+/* QUICK LINKS */
+.quick-links {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .6rem;
+  margin-bottom: 2rem;
+}
+@media (max-width: 600px) {
+  .quick-links { margin-bottom: 1.4rem; gap: .4rem; }
+}
+.ql {
+  display: flex; flex-direction: column; align-items: center; justify-content: flex-start;
+  padding: .9rem 1rem; text-align: center;
+  background: var(--surf); text-decoration: none;
+  border: 1.5px solid rgba(90,172,245,.35); border-radius: 4px;
+  transition: background .2s, border-color .2s;
+}
+@media (max-width: 600px) {
+  .ql { padding: .7rem .6rem; border-radius: 3px; }
+}
+.ql:hover { background: var(--bg); border-color: var(--accent); }
+.ql-label {
+  font-size: .88rem; font-weight: 600; letter-spacing: .01em;
+  color: var(--ink); margin-bottom: .3rem;
+}
+@media (max-width: 600px) {
+  .ql-label { font-size: .8rem; margin-bottom: .15rem; }
+}
+.ql-desc { font-size: .75rem; font-weight: 400; color: var(--muted); }
+@media (max-width: 600px) {
+  .ql-desc { font-size: .68rem; }
+}
+
+/* SEASON PROGRESS */
+.progress { margin-bottom: 2rem; }
+.prog-row {
+  display: flex; align-items: center; gap: .75rem;
+  padding: .5rem 0; border-bottom: 1px solid var(--rule);
+}
+.prog-name { min-width: 6rem; font-size: .78rem; color: var(--muted); }
+.prog-track {
+  flex: 1; height: 3px; background: rgba(90,172,245,.12);
+  border-radius: 2px; overflow: hidden;
+}
+.prog-fill { height: 100%; background: var(--prac); border-radius: 2px; }
+.prog-fill.red { background: var(--tour); }
+.prog-val {
+  min-width: 3.5rem; text-align: right;
+  font-size: .78rem; color: var(--ink); font-variant-numeric: tabular-nums;
+}
+
+/* ROSTER */
+.roster {
+  border-top: 1px solid var(--rule);
+  padding-top: 1.2rem;
+  margin-bottom: 3rem;
+}
+.roster-staff {
+  margin-bottom: 1rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--rule);
+}
+.roster-staff-row {
+  display: flex; align-items: baseline; gap: .75rem;
+  font-size: .82rem;
+}
+.roster-staff-role { color: var(--muted); min-width: 2.5rem; }
+.roster-staff-name { color: var(--ink); font-weight: 500; }
+.roster-grid { columns: 3; column-gap: 1.2rem; }
+@media (max-width: 600px) {
+  .roster-grid { columns: 2; }
+}
+.roster-player {
+  display: flex; align-items: baseline; gap: .5rem;
+  padding: .4rem 0;
+  border-bottom: 1px solid var(--rule);
+  font-size: .82rem;
+}
+.roster-num {
+  font-family: 'Oswald', sans-serif; font-size: .78rem; font-weight: 400;
+  color: var(--accent); min-width: 1.6rem; text-align: right;
+}
+.roster-name { color: var(--ink); }
 
 /* FOOTER */
 footer {
   border-top: 1px solid var(--rule);
   padding: 2rem 0;
+  max-width: 880px; margin: 0 auto;
   font-size: .74rem; color: var(--muted);
   display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem;
 }
@@ -146,69 +296,217 @@ footer {
 </style>
 
 <nav>
-  <a href="index.html" class="nav-logo">WIND VBC</a>
+  <a href="team.html" class="nav-logo">WIND VBC</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
   <ul class="nav-links" id="navLinks">
-    <li><a href="index.html">About the Club</a></li>
     <li><a href="team.html" class="active">U13 Team</a></li>
-    <li><a href="calendar.html">Calendar</a></li>
+    <li><a href="index.html">About the Club</a></li>
   </ul>
 </nav>
 
-<div class="wrap">
-  <div class="hero">
-    <p class="eyebrow">Wind Volleyball Club · 2026–27 Season</p>
-    <h1 class="hero-title">U13 Team</h1>
-    <p class="hero-sub">Girls 13 &amp; Under · December 2026 – May 2027</p>
-  </div>
-
-  <div class="content">
-
-    <p class="section-label">Season Details</p>
-    <div class="facts">
-      <div class="fact">
-        <span class="fact-label">Head Coach</span>
-        <span class="fact-value">Kei Kondo</span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Practice</span>
-        <span class="fact-value">Mon &amp; Wed, 6–8 PM</span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Primary Venue</span>
-        <span class="fact-value">Johnson Athletic Complex, Racine</span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Season</span>
-        <span class="fact-value">December 2026 – May 2027</span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Tournaments</span>
-        <span class="fact-value">8 total · <a href="calendar.html">View calendar</a></span>
-      </div>
-      <div class="fact">
-        <span class="fact-label">Contact</span>
-        <span class="fact-value"><a href="mailto:kondo.kei@windvbc.com">kondo.kei@windvbc.com</a></span>
-      </div>
-    </div>
-
-  </div>
-
-  <footer>
-    <span class="footer-logo">Wind Volleyball Club</span>
-    <span>© 2026 · Racine, WI</span>
-  </footer>
+<div class="page-hd">
+  <p class="eyebrow">Wind Volleyball Club · 2026–27 Season</p>
+  <h1 class="page-title">U13 Team</h1>
+  <p class="page-sub">Next practice, upcoming tournaments, and team announcements.</p>
 </div>
 
+<div class="content">
+
+  <p class="section-label">Next Up</p>
+  <div class="next-up">
+    <div class="next-card is-practice">
+      <p class="next-card-label">Practice</p>
+      <p class="next-card-date" id="np-date">–</p>
+      <p class="next-card-name" id="np-name"></p>
+      <p class="next-card-detail" id="np-detail"></p>
+    </div>
+    <div class="next-card is-tournament" id="next-tour-card">
+      <p class="next-card-label">Tournament</p>
+      <p class="next-card-date" id="nt-date">–</p>
+      <p class="next-card-name" id="nt-name"></p>
+      <p class="next-card-detail" id="nt-detail"></p>
+    </div>
+  </div>
+
+  <p class="section-label">Announcements</p>
+  <div class="announcements" id="announcements"></div>
+
+  <p class="section-label">Team Pages</p>
+  <div class="quick-links">
+    <a href="calendar.html" class="ql">
+      <p class="ql-label">Calendar</p>
+      <p class="ql-desc">All events</p>
+    </a>
+    <a href="practices.html" class="ql">
+      <p class="ql-label">Practices</p>
+      <p class="ql-desc">Schedule &amp; all dates</p>
+    </a>
+    <a href="tournaments.html" class="ql">
+      <p class="ql-label">Tournaments</p>
+      <p class="ql-desc">Season schedule</p>
+    </a>
+  </div>
+
+  <p class="section-label">Season Progress</p>
+  <div class="progress" id="season-progress"></div>
+
+  <p class="section-label">Roster</p>
+  <div class="roster">
+    <div class="roster-staff">
+      <div class="roster-staff-row">
+        <span class="roster-staff-role">Coach</span>
+        <span class="roster-staff-name">Kei Kondo</span>
+      </div>
+    </div>
+    <div class="roster-grid">
+      <div class="roster-player"><span class="roster-num">1</span><span class="roster-name">Abigail Bishop</span></div>
+      <div class="roster-player"><span class="roster-num">2</span><span class="roster-name">Scarlet Kondo</span></div>
+      <div class="roster-player"><span class="roster-num">4</span><span class="roster-name">Sawyer O'Brien</span></div>
+      <div class="roster-player"><span class="roster-num">7</span><span class="roster-name">Parker Infusino</span></div>
+      <div class="roster-player"><span class="roster-num">11</span><span class="roster-name">Patty Smith</span></div>
+      <div class="roster-player"><span class="roster-num">13</span><span class="roster-name">Sophia Brusha</span></div>
+      <div class="roster-player"><span class="roster-num">17</span><span class="roster-name">Aubrey Bukacek-Fahnrich</span></div>
+      <div class="roster-player"><span class="roster-num">20</span><span class="roster-name">Nora Kelly</span></div>
+      <div class="roster-player"><span class="roster-num">21</span><span class="roster-name">Leighton Carbajal</span></div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <span class="footer-logo">Wind Volleyball Club</span>
+  <span>© 2026 · 2026–27 Season</span>
+</footer>
+
 <script>
-  const toggle = document.getElementById('navToggle');
-  const links  = document.getElementById('navLinks');
-  toggle.addEventListener('click', () => {
-    toggle.classList.toggle('open');
-    links.classList.toggle('open');
+  // HAMBURGER
+  const navToggle = document.getElementById('navToggle');
+  const navLinks  = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const open = navLinks.classList.toggle('open');
+    navToggle.classList.toggle('open', open);
   });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open'); navToggle.classList.remove('open');
+  }));
+
+  // DATA
+  const PRACTICES = [
+    '2026-12-07','2026-12-09','2026-12-14','2026-12-16',
+    '2026-12-21','2026-12-23','2026-12-28','2026-12-30',
+    '2027-01-04','2027-01-06','2027-01-11','2027-01-13',
+    '2027-01-18','2027-01-20','2027-01-25','2027-01-27',
+    '2027-02-01','2027-02-03','2027-02-08','2027-02-10',
+    '2027-02-15','2027-02-17','2027-02-22','2027-02-24',
+    '2027-03-01','2027-03-03','2027-03-08','2027-03-10',
+    '2027-03-15','2027-03-17',
+    '2027-04-05','2027-04-07','2027-04-12','2027-04-14',
+    '2027-04-19','2027-04-21','2027-04-26','2027-04-28',
+    '2027-05-03','2027-05-05','2027-05-10','2027-05-12',
+  ];
+
+  const TOURNAMENTS = [
+    { name: 'JVC Winter Classic',             start: '2027-01-16', end: '2027-01-17', major: false, location: 'Baird Center, Milwaukee' },
+    { name: "WI Jr's January Jam",            start: '2027-01-31', end: '2027-01-31', major: false, location: 'Pleasant Prairie RecPlex' },
+    { name: 'Molten Wisconsin VB Fest',       start: '2027-03-06', end: '2027-03-07', major: false, location: 'Center Court Sports Complex, Waukesha' },
+    { name: 'Badger Regional Championship',   start: '2027-03-13', end: '2027-03-14', major: true,  location: 'Baird Center, Milwaukee' },
+    { name: "Mizuno Diggin' in the Dells II", start: '2027-04-10', end: '2027-04-11', major: false, location: 'Wisconsin Dells' },
+    { name: 'Cream City Challenge #1',        start: '2027-04-17', end: '2027-04-17', major: false, location: 'New Berlin' },
+    { name: 'Cornbelt Showdown',              start: '2027-05-01', end: '2027-05-02', major: false, location: 'Milwaukee County Sports Complex, Franklin' },
+    { name: 'JVC Grand Slam',                 start: '2027-05-15', end: '2027-05-16', major: true,  location: 'WI State Fair Expo Center, West Allis' },
+  ];
+
+  // Add announcements here — newest first.
+  // { text: 'No practice Dec 23.', date: 'Dec 15', urgent: false }
+  const ANNOUNCEMENTS = [];
+
+  const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const DOW = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+  function pdate(s) { return new Date(s + 'T12:00:00'); }
+  function fmt(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+  function fmtD(s) {
+    const d = pdate(s);
+    return `${DOW[d.getDay()]}, ${MON[d.getMonth()]} ${d.getDate()}`;
+  }
+  function fmtRange(s, e) {
+    if (s === e) return fmtD(s);
+    const ds = pdate(s), de = pdate(e);
+    return ds.getMonth() === de.getMonth()
+      ? `${MON[ds.getMonth()]} ${ds.getDate()}–${de.getDate()}`
+      : `${MON[ds.getMonth()]} ${ds.getDate()} – ${MON[de.getMonth()]} ${de.getDate()}`;
+  }
+
+  const today = fmt(new Date());
+
+  // Next practice
+  const np = PRACTICES.find(d => d >= today);
+  if (np) {
+    document.getElementById('np-date').textContent = fmtD(np);
+    document.getElementById('np-name').textContent = '6:00 – 8:00 PM';
+    document.getElementById('np-detail').textContent = 'The Prairie School';
+  } else {
+    document.getElementById('np-date').textContent = 'Season complete';
+  }
+
+  // Next tournament
+  const nt = TOURNAMENTS.find(t => t.end >= today);
+  if (nt) {
+    document.getElementById('nt-date').textContent = fmtRange(nt.start, nt.end);
+    document.getElementById('nt-name').textContent = nt.name;
+    document.getElementById('nt-detail').textContent = nt.location || '';
+    if (nt.major) {
+      document.getElementById('next-tour-card').classList.remove('is-tournament');
+      document.getElementById('next-tour-card').classList.add('is-major');
+    }
+  } else {
+    document.getElementById('nt-date').textContent = 'Season complete';
+  }
+
+  // Announcements
+  const annEl = document.getElementById('announcements');
+  if (ANNOUNCEMENTS.length === 0) {
+    annEl.innerHTML = '<p class="ann-empty">No announcements right now.</p>';
+  } else {
+    annEl.innerHTML = ANNOUNCEMENTS.map(a =>
+      `<div class="ann-row">
+        <span class="ann-date">${a.date || ''}</span>
+        <span class="ann-text${a.urgent ? ' urgent' : ''}">${a.text}</span>
+      </div>`
+    ).join('');
+  }
+
+  // Season progress
+  const S = pdate('2026-12-07'), E = pdate('2027-05-16');
+  const total = (E - S) / 86400000;
+  const elapsed = Math.min(Math.max((pdate(today) - S) / 86400000, 0), total);
+  const pctDays = Math.round(elapsed / total * 100);
+  const pracDone = PRACTICES.filter(d => d < today).length;
+  const pctPrac  = Math.round(pracDone / PRACTICES.length * 100);
+  const tourDone = TOURNAMENTS.filter(t => t.end < today).length;
+  const pctTour  = Math.round(tourDone / TOURNAMENTS.length * 100);
+
+  document.getElementById('season-progress').innerHTML = `
+    <div class="prog-row">
+      <span class="prog-name">Season</span>
+      <div class="prog-track"><div class="prog-fill" style="width:${pctDays}%"></div></div>
+      <span class="prog-val">${pctDays}%</span>
+    </div>
+    <div class="prog-row">
+      <span class="prog-name">Practices</span>
+      <div class="prog-track"><div class="prog-fill" style="width:${pctPrac}%"></div></div>
+      <span class="prog-val">${pracDone} / ${PRACTICES.length}</span>
+    </div>
+    <div class="prog-row">
+      <span class="prog-name">Tournaments</span>
+      <div class="prog-track"><div class="prog-fill red" style="width:${pctTour}%"></div></div>
+      <span class="prog-val">${tourDone} / ${TOURNAMENTS.length}</span>
+    </div>
+  `;
 </script>
 
 </body>
