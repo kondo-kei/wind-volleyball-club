@@ -18,9 +18,9 @@
   --muted:  rgba(200,220,255,.65);
   --rule:   rgba(90,172,245,.12);
   --accent: #c9a84c;
-  --prac:   rgba(90,172,245,.18);
-  --prac-text: #7db8f0;
-  --prac-border: rgba(90,172,245,.5);
+  --prac:   rgba(59,130,246,.2);
+  --prac-text: #93c5fd;
+  --prac-border: rgba(59,130,246,.7);
   --tour:   rgba(239,68,68,.18);
   --tour-text: #fca5a5;
   --tour-border: #ef4444;
@@ -112,7 +112,7 @@ nav {
 }
 
 /* CONTENT */
-.content { padding-block: 1.5rem 4rem; }
+.content { padding-block: 1rem 3rem; }
 
 /* SECTION LABEL */
 .section-label {
@@ -122,12 +122,12 @@ nav {
 
 /* LEGEND */
 .legend {
-  display: flex; flex-wrap: wrap; gap: .5rem 1.8rem;
-  margin-bottom: 1.2rem;
-  font-size: .75rem; color: var(--muted); align-items: center;
+  display: flex; flex-wrap: wrap; gap: .3rem 1.4rem;
+  margin-bottom: .8rem;
+  font-size: .7rem; color: var(--muted); align-items: center;
 }
-.legend-item { display: flex; align-items: center; gap: .4rem; }
-.legend-swatch { width: .85rem; height: .85rem; border-radius: 2px; flex-shrink: 0; }
+.legend-item { display: flex; align-items: center; gap: .35rem; }
+.legend-swatch { width: .75rem; height: .75rem; border-radius: 2px; flex-shrink: 0; }
 .ls-prac  { background: var(--prac);  border: 1px solid var(--prac-border); }
 .ls-tour  { background: var(--tour);  border: 1px solid var(--tour-border); }
 .ls-major { background: var(--major); border: 1px solid var(--major-border); }
@@ -135,17 +135,14 @@ nav {
 
 /* CALENDAR CARD */
 .cal-card {
-  background: var(--surf);
-  border: 1px solid var(--rule);
-  border-radius: 2px;
-  overflow: hidden;
+  background: transparent;
   margin-bottom: 2rem;
 }
-.cal-inner { padding: 1rem 1.2rem 1.2rem; overflow-x: auto; }
+.cal-inner { padding: 0; overflow-x: auto; }
 
 .cal-hd-row {
   display: grid;
-  grid-template-columns: 2.4rem repeat(7, minmax(0,1fr));
+  grid-template-columns: 1.8rem repeat(7, minmax(0,1fr));
   gap: 2px;
   margin-bottom: 3px;
   border-bottom: 1px solid var(--rule);
@@ -153,30 +150,32 @@ nav {
 }
 .cal-col-hd {
   font-size: .55rem; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--muted); font-weight: 500; text-align: center; padding: .2rem 0;
+  color: var(--ink); font-weight: 500; text-align: center; padding: .1rem 0; opacity: .75;
 }
 .cal-grid {
   display: grid;
-  grid-template-columns: 2.4rem repeat(7, minmax(0,1fr));
+  grid-template-columns: 1.8rem repeat(7, minmax(0,1fr));
   gap: 2px;
+  margin-bottom: 4px;
 }
 .cal-month-lbl {
   display: flex; align-items: center;
-  font-family: 'Oswald', sans-serif; font-size: .72rem; font-weight: 400;
-  color: var(--muted); letter-spacing: .04em;
+  font-family: 'Oswald', sans-serif; font-size: .7rem; font-weight: 500;
+  color: var(--ink); letter-spacing: .06em; text-transform: uppercase;
 }
 .cal-cell {
-  aspect-ratio: 1;
+  aspect-ratio: 7/5;
   display: flex; align-items: center; justify-content: center;
   border-radius: 2px;
-  font-size: clamp(.58rem, 1.4vw, 1rem);
+  border: 1px solid var(--rule);
+  font-size: clamp(.52rem, 1.2vw, .85rem);
   font-variant-numeric: tabular-nums;
   color: var(--muted);
   position: relative;
 }
-.cal-cell.out-range { opacity: .15; pointer-events: none; }
-.cal-cell.spring-break { background: rgba(100,116,139,.12); opacity: .5; }
-.cal-cell.practice { background: var(--prac); color: var(--prac-text); font-weight: 500; }
+.cal-cell.out-range { opacity: .12; pointer-events: none; }
+.cal-cell.spring-break { background: rgba(100,116,139,.1); border-color: rgba(100,116,139,.2); opacity: .5; }
+.cal-cell.practice { background: var(--prac); color: var(--prac-text); border-color: var(--prac-border); font-weight: 500; }
 .cal-cell.tournament { background: var(--tour); color: var(--tour-text); border: 1px solid var(--tour-border); font-weight: 500; }
 .cal-cell.major { background: var(--major); color: var(--major-text); border: 1px solid var(--major-border); font-weight: 500; }
 .cal-cell.today-cell { outline: 2px solid var(--accent); outline-offset: 1px; }
@@ -195,13 +194,14 @@ nav {
 }
 
 /* TOURNAMENT LIST */
-.event-list { border-top: 1px solid var(--rule); padding-top: 1.2rem; margin-bottom: 3rem; }
+.event-list { border-top: 1px solid var(--rule); padding-top: .8rem; margin-bottom: 2rem; }
 .event-row {
-  display: flex; align-items: baseline; gap: 1rem;
-  padding: .55rem 0; border-bottom: 1px solid var(--rule); font-size: .82rem;
+  display: flex; align-items: baseline; gap: .75rem;
+  padding: .35rem 0; border-bottom: 1px solid var(--rule); font-size: .78rem;
 }
-.event-date { min-width: 5.5rem; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .78rem; flex-shrink: 0; }
+.event-date { min-width: 5rem; font-variant-numeric: tabular-nums; color: var(--muted); font-size: .73rem; flex-shrink: 0; }
 .event-name { flex: 1; color: var(--ink); }
+.event-city { display: block; font-size: .68rem; color: var(--muted); margin-top: .05rem; }
 .event-badge {
   font-size: .6rem; font-weight: 500; letter-spacing: .08em; text-transform: uppercase;
   padding: .12rem .4rem; border-radius: 2px; flex-shrink: 0;
@@ -286,14 +286,14 @@ footer {
   ]);
 
   const TOURNAMENTS = [
-    { name: 'JVC Winter Classic',             start: '2027-01-16', end: '2027-01-17', major: false },
-    { name: "WI Jr's January Jam",            start: '2027-01-31', end: '2027-01-31', major: false },
-    { name: 'Molten Wisconsin VB Fest',       start: '2027-03-06', end: '2027-03-07', major: false },
-    { name: 'Badger Regional Championship',   start: '2027-03-13', end: '2027-03-14', major: true  },
-    { name: "Mizuno Diggin' in the Dells II", start: '2027-04-10', end: '2027-04-11', major: false },
-    { name: 'Cream City Challenge #1',        start: '2027-04-17', end: '2027-04-17', major: false },
-    { name: 'Cornbelt Showdown',              start: '2027-05-01', end: '2027-05-02', major: false },
-    { name: 'JVC Grand Slam',                 start: '2027-05-15', end: '2027-05-16', major: true  },
+    { name: 'JVC Winter Classic',             start: '2027-01-16', end: '2027-01-17', major: false, city: 'Milwaukee' },
+    { name: "WI Jr's January Jam",            start: '2027-01-31', end: '2027-01-31', major: false, city: 'Pleasant Prairie' },
+    { name: 'Molten Wisconsin VB Fest',       start: '2027-03-06', end: '2027-03-07', major: false, city: 'Waukesha' },
+    { name: 'Badger Regional Championship',   start: '2027-03-13', end: '2027-03-14', major: true,  city: 'Milwaukee' },
+    { name: "Mizuno Diggin' in the Dells II", start: '2027-04-10', end: '2027-04-11', major: false, city: 'Wisconsin Dells' },
+    { name: 'Cream City Challenge #1',        start: '2027-04-17', end: '2027-04-17', major: false, city: 'New Berlin' },
+    { name: 'Cornbelt Showdown',              start: '2027-05-01', end: '2027-05-02', major: false, city: 'Franklin' },
+    { name: 'JVC Grand Slam',                 start: '2027-05-15', end: '2027-05-16', major: true,  city: 'West Allis' },
   ];
 
   function pdate(s) { return new Date(s + 'T12:00:00'); }
@@ -382,7 +382,7 @@ footer {
       const bl = t.major ? 'Major' : 'Tournament';
       evHtml += `<div class="event-row">
         <span class="event-date">${dateStr}</span>
-        <span class="event-name">${t.name}</span>
+        <span class="event-name">${t.name}<span class="event-city">${t.city}</span></span>
         <span class="event-badge ${bc}">${bl}</span>
       </div>`;
     }
