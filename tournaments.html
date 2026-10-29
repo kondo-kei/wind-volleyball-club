@@ -1004,7 +1004,7 @@ function renderRegField(){
           </div></div>
         </div>`;
     return `<div class="team-row ${isOurs?"ours":""} ${isDropped(t)?"dropped":""}" data-s="${esc((t.name+" "+t.club).toLowerCase())}">
-      <div class="team-name">${esc(t.name)}${isOurs?`<span class="sp acc" style="margin-left:.5rem">WIND</span>`:""}</div>${rankHtml}${statusPill(t.status)}</div>`;
+      <div class="team-name">${esc(t.name)}</div>${rankHtml}${statusPill(t.status)}</div>`;
   }).join("");
   if (!rows.length) html+=`<div class="no-match">${d.list.length?"No teams with this status.":"No teams registered yet."}</div>`;
   html+=`<div class="no-match" id="nomatch" hidden>No teams match.</div></div></div>`;
