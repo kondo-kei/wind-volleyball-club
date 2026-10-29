@@ -71,7 +71,7 @@
     color: var(--ink);
     text-decoration: none;
   }
-  .nav-logo span { color: var(--sky); }
+  .nav-logo span { color: var(--accent); }
   .nav-links { display: flex; gap: 2rem; list-style: none; }
   .nav-links a {
     text-decoration: none;
@@ -88,10 +88,10 @@
   .btn-refresh {
     display: flex; align-items: center; gap: .45rem;
     padding: .42rem .9rem;
-    background: rgba(90,172,245,.08);
+    background: rgba(201,168,76,.08);
     border: 1px solid var(--rule-solid);
     border-radius: 4px;
-    color: var(--sky);
+    color: var(--accent);
     font-family: 'DM Sans', sans-serif;
     font-size: .72rem;
     letter-spacing: .1em;
@@ -99,7 +99,7 @@
     cursor: pointer;
     transition: background .2s, border-color .2s;
   }
-  .btn-refresh:hover { background: rgba(90,172,245,.18); border-color: var(--sky); }
+  .btn-refresh:hover { background: rgba(201,168,76,.18); border-color: var(--accent); }
   .btn-refresh.spin svg { animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -108,8 +108,6 @@
     display: grid;
     grid-template-columns: var(--sidebar-w) 1fr;
     min-height: calc(100vh - 56px);
-    max-width: 1400px;
-    margin: 0 auto;
   }
 
   /* ── SIDEBAR ── */
@@ -125,7 +123,7 @@
     scrollbar-color: rgba(90,172,245,.15) transparent;
   }
   .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: rgba(90,172,245,.15); border-radius: 2px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(201,168,76,.2); border-radius: 2px; }
 
   .sidebar-heading {
     font-family: 'Oswald', sans-serif;
@@ -155,7 +153,7 @@
     transition: background .18s, color .18s, border-color .18s;
   }
   .event-btn:hover { background: rgba(240,245,255,.04); color: var(--ink); }
-  .event-btn.on { background: rgba(59,130,246,.12); border-left-color: var(--sky); color: var(--ink); }
+  .event-btn.on { background: rgba(201,168,76,.1); border-left-color: var(--accent); color: var(--ink); }
   .event-btn .ev-name { display: block; font-weight: 500; margin-bottom: .18rem; }
   .event-btn .ev-date { display: block; font-size: .7rem; color: rgba(240,245,255,.3); }
   .event-btn.on .ev-date { color: rgba(240,245,255,.45); }
@@ -171,7 +169,7 @@
     margin-bottom: .3rem;
   }
   .ev-badge.live { background: #ef4444; color: #fff; }
-  .ev-badge.next { background: rgba(90,172,245,.18); color: var(--sky); }
+  .ev-badge.next { background: rgba(201,168,76,.18); color: var(--accent); }
   .ev-badge.past { background: rgba(240,245,255,.07); color: rgba(240,245,255,.35); }
   .ev-badge.upcoming { background: rgba(59,130,246,.2); color: var(--next-ink); }
 
@@ -208,7 +206,7 @@
     font-size: .78rem;
     color: var(--muted);
   }
-  .ev-meta a { color: var(--sky); text-decoration: none; }
+  .ev-meta a { color: var(--accent); text-decoration: none; }
   .ev-meta a:hover { text-decoration: underline; }
   .ev-updated { font-size: .7rem; color: var(--muted); opacity: .6; margin-top: .4rem; }
 
@@ -234,7 +232,7 @@
     transition: background .18s, color .18s;
     white-space: nowrap;
   }
-  .seg-btn.on { background: rgba(90,172,245,.18); color: var(--ink); }
+  .seg-btn.on { background: rgba(201,168,76,.18); color: var(--ink); }
   .seg-btn .cnt { font-weight: 300; opacity: .6; margin-left: .3rem; }
 
   /* Filter pills */
@@ -256,12 +254,12 @@
     cursor: pointer;
     transition: all .18s;
   }
-  .fbtn:hover { border-color: var(--sky); color: var(--ink); }
-  .fbtn.on { background: rgba(90,172,245,.2); color: var(--ink); border-color: var(--sky); }
-  .fbtn.ours { border-color: rgba(59,130,246,.5); border-width: 2px; }
-  .fbtn.ours:not(.on) { color: var(--next-ink); }
+  .fbtn:hover { border-color: var(--accent); color: var(--ink); }
+  .fbtn.on { background: rgba(201,168,76,.15); color: var(--ink); border-color: var(--accent); }
+  .fbtn.ours { border-color: rgba(201,168,76,.5); border-width: 2px; }
+  .fbtn.ours:not(.on) { color: var(--accent); }
   .fbtn .n { font-weight: 300; opacity: .55; margin-left: .25rem; }
-  .fbtn .wd { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--blue); margin-left: 4px; vertical-align: 1px; }
+  .fbtn .wd { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 4px; vertical-align: 1px; }
 
   .fsum { font-size: .75rem; color: var(--muted); margin: -.4rem 0 1rem; opacity: .7; }
 
@@ -281,7 +279,7 @@
     transition: border-color .2s, box-shadow .2s;
   }
   .search::placeholder { color: rgba(240,245,255,.3); }
-  .search:focus { border-color: rgba(90,172,245,.5); box-shadow: 0 0 0 3px rgba(59,130,246,.12); }
+  .search:focus { border-color: rgba(201,168,76,.5); box-shadow: 0 0 0 3px rgba(201,168,76,.12); }
 
   /* Team cards grid */
   .teams-grid {
@@ -389,7 +387,7 @@
     border-top: 1px solid var(--rule);
   }
   .play-header + .game-row { border-top: 0; }
-  .game-row.is-next { box-shadow: inset 3px 0 0 var(--sky); }
+  .game-row.is-next { box-shadow: inset 3px 0 0 var(--accent); }
   .game-time {
     font-size: .8rem;
     font-weight: 500;
@@ -455,7 +453,7 @@
     font-size: .58rem;
     font-weight: 700;
     letter-spacing: .08em;
-    color: var(--sky);
+    color: var(--accent);
     margin-left: .5rem;
     vertical-align: 1px;
   }
@@ -468,7 +466,7 @@
   .rank-group-cols { display: flex; gap: .3rem; }
   .rank-col { min-width: 1.9rem; display: flex; flex-direction: column; align-items: flex-end; }
   .rank-num { font-family: 'Oswald', sans-serif; font-size: .95rem; font-weight: 400; letter-spacing: .04em; color: var(--muted); line-height: 1.1; }
-  .rank-num.wind { color: var(--sky); }
+  .rank-num.wind { color: var(--accent); }
   .rank-num.nil { opacity: .18; }
   .rank-lbl { font-size: .5rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); opacity: .4; }
   .team-rank-loading { font-size: .62rem; color: var(--muted); opacity: .45; align-self: center; }
@@ -908,7 +906,7 @@ function renderMain(msg){
       <div class="ev-meta">
         <span>${esc(range)}</span>
         ${loc?`<span>${esc(loc)}</span>`:""}
-        ${key&&ev?`<a href="${AES_SITE}/event/${esc(key)}" target="_blank" rel="noopener">Open in AES →</a>`:""}
+        ${key&&ev?`<a href="${AES_SITE}/event/${esc(key)}" target="_blank" rel="noopener" style="color:var(--accent)">Open in AES →</a>`:""}
       </div>
       ${state.updated?`<div class="ev-updated">Updated ${esc(state.updated)}${statusOf(e)==="live"?` · auto-refreshes every ${CONFIG.refreshSeconds}s`:""}</div>`:""}
     </div>
