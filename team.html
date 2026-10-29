@@ -233,24 +233,6 @@ nav {
   .ql-desc { font-size: .68rem; }
 }
 
-/* SEASON PROGRESS */
-.progress { margin-bottom: 2rem; }
-.prog-row {
-  display: flex; align-items: center; gap: .75rem;
-  padding: .5rem 0; border-bottom: 1px solid var(--rule);
-}
-.prog-name { min-width: 6rem; font-size: .78rem; color: var(--muted); }
-.prog-track {
-  flex: 1; height: 3px; background: rgba(90,172,245,.12);
-  border-radius: 2px; overflow: hidden;
-}
-.prog-fill { height: 100%; background: var(--prac); border-radius: 2px; }
-.prog-fill.red { background: var(--tour); }
-.prog-val {
-  min-width: 3.5rem; text-align: right;
-  font-size: .78rem; color: var(--ink); font-variant-numeric: tabular-nums;
-}
-
 /* ROSTER */
 .roster {
   border-top: 1px solid var(--rule);
@@ -348,9 +330,6 @@ footer {
       <p class="ql-desc">Season schedule</p>
     </a>
   </div>
-
-  <p class="section-label">Season Progress</p>
-  <div class="progress" id="season-progress"></div>
 
   <p class="section-label">Roster</p>
   <div class="roster">
@@ -480,33 +459,6 @@ footer {
     ).join('');
   }
 
-  // Season progress
-  const S = pdate('2026-12-07'), E = pdate('2027-05-16');
-  const total = (E - S) / 86400000;
-  const elapsed = Math.min(Math.max((pdate(today) - S) / 86400000, 0), total);
-  const pctDays = Math.round(elapsed / total * 100);
-  const pracDone = PRACTICES.filter(d => d < today).length;
-  const pctPrac  = Math.round(pracDone / PRACTICES.length * 100);
-  const tourDone = TOURNAMENTS.filter(t => t.end < today).length;
-  const pctTour  = Math.round(tourDone / TOURNAMENTS.length * 100);
-
-  document.getElementById('season-progress').innerHTML = `
-    <div class="prog-row">
-      <span class="prog-name">Season</span>
-      <div class="prog-track"><div class="prog-fill" style="width:${pctDays}%"></div></div>
-      <span class="prog-val">${pctDays}%</span>
-    </div>
-    <div class="prog-row">
-      <span class="prog-name">Practices</span>
-      <div class="prog-track"><div class="prog-fill" style="width:${pctPrac}%"></div></div>
-      <span class="prog-val">${pracDone} / ${PRACTICES.length}</span>
-    </div>
-    <div class="prog-row">
-      <span class="prog-name">Tournaments</span>
-      <div class="prog-track"><div class="prog-fill red" style="width:${pctTour}%"></div></div>
-      <span class="prog-val">${tourDone} / ${TOURNAMENTS.length}</span>
-    </div>
-  `;
 </script>
 
 </body>
