@@ -90,9 +90,17 @@ nav {
   .nav-links li { width: 100%; }
   .nav-links a { display: block; padding: .8rem 2rem; }
 }
-
 /* LAYOUT */
-.wrap { max-width: 880px; margin: 0 auto; }
+.wrap { max-width: 1200px; margin: 0 auto; }
+.main-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+@media (max-width: 760px) {
+  .main-grid { grid-template-columns: 1fr; gap: 0; }
+}
 
 /* HERO */
 .hero {
@@ -237,22 +245,28 @@ footer {
   </div>
 
   <div class="content">
-    <p class="section-label">Schedule</p>
-    <div class="legend">
-      <span class="legend-item"><span class="legend-swatch ls-prac"></span>Practice</span>
-      <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
-      <span class="legend-item"><span class="legend-swatch ls-major"></span>Major</span>
-      <span class="legend-item"><span class="legend-swatch ls-sb"></span>Spring Break</span>
-    </div>
-    <div class="cal-card">
-      <div class="cal-inner">
-        <div class="cal-hd-row" id="cal-hd"></div>
-        <div class="cal-grid" id="cal"></div>
+    <div class="main-grid">
+      <div class="col-left">
+        <p class="section-label">Schedule</p>
+        <div class="legend">
+          <span class="legend-item"><span class="legend-swatch ls-prac"></span>Practice · 6–8 PM</span>
+          <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
+          <span class="legend-item"><span class="legend-swatch ls-major"></span>Major</span>
+          <span class="legend-item"><span class="legend-swatch ls-sb"></span>Spring Break</span>
+        </div>
+        <div class="cal-card">
+          <div class="cal-inner">
+            <div class="cal-hd-row" id="cal-hd"></div>
+            <div class="cal-grid" id="cal"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-right">
+        <p class="section-label">Tournaments</p>
+        <div class="event-list" id="event-rows"></div>
       </div>
     </div>
-
-    <p class="section-label">Tournaments</p>
-    <div class="event-list" id="event-rows"></div>
   </div>
 
   <footer>
