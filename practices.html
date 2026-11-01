@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Wind VC · Practices</title>
+  <title>Wind VBC · Practices</title>
   <!-- App install (home screen) -->
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0b1f3a">
@@ -14,30 +14,22 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --navy:          #0b1f3a;
-      --blue:          #1a6fd4;
-      --sky:           #5aacf5;
-      --bg:            #f4f8ff;
-      --ink:           #0b1f3a;
-      --muted:         #4a6a8a;
-      --line:          rgba(26,111,212,.13);
-      --surf:          #ffffff;
-      --amber:         #b45309;
-      --amber-bg:      rgba(245,158,11,.1);
-      --amber-border:  rgba(245,158,11,.28);
-    }
-    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
-      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1);
-      --surf: #0c1b30; --amber: #fbbf24; --amber-bg: rgba(251,191,36,.1); --amber-border: rgba(251,191,36,.25);
-    }}
-    :root[data-theme="dark"] {
-      --bg: #080f1e; --ink: #d8e8f6; --muted: #6a8aaa; --line: rgba(90,172,245,.1);
-      --surf: #0c1b30; --amber: #fbbf24; --amber-bg: rgba(251,191,36,.1); --amber-border: rgba(251,191,36,.25);
+      --bg:           #0b1f3a;
+      --surf:         #0d2448;
+      --ink:          #f0f5ff;
+      --muted:        rgba(200,220,255,.65);
+      --rule:         rgba(90,172,245,.12);
+      --accent:       #c9a84c;
+      --sky:          #5aacf5;
+      --amber:        #fbbf24;
+      --amber-bg:     rgba(251,191,36,.1);
+      --amber-border: rgba(251,191,36,.25);
+      color-scheme: dark;
     }
 
     html { scroll-behavior: smooth; }
@@ -46,47 +38,41 @@
     /* ── NAV ── */
     nav {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 1.1rem 5vw;
-      background: rgba(11,31,58,.98);
-      border-bottom: 1px solid rgba(26,111,212,.25);
+      padding: .9rem 2.5rem;
+      background: rgba(11,31,58,.97);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(90,172,245,.2);
       position: sticky; top: 0; z-index: 100;
     }
-    .nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.5rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: #fff; text-decoration: none; }
-    .nav-logo span { color: #c9a84c; }
-    .nav-links { display: flex; gap: 1.8rem; list-style: none; }
-    .nav-links a { font-size: .78rem; letter-spacing: .12em; text-transform: uppercase; text-decoration: none; color: rgba(255,255,255,.5); transition: color .2s; }
-    .nav-links a:hover, .nav-links a.active { color: #fff; }
-    @media (max-width: 600px) { .nav-links { gap: 1rem; } .nav-links li:nth-child(1), .nav-links li:nth-child(2), .nav-links li:nth-child(4) { display: none; } }
+    .nav-logo { font-family: 'Oswald', sans-serif; font-size: 1.5rem; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); text-decoration: none; }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; text-decoration: none; color: rgba(240,245,255,.45); font-weight: 500; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--ink); }
+    @media (max-width: 600px) { nav { padding: .8rem 1.25rem; } }
 
     /* ── PAGE HEADER ── */
-    .page-hd {
-      padding: 3.5rem 6vw 3rem;
-      background: linear-gradient(160deg, #0b1f3a 0%, #0d2a52 100%);
-      border-bottom: 1px solid rgba(26,111,212,.2);
-      position: relative; overflow: hidden;
+    .page-header {
+      padding: 2.5rem 2.5rem 2rem;
+      border-bottom: 1px solid var(--rule);
+      max-width: 760px;
     }
-    .page-hd::before {
-      content: ''; position: absolute; inset: 0;
-      background-image: repeating-linear-gradient(-18deg, transparent, transparent 60px, rgba(26,111,212,.055) 60px, rgba(26,111,212,.055) 61px);
-    }
-    .page-hd-inner { position: relative; z-index: 1; max-width: 760px; }
-    .eyebrow { font-size: .7rem; letter-spacing: .36em; text-transform: uppercase; color: var(--sky); margin-bottom: .7rem; }
-    .page-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(2.8rem, 8vw, 5rem); line-height: 1; color: #fff; margin-bottom: 1rem; }
-    .page-sub { color: rgba(255,255,255,.55); font-size: .92rem; max-width: 50ch; }
-    .page-meta { display: flex; flex-wrap: wrap; gap: .5rem 2.5rem; margin-top: 1.8rem; }
-    .meta-item { display: flex; flex-direction: column; gap: .2rem; }
-    .meta-val { font-size: .9rem; color: #fff; font-weight: 400; }
-    .meta-lbl { font-size: .58rem; letter-spacing: .2em; text-transform: uppercase; color: rgba(255,255,255,.38); }
+    .eyebrow { font-size: .65rem; letter-spacing: .26em; text-transform: uppercase; color: var(--accent); margin-bottom: .5rem; font-weight: 500; }
+    .page-title { font-family: 'Oswald', sans-serif; font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 400; line-height: 1.05; letter-spacing: .04em; text-transform: uppercase; margin-bottom: .5rem; }
+    .page-sub { font-size: .88rem; color: var(--muted); }
+    .page-facts { font-size: .8rem; color: var(--muted); margin-top: .4rem; opacity: .8; }
+    @media (max-width: 600px) { .page-header { padding: 1.5rem 1.25rem 1.25rem; } }
 
     /* ── CONTENT ── */
-    .content { padding: 2.5rem 6vw 5rem; max-width: 760px; }
+    .content { padding: 2rem 2.5rem 5rem; max-width: 760px; }
+    @media (max-width: 600px) { .content { padding: 1.5rem 1.25rem 4rem; } }
 
     /* ── LEGEND ── */
     .legend {
       display: flex; flex-wrap: wrap; gap: .5rem 1.8rem;
-      margin-bottom: 2.5rem;
-      padding: .85rem 1rem;
-      background: var(--surf); border: 1px solid var(--line); border-radius: 6px;
+      margin-bottom: 2rem;
+      padding: .75rem 1rem;
+      background: var(--surf); border: 1px solid var(--rule); border-radius: 6px;
       font-size: .78rem; color: var(--muted); align-items: center;
     }
     .legend-item { display: flex; align-items: center; gap: .5rem; }
@@ -97,23 +83,22 @@
       font-size: .64rem; font-weight: 500; letter-spacing: .07em; text-transform: uppercase;
       padding: .17rem .48rem; border-radius: 3px; white-space: nowrap; flex-shrink: 0;
     }
-    .chip-fh { background: rgba(90,172,245,.14); color: var(--sky); border: 1px solid rgba(90,172,245,.32); }
+    .chip-fh     { background: rgba(90,172,245,.14); color: var(--sky); border: 1px solid rgba(90,172,245,.32); }
     .chip-unconf { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
-    .chip-jac { background: rgba(26,111,212,.07); color: var(--muted); border: 1px solid var(--line); }
+    .chip-jac    { background: rgba(240,245,255,.06); color: var(--muted); border: 1px solid var(--rule); }
 
     /* ── MONTH SECTION ── */
     .month { margin-bottom: 2.5rem; }
-    .month-hd { display: flex; align-items: baseline; gap: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--blue); }
-    .month-nm { font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: .05em; }
+    .month-hd { display: flex; align-items: baseline; gap: 1rem; padding-bottom: .5rem; border-bottom: 2px solid var(--accent); }
+    .month-nm { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 400; letter-spacing: .06em; }
     .month-ct { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
     /* ── COLUMN HEADERS ── */
     .col-heads { display: grid; grid-template-columns: 1fr 1fr; }
-    .col-head { padding: .35rem .75rem; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--line); }
+    .col-head { padding: .35rem .75rem; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--rule); }
 
     /* ── WEEK PAIR ── */
-    .week-pair { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }
-    .week-pair + .week-pair { border-top-color: var(--line); }
+    .week-pair { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); }
 
     /* ── DAY CELL ── */
     .day-cell {
@@ -122,35 +107,30 @@
       font-size: .88rem;
       min-height: 2.5rem;
     }
-    .day-cell + .day-cell { border-left: 1px solid var(--line); }
-    .day-cell.past { opacity: .32; }
-    .day-cell.next-up {
-      background: rgba(26,111,212,.07);
-      box-shadow: inset 3px 0 0 var(--blue);
-    }
+    .day-cell + .day-cell { border-left: 1px solid var(--rule); }
+    .day-cell.past { opacity: .3; }
+    .day-cell.next-up { background: rgba(201,168,76,.08); box-shadow: inset 3px 0 0 var(--accent); }
     .day-cell.next-up + .day-cell.next-up { box-shadow: none; }
     .cell-day { font-size: .63rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 1.7rem; flex-shrink: 0; }
     .cell-date { flex: 1; font-weight: 400; font-variant-numeric: tabular-nums; }
-    .next-tag { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); font-weight: 500; background: rgba(26,111,212,.12); padding: .13rem .38rem; border-radius: 3px; flex-shrink: 0; }
+    .next-tag { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; background: rgba(201,168,76,.12); padding: .13rem .38rem; border-radius: 3px; flex-shrink: 0; }
 
     /* ── MOBILE: collapse to single column ── */
     @media (max-width: 500px) {
       .col-heads { display: none; }
       .week-pair { grid-template-columns: 1fr; }
-      .day-cell + .day-cell { border-left: none; border-top: 1px solid var(--line); }
+      .day-cell + .day-cell { border-left: none; border-top: 1px solid var(--rule); }
       .day-cell.empty { display: none; }
     }
 
     /* ── FOOTER ── */
     footer {
-      border-top: 1px solid var(--line);
-      padding: 2rem 6vw;
-      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-      background: var(--surf);
+      border-top: 1px solid var(--rule);
+      padding: 1.5rem 2.5rem;
+      display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+      font-size: .74rem; color: var(--muted);
     }
-    .footer-logo { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: .08em; color: var(--ink); }
-    .footer-logo span { color: var(--blue); }
-    footer p { font-size: .75rem; color: var(--muted); }
+    .footer-logo { font-family: 'Oswald', sans-serif; font-size: .9rem; color: var(--ink); }
   </style>
 </head>
 <body>
@@ -163,30 +143,11 @@
     </ul>
   </nav>
 
-  <div class="page-hd">
-    <div class="page-hd-inner">
-      <p class="eyebrow">Wind Volleyball Club · 2026–27 Season</p>
-      <h1 class="page-title">Practice Schedule</h1>
-      <p class="page-sub">All practices run 6:00–8:00 PM. Mondays and Wednesdays, December through May.</p>
-      <div class="page-meta">
-        <div class="meta-item">
-          <span class="meta-val">42 total</span>
-          <span class="meta-lbl">Practices</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-val" id="meta-upcoming">—</span>
-          <span class="meta-lbl">Upcoming</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-val">6:00 – 8:00 PM</span>
-          <span class="meta-lbl">Every Session</span>
-        </div>
-        <div class="meta-item">
-          <span class="meta-val" id="meta-next">—</span>
-          <span class="meta-lbl">Next Practice</span>
-        </div>
-      </div>
-    </div>
+  <div class="page-header">
+    <p class="eyebrow">2026–27 Season</p>
+    <h1 class="page-title">Practice Schedule</h1>
+    <p class="page-sub">Mon &amp; Wed · 6–8 PM · The Prairie School</p>
+    <p class="page-facts" id="page-facts"></p>
   </div>
 
   <div class="content">
@@ -211,8 +172,8 @@
   </div>
 
   <footer>
-    <div class="footer-logo">Wind<span> Volleyball Club</span></div>
-    <p>© 2026 Wind Volleyball Club · 2026–27 Season</p>
+    <span class="footer-logo">Wind Volleyball Club</span>
+    <span>© 2026 · Racine, WI</span>
   </footer>
 
   <script>
@@ -297,16 +258,18 @@
         if (pdate(PRACTICES[i].d) >= today) { nextIdx = i; break; }
       }
 
-      // Update header meta
+      // Update header facts line
       const upcoming = nextIdx >= 0 ? PRACTICES.length - nextIdx : 0;
-      document.getElementById('meta-upcoming').textContent = upcoming;
-      if (nextIdx >= 0) {
-        const np = PRACTICES[nextIdx];
-        const nd = pdate(np.d);
-        document.getElementById('meta-next').textContent =
-          MONTHS[nd.getMonth()].slice(0,3) + ' ' + nd.getDate();
-      } else {
-        document.getElementById('meta-next').textContent = 'Season complete';
+      const factsEl = document.getElementById('page-facts');
+      if (factsEl) {
+        if (nextIdx >= 0) {
+          const np = PRACTICES[nextIdx];
+          const nd = pdate(np.d);
+          const nextStr = MONTHS[nd.getMonth()].slice(0,3) + ' ' + nd.getDate();
+          factsEl.textContent = upcoming + ' upcoming · Next: ' + nextStr;
+        } else {
+          factsEl.textContent = 'Season complete · 42 practices';
+        }
       }
 
       // Group by month
