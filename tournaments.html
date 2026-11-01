@@ -4,50 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Wind VBC · Tournaments</title>
-<!-- App install (home screen) -->
 <link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#0b1f3a">
+<meta name="theme-color" content="#416E9C">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Wind VBC">
 <meta name="apple-mobile-web-app-status-bar-style" content="black">
-<link rel="icon" type="image/svg+xml" href="favicon.svg">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="theme.css">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  :root {
-    --bg:           #0b1f3a;
-    --surf:         #0d2448;
-    --surf2:        #112850;
-    --ink:          #f0f5ff;
-    --muted:        rgba(200,220,255,.65);
-    --rule:         rgba(90,172,245,.12);
-    --rule-solid:   rgba(90,172,245,.2);
-    --accent:       #c9a84c;
-    --sky:          #5aacf5;
-    --blue:         #3b82f6;
-    --blue-dim:     rgba(59,130,246,.18);
-
-    /* status colors – adapted for dark */
-    --win:         #34d399;
-    --win-bg:      rgba(16,185,129,.15);
-    --win-border:  rgba(52,211,153,.3);
-    --loss:        #f87171;
-    --loss-bg:     rgba(239,68,68,.15);
-    --loss-border: rgba(248,113,113,.3);
-    --work:        #fbbf24;
-    --work-bg:     rgba(245,158,11,.15);
-    --work-border: rgba(251,191,36,.3);
-    --next-bg:     rgba(59,130,246,.15);
-    --next-border: rgba(59,130,246,.35);
-    --next-ink:    #93c5fd;
-
-    --sidebar-w: 272px;
-    color-scheme: dark;
-  }
+  :root { --sidebar-w: 272px; }
 
   html { scroll-behavior: smooth; }
 
@@ -60,46 +27,16 @@
     min-height: 100vh;
   }
 
-  /* ── NAV ── */
-  nav {
-    position: sticky; top: 0; z-index: 200;
-    display: flex; align-items: center; justify-content: space-between;
-    padding: .9rem 2.5rem;
-    background: rgba(11,31,58,.97);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--rule-solid);
-  }
-  .nav-left { display: flex; align-items: center; gap: 2.5rem; }
-  .nav-logo {
-    font-family: 'Oswald', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 500;
-    letter-spacing: .1em;
-    text-transform: uppercase;
-    color: var(--ink);
-    text-decoration: none;
-  }
-  .nav-logo span { color: var(--accent); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a {
-    text-decoration: none;
-    color: rgba(240,245,255,.45);
-    font-size: .72rem;
-    letter-spacing: .14em;
-    text-transform: uppercase;
-    font-weight: 500;
-    transition: color .2s;
-  }
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--ink); }
+  /* ── NAV overrides ── */
+  nav { padding: 1rem 2.5rem; }
   .nav-right { display: flex; align-items: center; gap: .75rem; }
   .btn-refresh {
     display: flex; align-items: center; gap: .45rem;
     padding: .42rem .9rem;
-    background: rgba(201,168,76,.08);
-    border: 1px solid var(--rule-solid);
+    background: rgba(255,255,255,.08);
+    border: 1px solid var(--card-border);
     border-radius: 4px;
-    color: var(--accent);
+    color: rgba(255,255,255,.7);
     font-family: 'DM Sans', sans-serif;
     font-size: .72rem;
     letter-spacing: .1em;
@@ -107,7 +44,7 @@
     cursor: pointer;
     transition: background .2s, border-color .2s;
   }
-  .btn-refresh:hover { background: rgba(201,168,76,.18); border-color: var(--accent); }
+  .btn-refresh:hover { background: rgba(255,255,255,.15); border-color: rgba(255,255,255,.4); }
   .btn-refresh.spin svg { animation: spin .8s linear infinite; }
   @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -120,18 +57,18 @@
 
   /* ── SIDEBAR ── */
   .sidebar {
-    background: var(--surf);
-    border-right: 1px solid var(--rule);
+    background: var(--card-bg);
+    border-right: 1px solid var(--card-border);
     padding: 2rem 0;
     position: sticky;
     top: 56px;
     height: calc(100vh - 56px);
     overflow-y: auto;
     scrollbar-width: thin;
-    scrollbar-color: rgba(90,172,245,.15) transparent;
+    scrollbar-color: rgba(255,255,255,.15) transparent;
   }
   .sidebar::-webkit-scrollbar { width: 4px; }
-  .sidebar::-webkit-scrollbar-thumb { background: rgba(201,168,76,.2); border-radius: 2px; }
+  .sidebar::-webkit-scrollbar-thumb { background: rgba(255,255,255,.2); border-radius: 2px; }
 
   .sidebar-heading {
     font-family: 'Oswald', sans-serif;
@@ -161,7 +98,7 @@
     transition: background .18s, color .18s, border-color .18s;
   }
   .event-btn:hover { background: rgba(240,245,255,.04); color: var(--ink); }
-  .event-btn.on { background: rgba(201,168,76,.1); border-left-color: var(--accent); color: var(--ink); }
+  .event-btn.on { background: rgba(255,255,255,.1); border-left-color: var(--tour-accent); color: var(--ink); }
   .event-btn .ev-name { display: block; font-weight: 500; margin-bottom: .18rem; }
   .event-btn .ev-date { display: block; font-size: .7rem; color: rgba(240,245,255,.3); }
   .event-btn.on .ev-date { color: rgba(240,245,255,.45); }
@@ -177,13 +114,13 @@
     margin-bottom: .3rem;
   }
   .ev-badge.live { background: #ef4444; color: #fff; }
-  .ev-badge.next { background: rgba(201,168,76,.18); color: var(--accent); }
-  .ev-badge.past { background: rgba(240,245,255,.07); color: rgba(240,245,255,.35); }
-  .ev-badge.upcoming { background: rgba(59,130,246,.2); color: var(--next-ink); }
+  .ev-badge.next { background: var(--tour); color: var(--tour-text); border: 1px solid var(--tour-border); }
+  .ev-badge.past { background: rgba(255,255,255,.08); color: rgba(255,255,255,.4); }
+  .ev-badge.upcoming { background: var(--prac); color: var(--prac-text); border: 1px solid var(--prac-border); }
 
   /* ── MAIN CONTENT ── */
   .main {
-    padding: 3rem 2.5rem 4rem;
+    padding: 2.5rem 2.5rem 4rem;
     min-width: 0;
   }
 
@@ -214,7 +151,7 @@
     font-size: .78rem;
     color: var(--muted);
   }
-  .ev-meta a { color: var(--accent); text-decoration: none; }
+  .ev-meta a { color: var(--tour-text); text-decoration: none; }
   .ev-meta a:hover { text-decoration: underline; }
   .ev-updated { font-size: .7rem; color: var(--muted); opacity: .6; margin-top: .4rem; }
 
@@ -240,7 +177,7 @@
     transition: background .18s, color .18s;
     white-space: nowrap;
   }
-  .seg-btn.on { background: rgba(201,168,76,.18); color: var(--ink); }
+  .seg-btn.on { background: rgba(255,255,255,.15); color: var(--ink); }
   .seg-btn .cnt { font-weight: 300; opacity: .6; margin-left: .3rem; }
 
   /* Filter pills */
@@ -263,8 +200,8 @@
     transition: all .18s;
   }
   .fbtn:hover { border-color: var(--accent); color: var(--ink); }
-  .fbtn.on { background: rgba(201,168,76,.15); color: var(--ink); border-color: var(--accent); }
-  .fbtn.ours { border-color: rgba(201,168,76,.5); border-width: 2px; }
+  .fbtn.on { background: rgba(255,255,255,.15); color: var(--ink); border-color: rgba(255,255,255,.5); }
+  .fbtn.ours { border-color: var(--tour-accent); border-width: 2px; }
   .fbtn.ours:not(.on) { color: var(--accent); }
   .fbtn .n { font-weight: 300; opacity: .55; margin-left: .25rem; }
   .fbtn .wd { display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-left: 4px; vertical-align: 1px; }
@@ -287,7 +224,7 @@
     transition: border-color .2s, box-shadow .2s;
   }
   .search::placeholder { color: rgba(240,245,255,.3); }
-  .search:focus { border-color: rgba(201,168,76,.5); box-shadow: 0 0 0 3px rgba(201,168,76,.12); }
+  .search:focus { border-color: rgba(255,255,255,.5); box-shadow: 0 0 0 3px rgba(255,255,255,.1); }
 
   /* Team cards grid */
   .teams-grid {
@@ -557,47 +494,90 @@
     opacity: .6;
   }
 
-  /* Mobile event/division pickers (hidden on desktop) */
-  .mobile-picker {
-    display: none;
-    align-items: center;
-    padding: .65rem 1.25rem;
-    background: var(--surf);
-    border-bottom: 1px solid var(--rule);
-  }
-  .mobile-picker select,
-  .mobile-divpicker select {
-    flex: 1;
-    width: 100%;
-    background: var(--bg);
-    color: var(--ink);
-    border: 1px solid var(--rule-solid);
-    border-radius: 6px;
-    padding: .5rem .85rem;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .9rem;
-    font-weight: 400;
-    outline: none;
-    cursor: pointer;
-  }
-  .mobile-divpicker { display: none; margin-bottom: 1rem; }
-
   /* ── Mobile ── */
   @media (max-width: 720px) {
     .shell { grid-template-columns: 1fr; }
     .sidebar { display: none; }
-    .mobile-picker { display: flex; }
-    .mobile-divpicker { display: block; }
-    .filters.div-filters { display: none; }
-    .main { padding: 1.5rem 1.25rem 3rem; }
+    .main { padding: 1.25rem 1rem 3rem; }
     nav { padding: .8rem 1.25rem; }
-    .nav-links { display: none; }
+    .nav-links { display: none; flex-direction: column; gap: 0; position: absolute; top: 100%; left: 0; right: 0; background: var(--nav-bg); border-bottom: 1px solid rgba(255,255,255,.12); padding: .5rem 0; }
+    .nav-links.open { display: flex; }
+    .nav-links li { width: 100%; }
+    .nav-links a { display: block; padding: .8rem 2rem; }
+    .nav-toggle { display: flex; }
     .teams-grid { grid-template-columns: 1fr; }
-    .ev-header { flex-direction: column; gap: 1rem; }
+    .ev-header { flex-direction: column; gap: .75rem; }
+    .ev-title { font-size: 1.45rem; }
+
+    /* Mobile event picker */
+    .mobile-picker {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      padding: .65rem 1rem;
+      background: var(--surf);
+      border-bottom: 1px solid var(--rule);
+    }
+    .mobile-picker-label {
+      font-family: 'Oswald', sans-serif;
+      font-size: .55rem;
+      letter-spacing: .28em;
+      text-transform: uppercase;
+      color: rgba(240,245,255,.3);
+      flex-shrink: 0;
+    }
+    .mobile-picker select,
+    .mobile-divpicker select {
+      flex: 1;
+      background: rgba(240,245,255,.06);
+      color: var(--ink);
+      border: 1px solid var(--rule-solid);
+      border-radius: 5px;
+      padding: .42rem .65rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: .82rem;
+      font-weight: 400;
+      outline: none;
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%235aacf5' opacity='.4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right .6rem center;
+      padding-right: 1.8rem;
+    }
+    .mobile-picker select:focus,
+    .mobile-divpicker select:focus {
+      border-color: rgba(255,255,255,.5);
+      box-shadow: 0 0 0 2px rgba(255,255,255,.1);
+    }
+    /* Mobile division picker row (shown above .filters when on field view) */
+    .mobile-divpicker {
+      display: flex;
+      align-items: center;
+      gap: .6rem;
+      margin-bottom: .75rem;
+    }
+    .mobile-divpicker-label {
+      font-size: .62rem;
+      color: var(--muted);
+      flex-shrink: 0;
+      opacity: .7;
+    }
+    /* Hide desktop filter pills on mobile for division selection */
+    .filters.div-filters { display: none; }
+
+    /* Status pills become colored dots on mobile */
     .sp { width: 8px; height: 8px; border-radius: 50%; padding: 0; font-size: 0; letter-spacing: 0; border: none; flex-shrink: 0; }
     .sp.acc { background: var(--win); }
     .sp.pen { background: var(--work); }
     .sp.oth { background: var(--muted); opacity: .35; border: none; }
+  }
+
+  /* Desktop: hide mobile-only elements */
+  @media (min-width: 721px) {
+    .mobile-picker { display: none; }
+    .mobile-divpicker { display: none; }
   }
 </style>
 </head>
@@ -605,23 +585,24 @@
 
 <!-- NAV -->
 <nav>
-  <div class="nav-left">
-    <a href="index.html" class="nav-logo">Wind<span> VBC</span></a>
-    <button class="btn-refresh" id="refresh" aria-label="Refresh">
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
-      Refresh
-    </button>
-  </div>
-  <div class="nav-right">
-    <ul class="nav-links">
-      <li><a href="index.html">About the Club</a></li>
-      <li><a href="team.html">U13 Team</a></li>
-    </ul>
-  </div>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.jpg" alt="Wind VBC">
+    <span class="nav-logo-text">Wind VBC</span>
+  </a>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html">About the Club</a></li>
+    <li><a href="team.html">U13 Team</a></li>
+  </ul>
 </nav>
 
-<!-- MOBILE EVENT PICKER -->
+<button id="refresh" class="btn-refresh" style="display:none" aria-hidden="true"></button>
+
+<!-- MOBILE EVENT PICKER (hidden on desktop) -->
 <div class="mobile-picker">
+  <span class="mobile-picker-label">Tournament</span>
   <select id="mobile-event-select" aria-label="Select tournament"></select>
 </div>
 
@@ -672,25 +653,8 @@ const CONFIG = {
 const AES_SITE = "https://results.advancedeventsystems.com";
 const qs = new URLSearchParams(location.search);
 const DEMO = qs.has("demo") || !CONFIG.proxy;
-const PREVIEW = qs.has("preview");
 const DEMO_DATA = {"event":{"Key":"PTAwMDAwNDA3MTA90","EventId":40710,"Name":"2025 CEVA Junior Girls Power League","StartDate":"2024-12-15T00:00:00","EndDate":"2025-04-13T23:59:59.9999999","Location":"Various Locations in CEVA","IsOver":false,"Clubs":[{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"}]},"nextassignments":{"value":[{"TeamId":130143,"TeamName":"AGILE 14-1","TeamCode":"g14agile1ce","TeamText":"AGILE 14-1 (CE)","TeamClub":{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"},"TeamDivision":{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},"NextMatch":null,"WorkMatchs":[]},{"TeamId":208223,"TeamName":"AGILE 14-2","TeamCode":"g14agile2ce","TeamText":"AGILE 14-2 (CE)","TeamClub":{"ClubId":24664,"Name":"A.G.I.L.E. Volleyball Club"},"TeamDivision":{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},"NextMatch":null,"WorkMatchs":[]}]},"teams":{"130143":{"past":[{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":false,"SecondTeamId":103715,"SecondTeamName":"McMinnville 14-1 Red","SecondTeamWon":true,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":26,"SecondTeamScore":24},{"FirstTeamScore":18,"SecondTeamScore":25},{"FirstTeamScore":10,"SecondTeamScore":15}],"WorkTeamId":186303,"WorkTeamText":"Aspire NW 13-2 Royal (CE)","MatchId":-51060,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T08:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":true,"SecondTeamId":171491,"SecondTeamName":"NPJ Salem 13 Orange","SecondTeamWon":false,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":15},{"FirstTeamScore":25,"SecondTeamScore":21},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":103715,"WorkTeamText":"McMinnville 14-1 Red (CE)","MatchId":-51062,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T10:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":130143,"FirstTeamName":"AGILE 14-1","FirstTeamWon":false,"SecondTeamId":186303,"SecondTeamName":"Aspire NW 13-2 Royal","SecondTeamWon":true,"MatchFullName":"Match 6","MatchShortName":"M6","HasScores":true,"Sets":[{"FirstTeamScore":16,"SecondTeamScore":25},{"FirstTeamScore":13,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":171491,"WorkTeamText":"NPJ Salem 13 Orange (CE)","MatchId":-51065,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T13:00:00"},"Play":{"Type":0,"PlayId":-51057,"FullName":"Pool 27","ShortName":"P27"},"PlayType":0},{"Match":{"FirstTeamId":189682,"FirstTeamName":"Aspire NW 14-4 Force","FirstTeamWon":false,"SecondTeamId":130143,"SecondTeamName":"AGILE 14-1","SecondTeamWon":true,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":23},{"FirstTeamScore":19,"SecondTeamScore":25},{"FirstTeamScore":17,"SecondTeamScore":19}],"WorkTeamId":156712,"WorkTeamText":"MVA 14 - Red (CE)","MatchId":-51524,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T14:15:00"},"Play":{"Type":1,"PlayId":-51464,"FullName":"Cross 15","ShortName":"X15"},"PlayType":1},{"Match":{"FirstTeamId":186303,"FirstTeamName":"Aspire NW 13-2 Royal","FirstTeamWon":true,"SecondTeamId":130143,"SecondTeamName":"AGILE 14-1","SecondTeamWon":false,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":17},{"FirstTeamScore":25,"SecondTeamScore":19},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":189682,"WorkTeamText":"Aspire NW 14-4 Force (CE)","MatchId":-51526,"Court":{"CourtId":-52499,"Name":"McKay HS 3"},"ScheduledStartDateTime":"2025-01-12T15:15:00"},"Play":{"Type":1,"PlayId":-51464,"FullName":"Cross 15","ShortName":"X15"},"PlayType":1}],"standings":[{"TeamId":130143,"MatchesWon":7,"MatchesLost":14,"SetsWon":18,"SetsLost":29,"FinishRank":106,"OverallRank":106,"FinishRankText":"106th","Division":{"DivisionId":190758,"TeamCount":201}}]},"208223":{"past":[{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":90671,"SecondTeamName":"N. Clackamas 14-3 White","SecondTeamWon":false,"MatchFullName":"Match 1","MatchShortName":"M1","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":9},{"FirstTeamScore":25,"SecondTeamScore":13},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":210149,"WorkTeamText":"Kingtide 14-2 Black (CE)","MatchId":-51222,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T08:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":false,"SecondTeamId":102072,"SecondTeamName":"Siuslaw 14-1 Gold","SecondTeamWon":true,"MatchFullName":"Match 3","MatchShortName":"M3","HasScores":true,"Sets":[{"FirstTeamScore":16,"SecondTeamScore":25},{"FirstTeamScore":14,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":90671,"WorkTeamText":"N. Clackamas 14-3 White (CE)","MatchId":-51224,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T10:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":210149,"SecondTeamName":"Kingtide 14-2 Black","SecondTeamWon":false,"MatchFullName":"Match 6","MatchShortName":"M6","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":20},{"FirstTeamScore":27,"SecondTeamScore":25},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":102072,"WorkTeamText":"Siuslaw 14-1 Gold (CE)","MatchId":-51227,"Court":{"CourtId":-50017,"Name":"Olympus 5"},"ScheduledStartDateTime":"2025-01-12T13:00:00"},"Play":{"Type":0,"PlayId":-51219,"FullName":"Pool 45","ShortName":"P45"},"PlayType":0},{"Match":{"FirstTeamId":208223,"FirstTeamName":"AGILE 14-2","FirstTeamWon":true,"SecondTeamId":209295,"SecondTeamName":"OCJ 14 Black","SecondTeamWon":false,"MatchFullName":"Match 2","MatchShortName":"M2","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":16},{"FirstTeamScore":26,"SecondTeamScore":24},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":209121,"WorkTeamText":"WVE 14-3 (CE)","MatchId":-54934,"Court":{"CourtId":-50018,"Name":"Olympus 6"},"ScheduledStartDateTime":"2025-01-12T14:15:00"},"Play":{"Type":1,"PlayId":-54835,"FullName":"Cross 25","ShortName":"X25"},"PlayType":1},{"Match":{"FirstTeamId":208182,"FirstTeamName":"Courthouse 13 Blue","FirstTeamWon":true,"SecondTeamId":208223,"SecondTeamName":"AGILE 14-2","SecondTeamWon":false,"MatchFullName":"Match 5","MatchShortName":"M5","HasScores":true,"Sets":[{"FirstTeamScore":25,"SecondTeamScore":17},{"FirstTeamScore":25,"SecondTeamScore":10},{"FirstTeamScore":null,"SecondTeamScore":null}],"WorkTeamId":209295,"WorkTeamText":"OCJ 14 Black (CE)","MatchId":-54937,"Court":{"CourtId":-50018,"Name":"Olympus 6"},"ScheduledStartDateTime":"2025-01-12T15:15:00"},"Play":{"Type":1,"PlayId":-54835,"FullName":"Cross 25","ShortName":"X25"},"PlayType":1}],"standings":[{"TeamId":208223,"MatchesWon":10,"MatchesLost":11,"SetsWon":23,"SetsLost":24,"FinishRank":167,"OverallRank":167,"FinishRankText":"167th","Division":{"DivisionId":190758,"TeamCount":201}}]}}};
 const DEMO_FIELD = {"divisions":[{"DivisionId":190757,"Name":"12 Girls","TeamCount":70,"CodeAlias":"G12","ColorHex":"#5F9FFF"},{"DivisionId":190758,"Name":"14 Girls","TeamCount":201,"CodeAlias":"G14","ColorHex":"#FF5F7F"},{"DivisionId":190759,"Name":"16 Girls","TeamCount":159,"CodeAlias":"G16","ColorHex":"#5FFF7F"},{"DivisionId":190760,"Name":"18 Girls","TeamCount":66,"CodeAlias":"G18","ColorHex":"#FF5FFF"},{"DivisionId":190761,"Name":"Open Girls","TeamCount":52,"CodeAlias":"OPEN","ColorHex":"#FFFF7F"}],"teams":{"190757":[[91806,"Adidas OPV 12-1 National",14476],[186301,"Aspire NW 11-1 Empire",5751],[60862,"Aspire NW 12-1 Empire",5751],[172157,"Aspire NW 12-2 Royal",5751],[146884,"ATHENA VB 11-1 Gold",234],[189472,"ATHENA VB 11-2 Black",234],[41173,"ATHENA VB 12-1 Gold",234],[47964,"ATHENA VB 12-2 Black",234],[168263,"ATHENA VB 12-3 Onyx",234],[73001,"ATHENA VB 12-4 Silver",234],[114299,"Blues 12-1 Gold",15629],[142999,"CHAOS 12-1 GOLD",26583],[189139,"CHAOS 12-2 BURGUNDY",26583],[98732,"Courthouse 12 Blue",20775],[208649,"Courthouse 12 Red",20775],[186238,"Cowlitz 12-1 Black",29917],[155489,"Crushers 12 Black",24586],[73369,"Excel NW 12-1 Lux",667],[101996,"Excel NW 12-2 Gold",667],[203142,"FCA 12u Clark",29025],[184941,"FCA 12u Cowlitz",29025],[186508,"FCA 12u Sandy",29025],[147704,"G3VB 12-1",24386],[113548,"Game Day 12-1",14424],[206299,"HVVC 12-1",30119],[210151,"Kingtide 12-1 Gold",31352],[173175,"LC Elite 12-1 Black",28880],[173176,"LC Elite 12-2 White",28880],[146900,"MAC 12-1",26786],[203253,"MAC 12-2",26786],[203254,"MAC 12-3",26786],[161185,"McMinnville 12-1 Black",21217],[103285,"MHAC 12-1 Red",18211],[104113,"Mt. Hood 12-1 Timberline",11921],[156720,"Mt. Hood 12-2 Meadows",11921],[175514,"Mt. Hood 12-3 ZigZag",11921],[104279,"N. Clackamas 12-1 Black",11993],[205744,"N. Clackamas 12-2 White",11993],[168821,"NPJ Portland 12 Black",27442],[152580,"NPJ Portland 12 National",27442],[209317,"NPJ Portland 12 Orange",27442],[115192,"NPJ Salem 11 National",2654],[73546,"NPJ Salem 12 Black",2654],[73545,"NPJ Salem 12 National",2654],[104078,"NW Elite 12-1 Gold",18391],[104079,"NW Elite 12-2 Black",18391],[104080,"NW Elite 12-3 Red",18391],[156915,"NW Elite 12-4 White",18391],[6222,"OJVA 12-1 Gold",1455],[89922,"OJVA 12-2 Blue",1455],[89923,"OJVA 12-3 White",1455],[104074,"OJVA 12-4 Red",1455],[149252,"OJVA 12-5 Black",1455],[104396,"PDX VB 12-1 Black",11615],[160396,"PDX VB 12-2 Red",11615],[156774,"PNW 12-1 Black",27631],[211136,"Portland VBC 11-1 Navy",652],[16647,"Portland VBC 12-1 Pink",652],[208534,"Rose City VBC 12-1",14924],[131451,"RVC 12-1 Force",23218],[169137,"RVC 12-2 Vision",23218],[156812,"RWVBC 12-1 Bronze",23219],[102064,"Silverton Bearcats 12-1",21111],[185232,"South Coast 12-1",23690],[129796,"Stumptown 12-1 Blue",23537],[204765,"TVC 12-1",21253],[90543,"Webfoot 12-Elite",527],[192387,"Yaquina Juniors 12-1",30438],[101848,"YCVBC 12 Orange",21097],[101849,"YCVBC 12 White",21097]],"190758":[[211539,"Aces 14-1",31540],[91629,"Adidas OPV 14-1 National",14476],[171809,"Adidas OPV 14-2 Premier",14476],[198903,"Adidas OPV 14-3 Gold",14476],[211946,"Adventist VBC 13-1",27864],[160856,"Adventist VBC 14-1",27864],[130143,"AGILE 14-1",24664],[208223,"AGILE 14-2",24664],[154677,"Aspire NW 13-1 Empire",5751],[186303,"Aspire NW 13-2 Royal",5751],[208180,"Aspire NW 13-3 Power",5751],[58399,"Aspire NW 14-2 Royal",5751],[72118,"Aspire NW 14-3 Power",5751],[189682,"Aspire NW 14-4 Force",5751],[483,"ATHENA VB 13-1 Gold",234],[114282,"ATHENA VB 13-2 Black",234],[146885,"ATHENA VB 13-3 Onyx",234],[152822,"ATHENA VB 13-4 Silver",234],[146886,"ATHENA VB 13-5 Chrome",234],[481,"ATHENA VB 14-1 Gold",234],[482,"ATHENA VB 14-2 Black",234],[152828,"ATHENA VB 14-3 Onyx",234],[19028,"ATHENA VB 14-4 Silver",234],[28733,"ATHENA VB 14-5 Chrome",234],[168264,"ATHENA VB 14-6 White",234],[200628,"ATHENAVB Bend 14-1 Gold",31184],[200633,"ATHENAVB Bend 14-2 Black",31184],[89205,"Axiom 14-1 Elite",16256],[102004,"Axiom 14-2",16256],[114300,"Blues 14-1 Gold",15629],[192361,"Blues 14-2 Silver",15629],[208405,"CCJ 14-1 Jeo",23432],[209604,"CCJ 14-2 Chloe",23432],[203526,"CEVC 14-1",31347],[142997,"CHAOS 14-1 NATIONAL",26583],[142998,"CHAOS 14-2 GOLD",26583],[172249,"CHAOS 14-3 BLACK REGIONAL",26583],[192378,"CHAOS 14-4 BURGUNDY",26583],[205028,"CHAOS GIRLS 13U NATIONAL",26583],[208182,"Courthouse 13 Blue",20775],[98730,"Courthouse 14 Blue",20775],[98731,"Courthouse 14 Red",20775],[189579,"Courthouse 14 White",20775],[128153,"COVC 14 Elite",23110],[112310,"COVC 14 Nationals",23110],[186240,"Cowlitz 14-1 Black",29917],[205075,"Crosshill Christian 14-1",31346],[155490,"Crushers 14 Black",24586],[186359,"Crushers 14 Red",24586],[172872,"Crushers 14 White",24586],[191401,"EPUERTO 14-1",30345],[125128,"Excel NW 13-1 Lux",667],[-52819,"Excel NW 14-1 Lux (PL)",667],[73372,"Excel NW 14-2 Gold",667],[125127,"Excel NW 14-3 Silver",667],[175425,"FCA 14-1 Cowlitz",29025],[206670,"FCA 14-2 Cowlitz",29025],[184944,"FCA 14u Clark Elevate",29025],[184943,"FCA 14u Clark Force",29025],[189530,"FCA 14u Clark Rise",29025],[186509,"FCA 14u Sandy",29025],[125880,"G3VB 14-1",24386],[126302,"G3VB 14-2",24386],[156772,"G3VB 14-3",24386],[198260,"Game Day 13-1",14424],[101862,"Game Day 14-1",14424],[113547,"Game Day 14-2",14424],[208087,"Game Day 14-3",14424],[134575,"Gorge Juniors 14-1",14821],[209904,"Hood River 13-1",29024],[204774,"HVVC 14-1",30119],[114712,"Invasion 14-1",12372],[210148,"Kingtide 14-1 Gold",31352],[210149,"Kingtide 14-2 Black",31352],[210150,"Kingtide 14-3 White",31352],[103719,"La Center 14-1",21229],[173179,"LC Elite 13-1 Black",28880],[173177,"LC Elite 14-1 Black",28880],[173178,"LC Elite 14-2 White",28880],[210559,"LC Elite 14-3 Red",28880],[211544,"Lebanon VBC 13-1",28900],[192372,"Lebanon VBC 14-1",28900],[192373,"Lebanon VBC 14-2",28900],[203335,"LevelOne 14-1",31394],[203336,"LevelOne 14-2",31394],[203337,"LevelOne 14-3",31394],[203255,"MAC 13-1",26786],[203256,"MAC 14-1",26786],[203257,"MAC 14-2",26786],[103715,"McMinnville 14-1 Red",21217],[103716,"McMinnville 14-2 Black",21217],[157386,"MHAC 13 Red",18211],[89985,"MHAC 14 Black",18211],[103287,"MHAC 14 Red",18211],[156721,"Mt. Hood 13-1 Timberline",11921],[175487,"Mt. Hood 14 Alpine",11921],[66886,"Mt. Hood 14-1 Timberline",11921],[156722,"Mt. Hood 14-2 Meadows",11921],[156710,"MVA 14 - Gray",24669],[156712,"MVA 14 - Red",24669],[94187,"N. Clackamas 14-1 Black",11993],[66260,"N. Clackamas 14-2 Red",11993],[90671,"N. Clackamas 14-3 White",11993],[153043,"NPJ Bend 13 National",27014],[149181,"NPJ Bend 14 Black",27014],[-52818,"NPJ Bend 14 National (PL)",27014],[168820,"NPJ Portland 13 Black",27442],[168819,"NPJ Portland 13 National",27442],[171734,"NPJ Portland 13 Orange",27442],[152579,"NPJ Portland 14 Black",27442],[-52820,"NPJ Portland 14 National (PL)",27442],[168818,"NPJ Portland 14 Orange",27442],[186620,"NPJ Portland 14 Royal",27442],[186478,"NPJ Portland 14 White",27442],[155932,"NPJ Salem 13 Black",2654],[73544,"NPJ Salem 13 National",2654],[171491,"NPJ Salem 13 Orange",2654],[75877,"NPJ Salem 14 Black",2654],[-52817,"NPJ Salem 14 National (PL)",2654],[75878,"NPJ Salem 14 Orange",2654],[115193,"NPJ Salem 14 White",2654],[192375,"NPVA 14-1",30436],[194702,"NPVA 14-2",30436],[104082,"NW Elite 14-1 Gold",18391],[104083,"NW Elite 14-2 Black",18391],[104084,"NW Elite 14-3 Red",18391],[156917,"NW Elite 14-4 White",18391],[156918,"NW Elite 14-5 Blue",18391],[174651,"NW Elite 14-6 Green",18391],[156919,"NW Elite 14-7 Gray",18391],[156916,"NW Elite 14-8 Navy",18391],[208453,"NW Elite 14-9 Purple",18391],[199395,"NWAS Eugene 14-1 Alpha",31193],[199397,"NWAS Eugene 14-2 Beta",31193],[167644,"NWAS VBC 14-1 Alpha",27582],[167645,"NWAS VBC 14-2 Beta",27582],[209295,"OCJ 14 Black",24670],[130349,"OCJ 14 Gold",24670],[143003,"OJVA 13-1 Gold",1455],[192076,"OJVA 13-2 Blue",1455],[6221,"OJVA 14-1 Gold",1455],[19328,"OJVA 14-2 Blue",1455],[19329,"OJVA 14-3 White",1455],[89924,"OJVA 14-4  Red",1455],[62730,"PDX VB 14-1 Black",11615],[104397,"PDX VB 14-2 Red",11615],[175409,"PDX VB 14-3 White",11615],[114236,"Pirate 14-1",14786],[190329,"Pirate 14-2",14786],[211551,"PNW VBC 13-1 Black",27631],[211553,"PNW VBC 13-2 Green",27631],[156768,"PNW VBC 14-1 Black",27631],[5974,"Portland VBC 14-1 Red",652],[30061,"Portland VBC 14-2 Green",652],[183361,"Rise VBC 14 Regional BLK",23971],[183359,"Rise VBC 14 Regional GOLD",23971],[170292,"Rock Mountain 14-1",27791],[208535,"Rose City VBC 14-1",14924],[208536,"Rose City VBC 14-2",14924],[116542,"RVC 14-1 Chaos",23218],[208095,"RVC 14-2 Spirit",23218],[156781,"RWVBC 14-1 Gold",23219],[209014,"RWVBC 14-2 Silver",23219],[207866,"SEA 14-Shout",29023],[210649,"Sheridan 14-1 Valkyries",29021],[102065,"Silverton Bearcats 14-1",21111],[102066,"Silverton Bearcats 14-2",21111],[203059,"Silverton Bearcats 14-3",21111],[102072,"Siuslaw 14-1 Gold",21112],[153987,"South Coast 14-1",23690],[160448,"Spike It Pure 14-1",27641],[56639,"Spiketown 14-1 National",10184],[118159,"Stumptown 14-1 Blue",23537],[118160,"Stumptown 14-2 Green",23537],[118157,"Stumptown 14-3 White",23537],[209666,"Stumptown 14-4 Black",23537],[53183,"TEAM Hiki No 14-1",5828],[189283,"TSUNAMI 14-1",21298],[189284,"TSUNAMI 14-2",21298],[204766,"TVC 14-1",21253],[204767,"TVC 14-2",21253],[208614,"TVVC 14-1",31510],[208615,"TVVC 14-2",31510],[208969,"Valley VBC 14-1",31589],[176381,"Vancouver VBC 14-1",27664],[202805,"Webfoot 13 Elite",527],[37804,"Webfoot 14-Elite",527],[42995,"Webfoot 14-Force",527],[33220,"Webfoot 14-Power",527],[175415,"West Coast VBC 14-1",29020],[191862,"West Valley Dragons 14-1",30379],[89921,"Wildcats 14-1 Red",18202],[101841,"Wildcats 14-2 Blue",18202],[172805,"Wildcats 14-3 White",18202],[203564,"WVC 14-1",30210],[189508,"WVE 14-1",30208],[209120,"WVE 14-2",30208],[209121,"WVE 14-3",30208],[211554,"Yaquina Juniors 14-1",30438],[101847,"YCVBC 14 Orange",21097],[117588,"YCVBC 14 White",21097]]},"clubs":{"234":"ATHENAVB","527":"Webfoot Juniors Volleyball Club","652":"Portland Volleyball Club","667":"Excel NW Volleyball Club","1455":"Oregon Juniors Volleyball Academy","2654":"North Pacific Juniors Volleyball Club","5751":"Aspire NW Volleyball","5828":"T.E.A.M. Hiki No Volleyball Club","10184":"Spiketown Volleyball Club","11615":"PDX)))VB","11921":"Mt. Hood Volleyball Club","11993":"North Clackamas Volleyball Club","12372":"Invasion Volleyball Club","14424":"Game Day Volleyball Club","14476":"Oregon Premier Volleyball Club","14786":"Pirate Volleyball Club","14821":"Gorge Juniors Volleyball","14924":"Rose City Volleyball Club","15629":"Blues Volleyball Club","16256":"Axiom Volleyball Club","18202":"Wildcats Volleyball Club","18211":"MHAC Volleyball Club","18391":"NW Elite Volleyball Club","20775":"Courthouse Volleyball Club","21097":"YCVBC","21111":"Silverton Bearcats Volleyball Club","21112":"Siuslaw Volleyball Club","21217":"McMinnville Volleyball Association","21229":"La Center Volleyball Club","21253":"Tillamook Volleyball Club","21298":"Tsunami Volleyball Club","23110":"Central Oregon Volleyball Club","23218":"RiverHawk Volleyball Club","23219":"River Warriors Volleyball Club","23432":"Cherry City Jrs","23537":"Stumptown VB","23690":"South Coast Volleyball Club","23971":"Rise Volleyball Club","24386":"G3 Volleyball","24586":"Crushers Volleyball Club","24664":"A.G.I.L.E. Volleyball Club","24669":"Metro Volleyball Academy","24670":"Oregon Coast Juniors","26583":"Portland Chaos Volleyball Club","26786":"MAC Volleyball","27014":"North Pacific Juniors - Bend","27442":"North Pacific Juniors - Portland","27582":"NWAS Volleyball Club","27631":"PNW Volleyball Club","27641":"Spike-It Pure","27664":"Vancouver Volleyball Club","27791":"Rock Mountain Academy","27864":"Adventist Volleyball Club","28880":"Lower Columbia Elite","28900":"Lebanon Warrior Volleyball Club","29020":"West Coast Volleyball Club","29021":"Sheridan Volleyball Club","29023":"SEA Volleyball","29024":"Hood River Volleyball Club","29025":"Fellowship of Christian Athletes","29917":"Cowlitz Volleyball Academy","30119":"Happy Valley Volleyball Club","30208":"Willamette Valley Elite","30210":"Willamina Club Volleyball","30345":"Epuerto Elite Volleyball Club","30379":"West Valley Dragons VBC","30436":"North Portland Volleyball Academy","30438":"Yaquina Juniors Volleyball Club","31184":"ATHENAVB Bend","31193":"NWAS Volleyball Club - Eugene","31346":"Crosshill Christian","31347":"Cascade Elite Volleyball Club","31352":"Kingtide Volleyball","31394":"LevelOne Volleyball Club","31510":"Tualatin Valley Volleyball Club","31540":"Aces Volleyball Club","31589":"Valley Volleyball Club"}};
-
-const PREVIEW_EVENT = {
-  Key: "PTAwMDAwNDYzMjYw", EventId: 46326, Name: "JVC Winter Classic",
-  StartDate: "2027-01-16T00:00:00", EndDate: "2027-01-17T23:59:59.9999999",
-  Location: "Baird Center, Milwaukee, WI", IsOver: false,
-  Clubs: [{ClubId: 9999, Name: "Wind Volleyball Club"}],
-  Divisions: [{DivisionId: 9001, Name: "13 Girls", TeamCount: 48, CodeAlias: "G13", ColorHex: "#FF9F5F"}]
-};
-const PREVIEW_TEAMS = [
-  { TeamId: 1001, TeamName: "Wind 13-1", TeamCode: "G13WINVB1BG", TeamText: "Wind 13-1",
-    TeamClub: {ClubId: 9999, Name: "Wind Volleyball Club"},
-    TeamDivision: {DivisionId: 9001, Name: "13 Girls", TeamCount: 48, CodeAlias: "G13", ColorHex: "#FF9F5F"} },
-  { TeamId: 1002, TeamName: "Wind 13-2", TeamCode: "G13WINVB2BG", TeamText: "Wind 13-2",
-    TeamClub: {ClubId: 9999, Name: "Wind Volleyball Club"},
-    TeamDivision: {DivisionId: 9001, Name: "13 Girls", TeamCount: 48, CodeAlias: "G13", ColorHex: "#FF9F5F"} },
-];
 
 const $ = s => document.querySelector(s);
 const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
@@ -734,7 +698,6 @@ function fmtRange(a, b){
 function todayStr(){ const d = new Date(); return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0"); }
 function statusOf(e){
   if (DEMO && e._demo) return "live";
-  if (PREVIEW && e._preview) return "live";
   const t = todayStr();
   if (e.start <= t && t <= (e.end || e.start)) return "live";
   return e.start > t ? "upcoming" : "past";
@@ -746,7 +709,7 @@ async function get(path){
   if (!r.ok) { const e = new Error("AES returned " + r.status); e.status = r.status; throw e; }
   return r.json();
 }
-const getEvent = key => DEMO ? Promise.resolve({ ...DEMO_DATA.event, Divisions: DEMO_FIELD.divisions }) : PREVIEW ? Promise.resolve({ ...PREVIEW_EVENT }) : get(`/api/event/${key}`);
+const getEvent = key => DEMO ? Promise.resolve({ ...DEMO_DATA.event, Divisions: DEMO_FIELD.divisions }) : get(`/api/event/${key}`);
 async function getDivisionTeams(key, divId){
   if (DEMO) {
     const rows = DEMO_FIELD.teams[divId];
@@ -797,20 +760,16 @@ function regDivStats(divId){
 const statusPill = st => `<span class="sp ${/accept/i.test(st) ? "acc" : /pend/i.test(st) ? "pen" : "oth"}">${esc(st)}</span>`;
 
 async function findTeamsByCode(key, codes){
-  if (PREVIEW) return PREVIEW_TEAMS;
   const f = codes.map(c => `tolower(TeamCode) eq '${String(c).toLowerCase().replace(/[^a-z0-9]/g,"")}'`).join(" or ");
   const r = await get(`/odata/${key}/nextassignments(dId=null,cId=null,tIds=[])?$filter=${encodeURIComponent(f)}&$select=TeamId,TeamName,TeamCode,TeamClub,TeamDivision`);
   return r && r.value ? r.value : [];
 }
 const getClubTeams = (key, clubId) => DEMO
   ? Promise.resolve(DEMO_DATA.nextassignments.value)
-  : PREVIEW
-  ? Promise.resolve(PREVIEW_TEAMS)
   : get(`/odata/${key}/nextassignments(dId=null,cId=${clubId},tIds=[])?$orderby=TeamName,TeamCode`).then(r => r ? r.value : []);
 
 async function getTeamData(key, divId, teamId){
   if (DEMO) return demoTeam(teamId);
-  if (PREVIEW) return previewTeamData(teamId);
   const base = `/api/event/${key}/division/${divId}/team/${teamId}/schedule/`;
   const safe = p => p.catch(() => null);
   const [past, current, work, future, standings] = await Promise.all([
@@ -834,33 +793,6 @@ function demoTeam(teamId){
            work: teamId===208223 ? [work] : [],
            future:{ NextPendingReseed:true, NextPlay:{ FullName:"Gold Bracket" }, PotentialRankText:null },
            standing: raw.standings[0] };
-}
-
-function previewTeamData(teamId){
-  const p5  = {Type:0,PlayId:5010,FullName:"Pool 5",ShortName:"P5"};
-  const p14 = {Type:0,PlayId:5020,FullName:"Pool 14",ShortName:"P14"};
-  const x3  = {Type:1,PlayId:5011,FullName:"Cross 3",ShortName:"X3"};
-  if (teamId===1001) return {
-    past:[
-      {Match:{FirstTeamId:1001,FirstTeamName:"Wind 13-1",FirstTeamWon:true,SecondTeamId:2001,SecondTeamName:"Fusion 13-1",SecondTeamWon:false,MatchFullName:"Match 1",MatchShortName:"M1",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:17},{FirstTeamScore:25,SecondTeamScore:21},{FirstTeamScore:null,SecondTeamScore:null}],WorkTeamId:2003,WorkTeamText:"Prairie Storm 13-1",MatchId:5001,Court:{CourtId:5099,Name:"Hall B 3"},ScheduledStartDateTime:"2027-01-16T08:00:00"},Play:p5,PlayType:0},
-      {Match:{FirstTeamId:1001,FirstTeamName:"Wind 13-1",FirstTeamWon:false,SecondTeamId:2002,SecondTeamName:"Milwaukee Blaze 13-2",SecondTeamWon:true,MatchFullName:"Match 3",MatchShortName:"M3",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:22},{FirstTeamScore:20,SecondTeamScore:25},{FirstTeamScore:11,SecondTeamScore:15}],WorkTeamId:2001,WorkTeamText:"Fusion 13-1",MatchId:5002,Court:{CourtId:5099,Name:"Hall B 3"},ScheduledStartDateTime:"2027-01-16T10:00:00"},Play:p5,PlayType:0},
-      {Match:{FirstTeamId:1001,FirstTeamName:"Wind 13-1",FirstTeamWon:true,SecondTeamId:2003,SecondTeamName:"Prairie Storm 13-1",SecondTeamWon:false,MatchFullName:"Match 6",MatchShortName:"M6",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:19},{FirstTeamScore:25,SecondTeamScore:23},{FirstTeamScore:null,SecondTeamScore:null}],WorkTeamId:2002,WorkTeamText:"Milwaukee Blaze 13-2",MatchId:5003,Court:{CourtId:5099,Name:"Hall B 3"},ScheduledStartDateTime:"2027-01-16T13:00:00"},Play:p5,PlayType:0},
-      {Match:{FirstTeamId:1001,FirstTeamName:"Wind 13-1",FirstTeamWon:true,SecondTeamId:2004,SecondTeamName:"North Shore 13-1",SecondTeamWon:false,MatchFullName:"Match 1",MatchShortName:"M1",HasScores:true,Sets:[{FirstTeamScore:22,SecondTeamScore:25},{FirstTeamScore:25,SecondTeamScore:20},{FirstTeamScore:15,SecondTeamScore:13}],WorkTeamId:2005,WorkTeamText:"Lake Country 13-1",MatchId:5004,Court:{CourtId:5098,Name:"Hall A 5"},ScheduledStartDateTime:"2027-01-17T08:00:00"},Play:x3,PlayType:1},
-    ],
-    current:[], work:[],
-    future:{NextMatch:{FirstTeamId:1001,FirstTeamName:"Wind 13-1",SecondTeamId:2005,SecondTeamName:"Lake Country 13-1",MatchFullName:"Match 3",MatchShortName:"M3",HasScores:false,FirstTeamWon:false,SecondTeamWon:false,Sets:[{FirstTeamScore:null,SecondTeamScore:null}],WorkTeamId:2004,WorkTeamText:"North Shore 13-1",MatchId:5005,Court:{CourtId:5098,Name:"Hall A 5"},ScheduledStartDateTime:"2027-01-17T10:00:00"},NextPlay:x3,WorkMatch:null,NextPendingReseed:false,PotentialRankText:null},
-    standing:{TeamId:1001,MatchesWon:4,MatchesLost:1,SetsWon:9,SetsLost:4,FinishRank:9,OverallRank:9,FinishRankText:"9th",Division:{DivisionId:9001,TeamCount:48}}
-  };
-  return {
-    past:[
-      {Match:{FirstTeamId:2006,FirstTeamName:"Lake Country 13-2",FirstTeamWon:true,SecondTeamId:1002,SecondTeamName:"Wind 13-2",SecondTeamWon:false,MatchFullName:"Match 1",MatchShortName:"M1",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:14},{FirstTeamScore:25,SecondTeamScore:16},{FirstTeamScore:null,SecondTeamScore:null}],WorkTeamId:2007,WorkTeamText:"Milwaukee Attack 13-1",MatchId:5006,Court:{CourtId:5097,Name:"Hall C 2"},ScheduledStartDateTime:"2027-01-16T08:00:00"},Play:p14,PlayType:0},
-      {Match:{FirstTeamId:2007,FirstTeamName:"Milwaukee Attack 13-1",FirstTeamWon:true,SecondTeamId:1002,SecondTeamName:"Wind 13-2",SecondTeamWon:false,MatchFullName:"Match 3",MatchShortName:"M3",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:21},{FirstTeamScore:25,SecondTeamScore:19},{FirstTeamScore:null,SecondTeamScore:null}],WorkTeamId:2006,WorkTeamText:"Lake Country 13-2",MatchId:5007,Court:{CourtId:5097,Name:"Hall C 2"},ScheduledStartDateTime:"2027-01-16T10:00:00"},Play:p14,PlayType:0},
-      {Match:{FirstTeamId:1002,FirstTeamName:"Wind 13-2",FirstTeamWon:true,SecondTeamId:2008,SecondTeamName:"Shorewood 13-1",SecondTeamWon:false,MatchFullName:"Match 6",MatchShortName:"M6",HasScores:true,Sets:[{FirstTeamScore:25,SecondTeamScore:21},{FirstTeamScore:22,SecondTeamScore:25},{FirstTeamScore:15,SecondTeamScore:12}],WorkTeamId:2007,WorkTeamText:"Milwaukee Attack 13-1",MatchId:5008,Court:{CourtId:5097,Name:"Hall C 2"},ScheduledStartDateTime:"2027-01-16T13:00:00"},Play:p14,PlayType:0},
-    ],
-    current:[], work:[],
-    future:{NextPendingReseed:true,NextPlay:{FullName:"Silver Bracket"},PotentialRankText:null,NextMatch:null,WorkMatch:null},
-    standing:{TeamId:1002,MatchesWon:1,MatchesLost:2,SetsWon:4,SetsLost:5,FinishRank:27,OverallRank:27,FinishRankText:"27th",Division:{DivisionId:9001,TeamCount:48}}
-  };
 }
 
 const gameLabel = s => String(s||"").replace(/^Match/i,"Game").replace(/^M(\d+)$/i,"G$1");
@@ -905,18 +837,24 @@ function renderSidebar(){
                 : i===nextIdx ? `<span class="ev-badge next">Next</span>`
                 : st==="past" ? `<span class="ev-badge past">Final</span>`
                 : `<span class="ev-badge upcoming">${esc(MON[parts(e.start).mo])}</span>`;
-    return { i, e, st, badge };
+    return { e, i, st, badge };
   });
-  $("#events").innerHTML = items.map(({i,e,badge}) => `<li><button class="event-btn ${i===state.idx?"on":""}" data-i="${i}">
+  $("#events").innerHTML = items.map(({e,i,badge}) =>
+    `<li><button class="event-btn ${i===state.idx?"on":""}" data-i="${i}">
       ${badge}
       <span class="ev-name">${esc(e.name)}</span>
       <span class="ev-date">${esc(fmtRange(e.start,e.end))}${e.venue ? ` · ${esc(e.venue)}` : ""}</span>
-    </button></li>`).join("");
-  const msel = document.getElementById("mobile-event-select");
-  if (msel) msel.innerHTML = items.map(({i,e,st}) => {
-    const pre = st==="live" ? "🔴 " : i===nextIdx ? "▶ " : "";
-    return `<option value="${i}" ${i===state.idx?"selected":""}>${pre}${esc(e.name)} — ${esc(fmtRange(e.start,e.end))}</option>`;
-  }).join("");
+    </button></li>`
+  ).join("");
+  // Sync mobile event select
+  const sel = $("#mobile-event-select");
+  if (sel) {
+    sel.innerHTML = items.map(({e,i,st}) => {
+      const label = st==="live" ? "🔴 " : i===nextIdx ? "▶ " : st==="past" ? "" : "";
+      return `<option value="${i}" ${i===state.idx?"selected":""}>${label}${esc(e.name)} · ${esc(fmtRange(e.start,e.end))}</option>`;
+    }).join("");
+    sel.value = String(state.idx);
+  }
 }
 function nextUpcomingIdx(){ return CONFIG.events.findIndex(e=>statusOf(e)==="upcoming"); }
 function defaultIdx(){
@@ -990,8 +928,7 @@ function renderMain(msg){
   const totalTeams = state.reg?state.reg.teams.filter(t=>!isDropped(t)).length:divs.reduce((n,d)=>n+(d.TeamCount||0),0);
   const ourCount = state.teams.length||(state.reg?regOurs().length:0);
 
-  let html = DEMO ? `<div class="demo-box"><b>Demo mode</b> – showing real data from another club at a past AES event. Add the proxy URL in CONFIG to go live.</div>`
-           : PREVIEW ? `<div class="demo-box"><b>Preview mode</b> – showing fake Wind VBC data for layout testing.</div>` : "";
+  let html = DEMO ? `<div class="demo-box"><b>Demo mode</b> – showing real data from another club at a past AES event. Add the proxy URL in CONFIG to go live.</div>` : "";
   html += `<div class="ev-header">
     <div>
       <div class="ev-title">${esc(name)}</div>
@@ -1060,11 +997,13 @@ function renderRegField(){
   const divTeamIds=reg.teams.filter(t=>t.divId===state.divSel&&!isDropped(t)).map(t=>t.id);
   if (divTeamIds.length) loadRankings(state.divSel, divTeamIds);
   let html=`<div class="fsum">${reg.divisions.length} divisions · ${active.length} teams · ${acc} accepted</div>`;
+  // Mobile: division dropdown
+  html+=`<div class="mobile-divpicker"><span class="mobile-divpicker-label">Division</span><select id="mobile-div-select" aria-label="Select division">${sortedRegDivs.map(x=>{const n=reg.teams.filter(t=>t.divId===x.id&&!isDropped(t)).length;return `<option value="${x.id}" ${x.id===state.divSel?"selected":""}>${esc(x.name)}${ourDivs.has(x.id)?" ●":""} (${n}${x.max?"/"+x.max:""})</option>`;}).join("")}</select></div>`;
+  // Desktop: pill filters
   html+=`<div class="filters div-filters">${sortedRegDivs.map(x=>{
     const n=reg.teams.filter(t=>t.divId===x.id&&!isDropped(t)).length;
     return `<button class="fbtn ${x.id===state.divSel?"on":""} ${ourDivs.has(x.id)?"ours":""}" data-d="${x.id}">${esc(x.name)}<span class="n">${n}${x.max?"/"+x.max:""}</span>${ourDivs.has(x.id)?`<span class="wd"></span>`:""}</button>`;
   }).join("")}</div>`;
-  html+=`<div class="mobile-divpicker"><select id="mobile-div-select">${sortedRegDivs.map(x=>`<option value="${x.id}" ${x.id===state.divSel?"selected":""}>${esc(x.name)}${ourDivs.has(x.id)?" ▸":""}</option>`).join("")}</select></div>`;
   const d=regDivStats(state.divSel), drops=d.list.length-d.active;
   html+=`<div class="filters">${[["all","All"],["acc",`Accepted ${d.acc}`],["pen",`Pending ${d.pen}`]].map(([v,l])=>
     `<button class="fbtn ${state.st===v?"on":""}" data-st="${v}">${l}</button>`).join("")}</div>`;
@@ -1114,8 +1053,10 @@ function renderField(divs, totalTeams){
   const d=divs.find(x=>x.DivisionId===state.divSel);
   const sortedDivs=[...divs].sort((a,b)=>ageNum(a.Name)-ageNum(b.Name)||a.Name.localeCompare(b.Name));
   let html=`<div class="fsum">${divs.length} division${divs.length===1?"":"s"} · ${totalTeams} teams</div>`;
+  // Mobile: division dropdown
+  html+=`<div class="mobile-divpicker"><span class="mobile-divpicker-label">Division</span><select id="mobile-div-select" aria-label="Select division">${sortedDivs.map(x=>`<option value="${x.DivisionId}" ${x.DivisionId===state.divSel?"selected":""}>${esc(x.Name)}${ours.has(x.DivisionId)?" ●":""} (${x.TeamCount??0})</option>`).join("")}</select></div>`;
+  // Desktop: pill filters
   html+=`<div class="filters div-filters">${sortedDivs.map(x=>`<button class="fbtn ${x.DivisionId===state.divSel?"on":""} ${ours.has(x.DivisionId)?"ours":""}" data-d="${x.DivisionId}">${esc(x.Name)}<span class="n">${x.TeamCount??""}</span>${ours.has(x.DivisionId)?`<span class="wd"></span>`:""}</button>`).join("")}</div>`;
-  html+=`<div class="mobile-divpicker"><select id="mobile-div-select">${sortedDivs.map(x=>`<option value="${x.DivisionId}" ${x.DivisionId===state.divSel?"selected":""}>${esc(x.Name)}${ours.has(x.DivisionId)?" ▸":""}</option>`).join("")}</select></div>`;
   const list=state.field[d.DivisionId];
   if (list===undefined){ loadDivision(d.DivisionId); return html+`<div class="skel"></div>`; }
   if (list===null) return html+`<div class="empty-state"><b>${DEMO?"Not in the demo sample":"Couldn't load this division"}</b>${DEMO?"Demo only carries 12 & 14 Girls.":"Tap Refresh to try again."}</div>`;
@@ -1216,13 +1157,12 @@ async function load(idx, quiet){
   renderSidebar();
   const e=CONFIG.events[idx];
   if (DEMO) e._demo=true;
-  if (PREVIEW) e._preview=true;
   const key=DEMO?DEMO_DATA.event.Key:eventKey(e);
-  try{ history.replaceState(null,"","?t="+idx+(qs.has("demo")?"&demo":"")+(PREVIEW?"&preview":"")); }catch{}
+  try{ history.replaceState(null,"","?t="+idx+(qs.has("demo")?"&demo":"")); }catch{}
   if (!key){ renderMain(NOT_POSTED); return; }
   if (!quiet) renderMain(`<div class="skel"></div><div class="skel"></div>`);
   state.loading=true; $("#refresh").classList.add("spin");
-  const num=DEMO||PREVIEW?null:eventNumber(e);
+  const num=DEMO?null:eventNumber(e);
   const regP=num?getRegistration(num).catch(()=>null):Promise.resolve(null);
   const stamp=()=>state.updated=new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
   try{
@@ -1260,13 +1200,16 @@ async function load(idx, quiet){
 function scheduleRefresh(){
   clearTimeout(state.timer);
   const e=CONFIG.events[state.idx];
-  if (!DEMO&&!PREVIEW&&e&&statusOf(e)==="live"&&eventKey(e))
+  if (!DEMO&&e&&statusOf(e)==="live"&&eventKey(e))
     state.timer=setTimeout(()=>{ if(!document.hidden) load(state.idx,true); else scheduleRefresh(); },CONFIG.refreshSeconds*1000);
 }
 
 $("#events").addEventListener("click", ev=>{ const b=ev.target.closest("[data-i]"); if(b) load(+b.dataset.i); });
-const mobileEventSel = document.getElementById("mobile-event-select");
-if (mobileEventSel) mobileEventSel.addEventListener("change", ev => load(+ev.target.value));
+
+// Mobile event picker
+const mobileEventSel = $("#mobile-event-select");
+if (mobileEventSel) mobileEventSel.addEventListener("change", ev=>{ load(+ev.target.value); });
+
 $("#app").addEventListener("click", ev=>{
   const v=ev.target.closest("[data-v]"); if(v){ state.view=v.dataset.v; store.set("view",state.view); renderMain(); return; }
   const d=ev.target.closest("[data-d]"); if(d){ state.divSel=+d.dataset.d; state.q=""; state.st="all"; renderMain(); return; }
@@ -1274,18 +1217,129 @@ $("#app").addEventListener("click", ev=>{
   const b=ev.target.closest("[data-f]"); if(!b) return;
   state.filter=b.dataset.f; store.set("filter",state.filter); renderMain();
 });
+
+// Mobile division picker (rendered inside #app, so delegate via #app input/change)
+$("#app").addEventListener("change", ev=>{
+  if (ev.target.id==="mobile-div-select"){ state.divSel=+ev.target.value; state.q=""; state.st="all"; renderMain(); }
+});
+
 $("#app").addEventListener("input", ev=>{ if(ev.target.id==="q"){ state.q=ev.target.value; applySearch(); } });
-$("#app").addEventListener("change", ev=>{ if(ev.target.id==="mobile-div-select"){ state.divSel=+ev.target.value; state.q=""; state.st="all"; renderMain(); } });
 $("#refresh").addEventListener("click", ()=>{ state.field={}; load(state.idx,true); });
 document.addEventListener("visibilitychange",()=>{
   if (!document.hidden&&CONFIG.events[state.idx]&&statusOf(CONFIG.events[state.idx])==="live") load(state.idx,true);
 });
 
-load(DEMO?0:defaultIdx());
-</script>
-<script>
-  // Lets families install the site as an app and open it offline (see sw.js)
-  if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
+/* ── PREVIEW MODE: fake Wind VBC data for design/layout work ──
+   Add ?preview to the URL to activate. Remove before going live. */
+const PREVIEW = qs.has("preview");
+if (PREVIEW) {
+  const WIND_TEAM = {
+    TeamId: 99001,
+    TeamName: "Wind 13-1",
+    TeamCode: "g13winvb1bg",
+    TeamClub: { ClubId: 88001, Name: "Wind Volleyball Club" },
+    TeamDivision: { DivisionId: 7701, Name: "13 Girls", TeamCount: 48, CodeAlias: "G13", ColorHex: "#c9a84c" },
+  };
+  const WIND_TEAM2 = {
+    TeamId: 99002,
+    TeamName: "Wind 13-2",
+    TeamCode: "g13winvb2bg",
+    TeamClub: { ClubId: 88001, Name: "Wind Volleyball Club" },
+    TeamDivision: { DivisionId: 7701, Name: "13 Girls", TeamCount: 48, CodeAlias: "G13", ColorHex: "#c9a84c" },
+  };
+  const mk = (id, home, opp, won, sets, time, court, play, label, workOpp) => ({
+    Match: {
+      MatchId: id, FirstTeamId: 99001, FirstTeamName: home,
+      SecondTeamId: id*10, SecondTeamName: opp,
+      FirstTeamWon: won===true, SecondTeamWon: won===false,
+      HasScores: won!==null,
+      Sets: sets.map(([a,b])=>({FirstTeamScore:a,SecondTeamScore:b})),
+      WorkTeamText: workOpp || null,
+      MatchFullName: label, MatchShortName: label,
+      Court: { CourtId: id, Name: court },
+      ScheduledStartDateTime: time,
+    },
+    Play: { Type: 0, PlayId: 55, FullName: play, ShortName: play },
+    PlayType: 0,
+  });
+  const mkWork = (id, t1, t2, time, court, play, label) => ({
+    Match: {
+      MatchId: id,
+      FirstTeamId: id*10+1, FirstTeamName: t1,
+      SecondTeamId: id*10+2, SecondTeamName: t2,
+      FirstTeamWon: false, SecondTeamWon: false, HasScores: false,
+      WorkTeamId: 99001, WorkTeamText: "Wind 13-1",
+      Sets: [{FirstTeamScore:null,SecondTeamScore:null},{FirstTeamScore:null,SecondTeamScore:null}],
+      MatchFullName: label, MatchShortName: label,
+      Court: { CourtId: id, Name: court },
+      ScheduledStartDateTime: time,
+    },
+    Play: { Type: 0, PlayId: 56, FullName: play, ShortName: play },
+    PlayType: 0,
+  });
+  const FAKE_DATA = {
+    99001: {
+      past: [
+        mk(1001,"Wind 13-1","North Shore 13-1",true,[[25,18],[25,21],[null,null]],"2027-01-16T08:00:00","Court 4","Pool A","G1"),
+        mk(1002,"Wind 13-1","Lakeside 13-2",true,[[25,22],[23,25],[15,11]],"2027-01-16T09:15:00","Court 4","Pool A","G2"),
+        mk(1003,"Wind 13-1","Metro VBC 13-1",false,[[18,25],[25,23],[12,15]],"2027-01-16T10:30:00","Court 4","Pool A","G3"),
+        mkWork(1004,"North Shore 13-2","Lakeside 13-1","2027-01-16T11:45:00","Court 4","Pool A","W"),
+        mk(1005,"Wind 13-1","Bay City 13-1",true,[[25,19],[25,17],[null,null]],"2027-01-16T14:00:00","Court 7","Gold Bracket","G1"),
+      ],
+      current: [],
+      work: [],
+      future: { NextPendingReseed: false, NextPlay: { FullName: "Gold Bracket Finals" }, NextMatch: {
+        MatchId: 1006, FirstTeamId: 99001, FirstTeamName: "Wind 13-1",
+        SecondTeamId: 5050, SecondTeamName: "Midwest Elite 13-1",
+        FirstTeamWon: false, SecondTeamWon: false, HasScores: false,
+        Sets: [{FirstTeamScore:null,SecondTeamScore:null}],
+        WorkTeamText: null, MatchFullName: "Semifinal", MatchShortName: "SF",
+        Court: { CourtId: 999, Name: "Court 2" },
+        ScheduledStartDateTime: "2027-01-17T10:00:00",
+      }, WorkMatch: null },
+      standing: { TeamId:99001, MatchesWon:3, MatchesLost:1, SetsWon:8, SetsLost:5, FinishRank:null, OverallRank:null, FinishRankText:null, Division:{ DivisionId:7701, TeamCount:48 } },
+    },
+    99002: {
+      past: [
+        mk(2001,"Wind 13-2","Prairie Stars 13-1",false,[[20,25],[21,25],[null,null]],"2027-01-16T08:00:00","Court 9","Pool B","G1"),
+        mk(2002,"Wind 13-2","Fox Valley 13-2",true,[[25,14],[25,20],[null,null]],"2027-01-16T09:15:00","Court 9","Pool B","G2"),
+        mk(2003,"Wind 13-2","Racine Juniors 13-1",true,[[22,25],[25,20],[15,13]],"2027-01-16T10:30:00","Court 9","Pool B","G3"),
+      ],
+      current: [],
+      work: [],
+      future: { NextPendingReseed: true, NextPlay: { FullName: "Silver Bracket" }, NextMatch: null, WorkMatch: null },
+      standing: { TeamId:99002, MatchesWon:2, MatchesLost:1, SetsWon:5, SetsLost:4, FinishRank:null, OverallRank:null, FinishRankText:null, Division:{ DivisionId:7701, TeamCount:48 } },
+    },
+  };
+
+  // Override load() for preview — reassign the named function via closure trick
+  const _realLoad = load;
+  // eslint-disable-next-line no-global-assign
+  load = async function(idx, quiet) {
+    if (state.loading) return;
+    const changed = idx !== state.idx; state.idx = idx;
+    if (changed) { state.event=null; state.teams=[]; state.data={}; state.updated=null; state.club=null; state.field={}; state.divSel=null; state.q=""; state.reg=null; state.st="all"; state.rankings={}; state._rankLoading=new Set(); }
+    renderSidebar();
+    try { history.replaceState(null,"","?preview&t="+idx); } catch {}
+    if (!quiet) renderMain(`<div class="skel"></div><div class="skel"></div>`);
+    state.loading = true; $("#refresh").classList.add("spin");
+    await new Promise(r => setTimeout(r, 320)); // simulate network
+    state.club = { ClubId: 88001, Name: "Wind Volleyball Club" };
+    state.teams = [WIND_TEAM, WIND_TEAM2];
+    state.data = JSON.parse(JSON.stringify(FAKE_DATA));
+    state.event = { Name: CONFIG.events[idx].name, StartDate: CONFIG.events[idx].start, EndDate: CONFIG.events[idx].end, Location: CONFIG.events[idx].venue, Divisions: [WIND_TEAM.TeamDivision] };
+    state.updated = new Date().toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});
+    state.loading = false; $("#refresh").classList.remove("spin");
+    renderMain();
+    scheduleRefresh();
+  };
+}
+
+load(defaultIdx());
+
+// Hamburger nav
+const nt = document.getElementById('navToggle'), nl = document.getElementById('navLinks');
+if (nt && nl) nt.addEventListener('click', () => { nt.classList.toggle('open'); nl.classList.toggle('open'); });
 </script>
 </body>
 </html>

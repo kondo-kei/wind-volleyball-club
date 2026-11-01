@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Wind VBC</title>
-  <!-- App install (home screen) -->
   <link rel="manifest" href="/manifest.webmanifest">
   <meta name="theme-color" content="#0b1f3a">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -27,6 +26,7 @@
   --muted:  rgba(200,220,255,.65);
   --rule:   rgba(90,172,245,.12);
   --accent: #c9a84c;
+  --nav-bg: #0b1f3a;
   color-scheme: dark;
 }
 
@@ -43,12 +43,12 @@ body {
   padding-block: 0;
 }
 
-/* NAV */
+/* ── NAV ── */
 nav {
   display: flex; align-items: center; justify-content: space-between;
   border-bottom: 1px solid var(--rule);
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100;
-  background: var(--bg);
+  background: var(--nav-bg);
   margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
   margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
   padding: 1.4rem max(2rem, env(safe-area-inset-left, 0px));
@@ -57,11 +57,9 @@ nav {
 }
 .nav-logo {
   font-family: 'Oswald', sans-serif;
-  font-size: 1.5rem; font-weight: 500; letter-spacing: .1em;
-  text-transform: uppercase;
+  font-size: 1.1rem; font-weight: 400; letter-spacing: .01em;
   color: var(--ink); text-decoration: none;
 }
-.nav-logo span { color: var(--accent); }
 .nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
 .nav-links a {
   font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
@@ -85,17 +83,17 @@ nav {
   .nav-links {
     display: none; flex-direction: column; gap: 0;
     position: absolute; top: 100%; left: 0; right: 0;
-    background: var(--bg); border-bottom: 1px solid var(--rule);
+    background: var(--nav-bg); border-bottom: 1px solid var(--rule);
     padding: .5rem 0;
   }
   .nav-links.open { display: flex; }
   .nav-links li a { display: block; padding: .75rem 2rem; }
 }
 
-/* LAYOUT */
+/* ── LAYOUT ── */
 .wrap { max-width: 880px; margin: 0 auto; }
 
-/* HERO */
+/* ── HERO ── */
 .hero {
   padding: 3rem 0 2.5rem;
   border-bottom: 1px solid var(--rule);
@@ -122,16 +120,19 @@ nav {
   .hero-mission { font-size: .88rem; }
 }
 
-/* CONTENT */
+/* ── CONTENT ── */
 .content { padding-block: 2rem 4rem; }
 
-/* SECTION LABEL */
+/* ── SECTION LABEL ── */
 .section-label {
-  font-size: .65rem; letter-spacing: .26em; text-transform: uppercase;
-  color: var(--accent); margin-bottom: .8rem; font-weight: 500;
+  font-family: 'Oswald', sans-serif;
+  font-size: .85rem; letter-spacing: .18em; text-transform: uppercase;
+  color: #ffffff; margin-bottom: .8rem; font-weight: 500;
+  background: none;
+  border-bottom: 2px solid rgba(255,255,255,.6); padding: .2rem 0;
 }
 
-/* PILLARS */
+/* ── PILLARS ── */
 .pillars {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px;
   background: var(--rule); border: 1px solid var(--rule);
@@ -155,7 +156,7 @@ nav {
 }
 .pillar-body { font-size: .8rem; color: var(--muted); line-height: 1.6; }
 
-/* SEASON FACTS */
+/* ── SEASON FACTS ── */
 .facts {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 1px;
   background: var(--rule); border: 1px solid var(--rule);
@@ -172,7 +173,7 @@ nav {
 .fact-label { font-size: .65rem; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
 .fact-value { font-size: .9rem; color: var(--ink); font-weight: 400; }
 
-/* STAFF / CONTACT */
+/* ── STAFF / CONTACT ── */
 .about-grid {
   display: grid; grid-template-columns: 1fr 1fr; gap: 1px;
   background: var(--rule); border: 1px solid var(--rule);
@@ -190,7 +191,7 @@ nav {
 .about-cell-body a { color: var(--accent); text-decoration: none; }
 .about-cell-body a:hover { text-decoration: underline; }
 
-/* FOOTER */
+/* ── FOOTER ── */
 footer {
   border-top: 1px solid var(--rule);
   padding: 2rem 0;
@@ -201,7 +202,7 @@ footer {
 </style>
 
 <nav>
-  <a href="index.html" class="nav-logo">Wind<span> VBC</span></a>
+  <a href="index.html" class="nav-logo">WIND VBC</a>
   <button class="nav-toggle" id="navToggle" aria-label="Menu">
     <span></span><span></span><span></span>
   </button>
@@ -251,7 +252,7 @@ footer {
       </div>
       <div class="fact">
         <span class="fact-label">Practice</span>
-        <span class="fact-value">Mon &amp; Wed, 6–8 PM · The Prairie School</span>
+        <span class="fact-value">Mon & Wed, 6–8 PM · The Prairie School</span>
       </div>
       <div class="fact">
         <span class="fact-label">Season</span>
@@ -259,14 +260,14 @@ footer {
       </div>
       <div class="fact">
         <span class="fact-label">Tournaments</span>
-        <span class="fact-value">8 tournaments, including Badger Regionals &amp; JVC Grand Slam</span>
+        <span class="fact-value">8 tournaments, including Badger Regionals & JVC Grand Slam</span>
       </div>
     </div>
 
-    <p class="section-label">Staff &amp; Contact</p>
+    <p class="section-label">Staff & Contact</p>
     <div class="about-grid">
       <div class="about-cell">
-        <div class="about-cell-title">Head Coach &amp; Club Director</div>
+        <div class="about-cell-title">Head Coach & Club Director</div>
         <div class="about-cell-body">Kei Kondo</div>
       </div>
       <div class="about-cell">
@@ -296,7 +297,6 @@ footer {
 </script>
 
 <script>
-  // Lets families install the site as an app and open it offline (see sw.js)
   if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js").catch(() => {}));
 </script>
 </body>

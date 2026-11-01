@@ -1,0 +1,155 @@
+/* ============================================================
+   Wind VBC – Theme System
+   Single light theme derived from the club logo palette.
+   All pages link this file; theme.js is not used.
+   ============================================================ */
+
+/* –– Fonts –– */
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap');
+
+/* –– Reset –– */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+/* –– Tokens –– */
+:root {
+  /* Core */
+  --bg:           #416E9C;
+  --surf:         #3a6490;
+  --surf2:        #345a82;
+  --ink:          #ffffff;
+  --muted:        rgba(255,255,255,.6);
+  --rule:         rgba(255,255,255,.12);
+  --rule-solid:   rgba(255,255,255,.25);
+
+  /* Brand blues */
+  --accent:       #8fb8d8;   /* light tint – readable on blue bg */
+  --accent-dark:  #ffffff;   /* headings/labels on blue bg */
+  --sky:          #6a9ec8;   /* lighter tint for secondary UI */
+  --blue:         #416E9C;
+  --blue-dim:     rgba(255,255,255,.1);
+
+  /* RGB components for rgba() usage */
+  --accent-r: 143; --accent-g: 184; --accent-b: 216;
+
+  /* Nav / surface */
+  --nav-bg:       #1B3A5C;
+  --card-bg:      rgba(27,58,92,.3);
+  --card-border:  rgba(255,255,255,.18);
+  --card-accent:  #1B3A5C;               /* left stripe on buttons (practice navy) */
+  --tour-accent:  #d4a830;               /* tournament gold */
+  --major-accent: #d4b060;
+
+  /* Status */
+  --win:          #2e7d52;
+  --win-bg:       rgba(46,125,82,.1);
+  --win-border:   rgba(46,125,82,.3);
+  --loss:         #b94040;
+  --loss-bg:      rgba(185,64,64,.1);
+  --loss-border:  rgba(185,64,64,.3);
+  --work:         #8a6a00;
+  --work-bg:      rgba(138,106,0,.1);
+  --work-border:  rgba(138,106,0,.3);
+  --next-bg:      rgba(65,110,156,.1);
+  --next-border:  rgba(65,110,156,.3);
+  --next-ink:     #1B3A5C;
+
+  /* Calendar event types – tuned for blue page background */
+  --prac:         rgba(255,255,255,.18);
+  --prac-text:    #ffffff;
+  --prac-border:  rgba(255,255,255,.5);
+  --tour:         rgba(212,168,48,.28);
+  --tour-text:    #f5d98a;
+  --tour-border:  rgba(212,168,48,.7);
+  --major:        rgba(212,168,48,.28);
+  --major-text:   #f5d98a;
+  --major-border: rgba(212,168,48,.7);
+
+  /* Practices page */
+  --amber:        #8a6a00;
+  --amber-bg:     rgba(138,106,0,.1);
+  --amber-border: rgba(138,106,0,.28);
+
+  color-scheme: light;
+}
+
+/* –– Base body –– */
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: 'DM Sans', system-ui, sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+}
+
+/* –– Shared nav –– */
+nav {
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid rgba(255,255,255,.12);
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 100;
+  background: var(--card-bg);
+  margin-left: max(-16px, calc(-1 * env(safe-area-inset-left, 0px)));
+  margin-right: max(-16px, calc(-1 * env(safe-area-inset-right, 0px)));
+  padding: 1rem max(2rem, env(safe-area-inset-left, 0px));
+  padding-left: max(2rem, env(safe-area-inset-left, 0px));
+  padding-right: max(2rem, env(safe-area-inset-right, 0px));
+}
+.nav-logo {
+  display: flex; align-items: center; gap: .55rem;
+  text-decoration: none;
+}
+.nav-logo img { width: 36px; height: 36px; border-radius: 50%; display: block; flex-shrink: 0; }
+.nav-logo-text {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.1rem; font-weight: 500; letter-spacing: .08em;
+  text-transform: uppercase; color: #ffffff;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; align-items: center; }
+.nav-links a {
+  font-size: .72rem; letter-spacing: .14em; text-transform: uppercase;
+  text-decoration: none; color: rgba(255,255,255,.65); transition: color .2s;
+}
+.nav-links a:hover { color: #ffffff; }
+.nav-links a.active { color: #ffffff; font-weight: 500; }
+.nav-toggle {
+  display: none; flex-direction: column; gap: 5px; justify-content: center;
+  width: 1.8rem; height: 1.8rem; background: none; border: none; cursor: pointer; padding: 0;
+  align-self: center;
+}
+.nav-toggle span {
+  display: block; height: 1.5px; background: #ffffff; border-radius: 1px;
+  transition: transform .25s, opacity .25s;
+}
+.nav-toggle.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.nav-toggle.open span:nth-child(2) { opacity: 0; }
+.nav-toggle.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+@media (max-width: 560px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    display: none; flex-direction: column; gap: 0;
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--nav-bg); border-bottom: 1px solid rgba(255,255,255,.12);
+    padding: .5rem 0;
+  }
+  .nav-links.open { display: flex; }
+  .nav-links li { width: 100%; }
+  .nav-links a { display: block; padding: .8rem 2rem; }
+}
+
+/* –– Shared section label –– */
+.section-label {
+  font-family: 'Oswald', sans-serif;
+  font-size: .85rem; letter-spacing: .18em; text-transform: uppercase;
+  color: #ffffff; margin-bottom: .8rem; font-weight: 500;
+  border-bottom: 1px solid rgba(255,255,255,.45); padding: .2rem 0;
+}
+@media (max-width: 600px) {
+  .section-label { margin-bottom: .6rem; font-size: .78rem; }
+}
+
+/* –– Shared card surface –– */
+.card-surface {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+}
