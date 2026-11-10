@@ -75,6 +75,7 @@ body {
 .ls-prac  { background: var(--prac);  border: 1px solid var(--prac-border); }
 .ls-tour  { background: var(--tour);  border: 1px solid var(--tour-border); }
 .ls-major { background: var(--major); border: 1px solid var(--major-border); }
+.ls-party { background: rgba(90,172,245,.22); border: 1px solid rgba(90,172,245,.7); }
 .ls-sb    { background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.25); }
 
 /* CALENDAR CARD */
@@ -122,6 +123,7 @@ body {
 .cal-cell.practice { background: var(--prac); color: var(--prac-text); border-color: var(--prac-border); font-weight: 500; }
 .cal-cell.tournament { background: var(--tour); color: var(--tour-text); border: 1px solid var(--tour-border); font-weight: 500; }
 .cal-cell.major { background: var(--major); color: var(--major-text); border: 1px solid var(--major-border); font-weight: 500; }
+.cal-cell.party { background: rgba(90,172,245,.22); color: #cfe6ff; border: 1px solid rgba(90,172,245,.7); font-weight: 500; }
 .cal-cell.today-cell { outline: 2px solid var(--accent); outline-offset: 1px; }
 
 .cal-cell[data-tip] { cursor: default; }
@@ -188,6 +190,7 @@ footer {
         <div class="legend">
           <span class="legend-item"><span class="legend-swatch ls-prac"></span>Practice</span>
           <span class="legend-item"><span class="legend-swatch ls-tour"></span>Tournament</span>
+          <span class="legend-item"><span class="legend-swatch ls-party"></span>Get-together</span>
           <span class="legend-item"><span class="legend-swatch ls-sb"></span>Spring Break</span>
         </div>
         <div class="cal-card">
@@ -221,18 +224,47 @@ footer {
 
   const MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
 
-  const PRAC_SET = new Set([
-    '2026-12-07','2026-12-09','2026-12-14','2026-12-16',
-    '2026-12-21','2026-12-23','2026-12-28','2026-12-30',
-    '2027-01-04','2027-01-06','2027-01-11','2027-01-13',
-    '2027-01-18','2027-01-20','2027-01-25','2027-01-27',
-    '2027-02-01','2027-02-03','2027-02-08','2027-02-10',
-    '2027-02-15','2027-02-17','2027-02-22','2027-02-24',
-    '2027-03-01','2027-03-03','2027-03-08','2027-03-10',
-    '2027-03-15','2027-03-17',
-    '2027-04-05','2027-04-07','2027-04-12','2027-04-14',
-    '2027-04-19','2027-04-21','2027-04-26','2027-04-28',
-    '2027-05-03','2027-05-05','2027-05-10','2027-05-12',
+  // Practices confirmed so far (through Mar 9). Sundays 9–11 AM, other days 4:15–6:15 PM.
+  const PRAC = new Map([
+    ['2026-12-08', 'Field House'],
+    ['2026-12-11', 'Field House'],
+    ['2026-12-13', 'JAC'],
+    ['2026-12-15', 'Field House'],
+    ['2026-12-18', 'JAC'],
+    ['2026-12-20', 'JAC'],
+    ['2026-12-21', 'JAC'],
+    ['2026-12-23', 'JAC'],
+    ['2026-12-28', 'JAC'],
+    ['2026-12-30', 'JAC'],
+    ['2027-01-03', 'JAC'],
+    ['2027-01-05', 'Field House'],
+    ['2027-01-07', 'Field House'],
+    ['2027-01-10', 'JAC'],
+    ['2027-01-12', 'Field House'],
+    ['2027-01-14', 'Field House'],
+    ['2027-01-19', 'Field House'],
+    ['2027-01-21', 'Field House'],
+    ['2027-01-24', 'JAC'],
+    ['2027-01-26', 'Field House'],
+    ['2027-01-29', 'Field House'],
+    ['2027-02-02', 'Field House'],
+    ['2027-02-05', 'Field House'],
+    ['2027-02-07', 'JAC'],
+    ['2027-02-09', 'Field House'],
+    ['2027-02-11', 'Field House'],
+    ['2027-02-14', 'JAC'],
+    ['2027-02-16', 'Field House'],
+    ['2027-02-18', 'Field House'],
+    ['2027-02-23', 'Field House'],
+    ['2027-02-25', 'Field House'],
+    ['2027-02-28', 'JAC'],
+    ['2027-03-02', 'Field House'],
+    ['2027-03-04', 'Field House'],
+    ['2027-03-09', 'Field House'],
+  ]);
+  const PRAC_SET = new Set(PRAC.keys());
+  const EXTRA = new Map([
+    ['2027-05-19', 'Post-season get-together'],
   ]);
 
   const TOURNAMENTS = [
@@ -305,7 +337,11 @@ footer {
         } else if (ds >= '2027-03-22' && ds <= '2027-04-04') {
           cls += ' spring-break'; tip = 'Spring Break';
         } else if (PRAC_SET.has(ds)) {
-          cls += ' practice'; tip = 'Practice';
+          const dd = pdate(ds);
+          cls += ' practice';
+          tip = 'Practice · ' + (dd.getDay() === 0 ? '9–11 AM' : '4:15–6:15 PM') + ' · ' + PRAC.get(ds);
+        } else if (EXTRA.has(ds)) {
+          cls += ' party'; tip = EXTRA.get(ds);
         } else if (TMAP.has(ds)) {
           const t = TMAP.get(ds);
           cls += t.major ? ' major' : ' tournament';

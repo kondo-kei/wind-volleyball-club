@@ -93,34 +93,31 @@
     .month-nm { font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 400; letter-spacing: .06em; }
     .month-ct { font-size: .68rem; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
-    /* ── COLUMN HEADERS ── */
-    .col-heads { display: grid; grid-template-columns: 1fr 1fr; }
-    .col-head { padding: .35rem .75rem; font-size: .62rem; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--rule); }
-
-    /* ── WEEK PAIR ── */
-    .week-pair { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--rule); }
-
-    /* ── DAY CELL ── */
-    .day-cell {
-      display: flex; align-items: center; gap: .55rem;
+    /* ── PRACTICE ROWS ── */
+    .prac-row {
+      display: grid; grid-template-columns: 2.2rem 4.2rem 1fr auto;
+      align-items: center; gap: .6rem;
       padding: .58rem .75rem;
       font-size: .88rem;
-      min-height: 2.5rem;
+      border-top: 1px solid var(--rule);
     }
-    .day-cell + .day-cell { border-left: 1px solid var(--rule); }
-    .day-cell.past { opacity: .3; }
-    .day-cell.next-up { background: rgba(201,168,76,.08); box-shadow: inset 3px 0 0 var(--accent); }
-    .day-cell.next-up + .day-cell.next-up { box-shadow: none; }
-    .cell-day { font-size: .63rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); min-width: 1.7rem; flex-shrink: 0; }
-    .cell-date { flex: 1; font-weight: 400; font-variant-numeric: tabular-nums; }
-    .next-tag { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; background: rgba(201,168,76,.12); padding: .13rem .38rem; border-radius: 3px; flex-shrink: 0; }
+    .prac-row:first-of-type { border-top: none; }
+    .prac-row.past { opacity: .3; }
+    .prac-row.next-up { background: rgba(201,168,76,.08); box-shadow: inset 3px 0 0 var(--accent); }
+    .cell-day { font-size: .63rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+    .cell-date { font-weight: 400; font-variant-numeric: tabular-nums; }
+    .cell-time { font-size: .8rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+    .cell-tags { display: flex; gap: .4rem; align-items: center; justify-content: flex-end; }
+    .next-tag { font-size: .58rem; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 500; background: rgba(201,168,76,.12); padding: .13rem .38rem; border-radius: 3px; }
+    .tba {
+      margin-top: .5rem; padding: .9rem 1rem;
+      background: var(--surf); border: 1px dashed var(--rule); border-radius: 6px;
+      font-size: .82rem; color: var(--muted);
+    }
 
-    /* ── MOBILE: collapse to single column ── */
     @media (max-width: 500px) {
-      .col-heads { display: none; }
-      .week-pair { grid-template-columns: 1fr; }
-      .day-cell + .day-cell { border-left: none; border-top: 1px solid var(--rule); }
-      .day-cell.empty { display: none; }
+      .prac-row { grid-template-columns: 2rem 3.8rem 1fr; }
+      .cell-tags { grid-column: 3; justify-content: flex-start; }
     }
 
     /* ── FOOTER ── */
@@ -146,7 +143,7 @@
   <div class="page-header">
     <p class="eyebrow">2026–27 Season</p>
     <h1 class="page-title">Practice Schedule</h1>
-    <p class="page-sub">Mon &amp; Wed · 6–8 PM · The Prairie School</p>
+    <p class="page-sub">Weekdays 4:15–6:15 PM · Sundays 9–11 AM · The Prairie School</p>
     <p class="page-facts" id="page-facts"></p>
   </div>
 
@@ -154,16 +151,12 @@
 
     <div class="legend">
       <span class="legend-item">
+        <span class="chip chip-fh">Field House</span>
+        Prairie Field House
+      </span>
+      <span class="legend-item">
         <span class="chip chip-jac">JAC</span>
         Johnson Athletic Complex
-      </span>
-      <span class="legend-item">
-        <span class="chip chip-fh">✓ Fieldhouse</span>
-        confirmed venue change
-      </span>
-      <span class="legend-item">
-        <span class="chip chip-unconf">Fieldhouse · ?</span>
-        venue unconfirmed
       </span>
     </div>
 
@@ -180,34 +173,44 @@
     const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     const DAYS_SHORT = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 
+    // Times: Sundays 9–11 AM, all other days 4:15–6:15 PM
+    // Practices after March 9 are not confirmed yet — add them here when they are.
     const PRACTICES = [
-      // December 2026
-      {d:'2026-12-07'}, {d:'2026-12-09'},
-      {d:'2026-12-14', venue:'Fieldhouse', conf:true}, {d:'2026-12-16'},
-      {d:'2026-12-21'}, {d:'2026-12-23'},
-      {d:'2026-12-28'}, {d:'2026-12-30'},
-      // January 2027
-      {d:'2027-01-04'}, {d:'2027-01-06'},
-      {d:'2027-01-11'}, {d:'2027-01-13', venue:'Fieldhouse', conf:false},
-      {d:'2027-01-18'}, {d:'2027-01-20'},
-      {d:'2027-01-25'}, {d:'2027-01-27'},
-      // February 2027
-      {d:'2027-02-01'}, {d:'2027-02-03'},
-      {d:'2027-02-08'}, {d:'2027-02-10'},
-      {d:'2027-02-15'}, {d:'2027-02-17'},
-      {d:'2027-02-22'}, {d:'2027-02-24'},
-      // March 2027
-      {d:'2027-03-01'}, {d:'2027-03-03'},
-      {d:'2027-03-08'}, {d:'2027-03-10'},
-      {d:'2027-03-15'}, {d:'2027-03-17'},
-      // April 2027
-      {d:'2027-04-05'}, {d:'2027-04-07'},
-      {d:'2027-04-12'}, {d:'2027-04-14'},
-      {d:'2027-04-19'}, {d:'2027-04-21'},
-      {d:'2027-04-26'}, {d:'2027-04-28'},
-      // May 2027
-      {d:'2027-05-03'}, {d:'2027-05-05'},
-      {d:'2027-05-10'}, {d:'2027-05-12'},
+      {d:'2026-12-08', v:'FH'},
+      {d:'2026-12-11', v:'FH'},
+      {d:'2026-12-13', v:'JAC'},
+      {d:'2026-12-15', v:'FH'},
+      {d:'2026-12-18', v:'JAC'},
+      {d:'2026-12-20', v:'JAC'},
+      {d:'2026-12-21', v:'JAC'},
+      {d:'2026-12-23', v:'JAC'},
+      {d:'2026-12-28', v:'JAC'},
+      {d:'2026-12-30', v:'JAC'},
+      {d:'2027-01-03', v:'JAC'},
+      {d:'2027-01-05', v:'FH'},
+      {d:'2027-01-07', v:'FH'},
+      {d:'2027-01-10', v:'JAC'},
+      {d:'2027-01-12', v:'FH'},
+      {d:'2027-01-14', v:'FH'},
+      {d:'2027-01-19', v:'FH'},
+      {d:'2027-01-21', v:'FH'},
+      {d:'2027-01-24', v:'JAC'},
+      {d:'2027-01-26', v:'FH'},
+      {d:'2027-01-29', v:'FH'},
+      {d:'2027-02-02', v:'FH'},
+      {d:'2027-02-05', v:'FH'},
+      {d:'2027-02-07', v:'JAC'},
+      {d:'2027-02-09', v:'FH'},
+      {d:'2027-02-11', v:'FH'},
+      {d:'2027-02-14', v:'JAC'},
+      {d:'2027-02-16', v:'FH'},
+      {d:'2027-02-18', v:'FH'},
+      {d:'2027-02-23', v:'FH'},
+      {d:'2027-02-25', v:'FH'},
+      {d:'2027-02-28', v:'JAC'},
+      {d:'2027-03-02', v:'FH'},
+      {d:'2027-03-04', v:'FH'},
+      {d:'2027-03-09', v:'FH'},
     ];
 
     function pdate(s) {
@@ -215,116 +218,71 @@
       return new Date(y, m-1, d);
     }
 
-    function cellHtml(p, nextIdx) {
-      if (!p) return '<div class="day-cell empty"></div>';
+    function timeFor(date) {
+      return date.getDay() === 0 ? '9–11 AM' : '4:15–6:15 PM';
+    }
 
-      const date  = pdate(p.d);
-      const idx   = PRACTICES.indexOf(p);
-      const today = window._today;
+    function rowHtml(p, idx, nextIdx, today) {
+      const date = pdate(p.d);
       const isPast = date < today;
       const isNext = idx === nextIdx;
-
       const dayAbbr = DAYS_SHORT[date.getDay()];
       const dateStr = MONTHS[date.getMonth()].slice(0,3) + ' ' + date.getDate();
-
-      let venueHtml = '';
-      if (p.venue === 'Fieldhouse') {
-        venueHtml = p.conf
-          ? '<span class="chip chip-fh">✓ Fieldhouse</span>'
-          : '<span class="chip chip-unconf">Fieldhouse · ?</span>';
-      } else {
-        venueHtml = '<span class="chip chip-jac">JAC</span>';
-      }
-
+      const venue = p.v === 'FH'
+        ? '<span class="chip chip-fh">Field House</span>'
+        : '<span class="chip chip-jac">JAC</span>';
       const nextTag = isNext ? '<span class="next-tag">Next</span>' : '';
-
-      const cls = ['day-cell', isPast && 'past', isNext && 'next-up'].filter(Boolean).join(' ');
-
+      const cls = ['prac-row', isPast && 'past', isNext && 'next-up'].filter(Boolean).join(' ');
       return `<div class="${cls}">
         <span class="cell-day">${dayAbbr}</span>
         <span class="cell-date">${dateStr}</span>
-        ${venueHtml}${nextTag}
+        <span class="cell-time">${timeFor(date)}</span>
+        <span class="cell-tags">${venue}${nextTag}</span>
       </div>`;
     }
 
     function render() {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
-      window._today = today;
 
-      // Find next practice
       let nextIdx = -1;
       for (let i = 0; i < PRACTICES.length; i++) {
         if (pdate(PRACTICES[i].d) >= today) { nextIdx = i; break; }
       }
 
-      // Update header facts line
-      const upcoming = nextIdx >= 0 ? PRACTICES.length - nextIdx : 0;
       const factsEl = document.getElementById('page-facts');
       if (factsEl) {
         if (nextIdx >= 0) {
-          const np = PRACTICES[nextIdx];
-          const nd = pdate(np.d);
-          const nextStr = MONTHS[nd.getMonth()].slice(0,3) + ' ' + nd.getDate();
-          factsEl.textContent = upcoming + ' upcoming · Next: ' + nextStr;
+          const nd = pdate(PRACTICES[nextIdx].d);
+          const upcoming = PRACTICES.length - nextIdx;
+          factsEl.textContent = upcoming + ' scheduled · Next: ' + DAYS_SHORT[nd.getDay()] + ' ' + MONTHS[nd.getMonth()].slice(0,3) + ' ' + nd.getDate();
         } else {
-          factsEl.textContent = 'Season complete · 42 practices';
+          factsEl.textContent = PRACTICES.length + ' practices scheduled so far';
         }
       }
 
-      // Group by month
       const groups = new Map();
-      for (const p of PRACTICES) {
+      PRACTICES.forEach((p, i) => {
         const key = p.d.slice(0, 7);
         if (!groups.has(key)) groups.set(key, []);
-        groups.get(key).push(p);
-      }
+        groups.get(key).push([p, i]);
+      });
 
       let html = '';
       for (const [key, list] of groups) {
         const [y, m] = key.split('-').map(Number);
-        const mName = MONTHS[m - 1];
-
-        // Pair Mondays and Wednesdays
-        const pairs = [];
-        let i = 0;
-        while (i < list.length) {
-          const day = pdate(list[i].d).getDay();
-          if (day === 1) {
-            // Monday — pair with next if it's Wednesday
-            const wed = list[i + 1] && pdate(list[i + 1].d).getDay() === 3 ? list[i + 1] : null;
-            pairs.push([list[i], wed]);
-            i += wed ? 2 : 1;
-          } else {
-            // Wednesday without a Monday (shouldn't happen but handle gracefully)
-            pairs.push([null, list[i]]);
-            i++;
-          }
-        }
-
         html += `<section class="month">
           <div class="month-hd">
-            <span class="month-nm">${mName} ${y}</span>
+            <span class="month-nm">${MONTHS[m - 1]} ${y}</span>
             <span class="month-ct">${list.length} practice${list.length === 1 ? '' : 's'}</span>
-          </div>
-          <div class="col-heads">
-            <div class="col-head">Monday</div>
-            <div class="col-head">Wednesday</div>
           </div>`;
-
-        for (const [mon, wed] of pairs) {
-          html += `<div class="week-pair">
-            ${cellHtml(mon, nextIdx)}
-            ${wed !== undefined ? cellHtml(wed, nextIdx) : '<div class="day-cell empty"></div>'}
-          </div>`;
-        }
-
+        for (const [p, i] of list) html += rowHtml(p, i, nextIdx, today);
         html += '</section>';
       }
+      html += '<div class="tba">Practices after March 9 will be posted once confirmed.</div>';
 
       document.getElementById('schedule').innerHTML = html;
 
-      // Scroll to next practice if not near the top
       if (nextIdx > 3) {
         const el = document.querySelector('.next-up');
         if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'center' }), 150);
