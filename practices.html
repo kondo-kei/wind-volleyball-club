@@ -86,6 +86,7 @@
     .chip-fh     { background: rgba(90,172,245,.14); color: var(--sky); border: 1px solid rgba(90,172,245,.32); }
     .chip-unconf { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
     .chip-jac    { background: rgba(240,245,255,.06); color: var(--muted); border: 1px solid var(--rule); }
+    .chip-opt    { background: rgba(201,168,76,.08); color: var(--accent); border: 1px solid rgba(201,168,76,.2); }
 
     /* ── MONTH SECTION ── */
     .month { margin-bottom: 2.5rem; }
@@ -157,6 +158,10 @@
       <span class="legend-item">
         <span class="chip chip-jac">JAC</span>
         Johnson Athletic Complex
+      </span>
+      <span class="legend-item">
+        <span class="chip chip-opt">Optional</span>
+        pre-season, optional
       </span>
     </div>
 
@@ -241,6 +246,12 @@
       </div>`;
     }
 
+    const PRE_SEASON = [
+      { d: '2026-11-14', time: '12–2 PM',  venue: 'JAC' },
+      { d: '2026-11-22', time: '8–10 AM', venue: 'JAC' },
+      { d: '2026-11-24', time: '8–10 AM', venue: 'JAC' },
+    ];
+
     function render() {
       const today = new Date();
       today.setHours(0, 0, 0, 0);
@@ -269,6 +280,28 @@
       });
 
       let html = '';
+
+      // Pre-season optional section
+      html += `<section class="month">
+        <div class="month-hd">
+          <span class="month-nm">Pre-Season</span>
+          <span class="month-ct">${PRE_SEASON.length} optional</span>
+        </div>`;
+      for (const pre of PRE_SEASON) {
+        const date = pdate(pre.d);
+        const isPast = date < today;
+        const dayAbbr = DAYS_SHORT[date.getDay()];
+        const dateStr = MONTHS[date.getMonth()].slice(0,3) + ' ' + date.getDate();
+        const cls = ['prac-row', isPast && 'past'].filter(Boolean).join(' ');
+        html += `<div class="${cls}">
+          <span class="cell-day">${dayAbbr}</span>
+          <span class="cell-date">${dateStr}</span>
+          <span class="cell-time">${pre.time}</span>
+          <span class="cell-tags"><span class="chip chip-jac">${pre.venue}</span><span class="chip chip-opt">Optional</span></span>
+        </div>`;
+      }
+      html += '</section>';
+
       for (const [key, list] of groups) {
         const [y, m] = key.split('-').map(Number);
         html += `<section class="month">
